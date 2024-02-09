@@ -6,7 +6,8 @@ export interface ArtistMutation {
 export interface AlbumMutation {
     title: string;
     artist: string;
-    image?: string;
+    issueDate: string;
+    image: string | null;
 }
 export interface TrackMutation {
     title: string;

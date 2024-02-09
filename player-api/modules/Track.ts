@@ -26,4 +26,4 @@ const TrackSchema = new mongoose.Schema({
 
 const Track = mongoose.model('Track', TrackSchema);
 
-export default Album;
+export default Track;
