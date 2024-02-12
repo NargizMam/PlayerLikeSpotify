@@ -1,6 +1,8 @@
 import express from "express";
-import {TrackMutation} from "../types";
+import {TrackApi, TrackArtistApi, TrackMutation} from "../types";
 import Track from "../modules/Track";
+import Artist from "../modules/Artist";
+
 
 const tracksRouter = express.Router();
 
@@ -14,8 +16,28 @@ tracksRouter.get('/', async (req, res, next) => {
             }
             return res.send(trackList);
         }
-        trackList = await Track.find();
-        return res.send(trackList);
+        if (req.query.artist) {
+            let artistTrack: TrackArtistApi[] = [];
+            const tracks: TrackApi[] = await Track.find().populate('album', {'artist': req.query.artist});
+            for (let i = 0; i < tracks.length; i++) {
+                const artistName = await Artist.findById(tracks[i].album.artist);
+                if(artistName){
+                    const artistsTrack: TrackArtistApi = {
+                        artist: artistName.name,
+                        title: tracks[i].title,
+                        duration: tracks[i].duration
+                    }
+                    artistTrack.push(artistsTrack);
+                }else{
+                    res.send('У данного исполнителя не найдены композиции')
+                }
+            }
+            return res.send(artistTrack);
+        }
+
+            trackList = await Track.find();
+            return res.send(trackList);
+
     } catch (e) {
         next(e);
     }

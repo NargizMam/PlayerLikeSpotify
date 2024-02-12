@@ -23,17 +23,9 @@ albumsRouter.get('/', async (req, res, next) => {
     }
 });
 albumsRouter.get('/:id', async (req, res, next) => {
-    let _id: Types.ObjectId;
     try {
-        try {
-            _id = new Types.ObjectId(req.params.id);
-            // console.log(_id, '1') Спросить почему ошибка. Используется до инициализации
-        } catch {
-            res.status(404).send({error: "Неверный идентификатор!"});
-        }
         const selectAlbum = await Album.findById(req.params.id).populate('artist', 'name');
-        // console.log(req.params.id, '3')
-        // console.log(_id);
+
         if (!selectAlbum) {
             return res.status(404).send({error: 'Альбом не найден'});
         }

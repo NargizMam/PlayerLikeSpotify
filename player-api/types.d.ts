@@ -14,6 +14,19 @@ export interface TrackMutation {
     album: string;
     duration: string;
 }
-export interface ArtistApi extends ArtistMutation{
+export interface Album {
     _id: string;
+    artist: string;
+}
+export interface TrackApi {
+    _id: string;
+    title: string;
+    album: Album;
+    duration: string;
+    __v: number;
+}
+export interface TrackArtistApi{
+    artist: string | null;
+    title: string;
+    duration: string;
 }
