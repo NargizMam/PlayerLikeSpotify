@@ -1,7 +1,7 @@
 import express from "express";
 import {TrackApi, TrackArtistApi, TrackMutation} from "../types";
-import Track from "../modules/Track";
-import Artist from "../modules/Artist";
+import Track from "../models/Track";
+import Artist from "../models/Artist";
 
 
 const tracksRouter = express.Router();

@@ -1,5 +1,5 @@
 import express from "express";
-import Artist from "../modules/Artist";
+import Artist from "../models/Artist";
 import {imagesUpload} from "../multer";
 import {ArtistMutation} from "../types";
 
