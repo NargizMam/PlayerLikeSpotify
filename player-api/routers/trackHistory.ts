@@ -28,9 +28,5 @@ trackHistoryRouter.post('/', auth, async (req, res, next) => {
     }
   }
 });
-trackHistoryRouter.get('/', async (req, res, next) => {
-  const newTrH = await TrackHistory.find();
-  return res.send(newTrH);
-});
 
 export default trackHistoryRouter;
