@@ -1,8 +1,7 @@
 import express from "express";
 import {imagesUpload} from "../multer";
 import {AlbumMutation} from "../types";
-import Album from "../modules/Album";
-import {Types} from "mongoose";
+import Album from "../models/Album";
 
 const albumsRouter = express.Router();
 
@@ -44,7 +43,7 @@ albumsRouter.post('/', imagesUpload.single('image'), async (req, res, next) => {
         }
         const albums = new Album(albumsData);
         await albums.save();
-        return res.send('Album was created!');
+        return res.send('Альбом был создан!');
     } catch (e) {
         next(e);
     }

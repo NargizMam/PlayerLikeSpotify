@@ -22,7 +22,7 @@ artistsRouter.post('/', imagesUpload.single('image'), async (req, res, next) => 
     };
     const artist = new Artist(artistData);
     await artist.save();
-    return res.send('ИСпонитель был создан!');
+    return res.send('Испонитель был создан!');
   } catch (e) {
     next(e);
   }
