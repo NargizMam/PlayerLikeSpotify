@@ -3,6 +3,7 @@ import auth, { RequestWithUser } from '../middleware/auth';
 import Track from '../models/Track';
 import TrackHistory from '../models/TrackHistory';
 import mongoose from 'mongoose';
+import {TrackArtistApi, TrackHistoryMutation} from "../types";
 
 const trackHistoryRouter = express.Router();
 
@@ -12,13 +13,14 @@ trackHistoryRouter.post('/', auth, async (req, res, next) => {
     if (req.body.track) {
       const trackId = await Track.findById(req.body.track);
       if (!trackId) return res.send('Композиция не найдена!');
-      const newTrackHistory = {
-        track: req.body.track,
+      const newTrackHistory: TrackHistoryMutation = {
+        track: req.body.track.toString(),
         user: user._id.toString(),
       };
       const trackHistory = new TrackHistory(newTrackHistory);
       await trackHistory.save();
-      return res.send(newTrackHistory);
+      const tracksHistory = await TrackHistory.find<TrackArtistApi[]>();
+      return res.send(tracksHistory);
     }
   } catch (e) {
     if (e instanceof mongoose.Error.ValidationError) {

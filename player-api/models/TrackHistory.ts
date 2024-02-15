@@ -26,13 +26,8 @@ const TrackHistorySchema = new Schema({
       },
       message: 'Композиция не найдена!',
     },
-  },
-  datetime: {
-    type: Date,
-    default: Date.now(),
-    required: true,
-  },
-});
+  }
+}, {timestamps: true});
 
 const TrackHistory = mongoose.model('TrackHistory', TrackHistorySchema);
 

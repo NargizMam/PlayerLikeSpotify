@@ -37,6 +37,16 @@ export interface UserFields {
   password: string;
   token: string;
 }
+export interface TrackHistoryMutation {
+  user: string;
+  track: string;
+}
+export interface TrackHistoryApi {
+  user: string;
+  track: string;
+  createdAt: string;
+  updateAt: string;
+}
 export interface UserMethods {
   checkPassword(password: string): Promise<boolean>;
   generateToken(): void;
