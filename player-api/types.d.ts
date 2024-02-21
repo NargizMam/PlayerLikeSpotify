@@ -15,7 +15,7 @@ export interface TrackMutation {
   title: string;
   album: string;
   duration: string;
-  serialNumber: string;
+  serialNumber: number;
 }
 export interface Album {
   _id: string;
@@ -26,12 +26,13 @@ export interface TrackApi {
   title: string;
   album: Album;
   duration: string;
-  serialNumber: string;
+  serialNumber: number;
 }
 export interface TrackArtistApi {
   artist: string | null;
   title: string;
   duration: string;
+  serialNumber: number;
 }
 export interface UserFields {
   username: string;

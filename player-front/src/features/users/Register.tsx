@@ -1,10 +1,11 @@
-import { Alert, Avatar, Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';import { RegisterMutation } from '../../types';
-import React, { useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { registerUser } from './usersThunk';
+import {Avatar, Box, Button, Container, Grid, Link, TextField, Typography} from '@mui/material';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import React, {useState} from 'react';
+import {Link as RouterLink, useNavigate} from 'react-router-dom';
+import {useAppDispatch, useAppSelector} from '../../app/hooks';
+import {registerUser} from './usersThunk';
 import {selectRegisterError} from "./usersSlice.ts";
+import { RegisterMutation } from '../../types';
 
 
 const Register = () => {

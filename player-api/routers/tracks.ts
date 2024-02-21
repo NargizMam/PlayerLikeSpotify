@@ -25,6 +25,7 @@ tracksRouter.get('/', async (req, res, next) => {
             artist: artistName.name,
             title: tracks[i].title,
             duration: tracks[i].duration,
+            serialNumber: tracks[i].serialNumber
           };
           artistTrack.push(artistsTrack);
         } else {
@@ -47,6 +48,7 @@ tracksRouter.post('/', async (req, res, next) => {
       title: req.body.title,
       album: req.body.album,
       duration: req.body.duration,
+      serialNumber: parseInt(req.body.serialNumber)
     };
     const tracks = new Track(tracksData);
     await tracks.save();
