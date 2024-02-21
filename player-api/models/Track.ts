@@ -22,6 +22,10 @@ const TrackSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  serialNumber: {
+    type: Number,
+    required: true
+  }
 });
 
 const Track = mongoose.model('Track', TrackSchema);

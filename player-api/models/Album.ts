@@ -19,7 +19,7 @@ const AlbumSchema = new mongoose.Schema({
     },
   },
   issueDate: {
-    type: String,
+    type: Number,
     required: true,
   },
   image: String,

@@ -8,13 +8,14 @@ export interface ArtistMutation {
 export interface AlbumMutation {
   title: string;
   artist: string;
-  issueDate: string;
+  issueDate: number;
   image: string | null;
 }
 export interface TrackMutation {
   title: string;
   album: string;
   duration: string;
+  serialNumber: string;
 }
 export interface Album {
   _id: string;
@@ -25,7 +26,7 @@ export interface TrackApi {
   title: string;
   album: Album;
   duration: string;
-  __v: number;
+  serialNumber: string;
 }
 export interface TrackArtistApi {
   artist: string | null;
