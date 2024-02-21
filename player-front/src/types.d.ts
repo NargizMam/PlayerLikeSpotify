@@ -28,9 +28,9 @@ export interface ArtistApi {
     image: string | null;
 }
 export interface AlbumsApi {
-    id: string;
+    _id: string;
     title: string;
     artist: string;
-    issueDate: string;
+    issueDate: number;
     image: string;
 }

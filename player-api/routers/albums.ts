@@ -8,8 +8,9 @@ const albumsRouter = express.Router();
 albumsRouter.get('/', async (req, res, next) => {
     let albumsList;
     try {
-        if (req.query.params) {
-            albumsList = await Album.find({'artist': req.query.params}).populate('artist', 'name');
+        if (req.query.artist) {
+            albumsList = await Album.find({'artist': req.query.artist}).populate('artist', 'name');
+            console.log(albumsList)
             if(albumsList.length === 0){
                 return  res.send('У данного альбома нет треков')
             }

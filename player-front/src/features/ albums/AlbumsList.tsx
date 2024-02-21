@@ -13,35 +13,41 @@ const AlbumsList = () => {
     const albumsList = useAppSelector(selectAlbumsList);
     const loading = useAppSelector(selectAlbumsFetching);
     const { id} = useParams();
-    const artistName = useAppSelector(selectArtistsName);
+    const artistName = useAppSelector(selectArtistsName);//как сделать так чтобы не было обязательным
+    let name = 'vj';
+    if(artistName && artistName.name){
+        name = artistName.name;
+        console.log(name)
+    }
 
     useEffect(() => {
-        console.log(id, artistName)
-
         if(id){
             dispatch(getOneArtist(id));
             dispatch(getAlbumsList(id));
         }
-    }, [dispatch]);
-
-    const allAlbums = albumsList.map(album => (
+    }, [dispatch, id]);
+    const sortedAlbums = [...albumsList].sort((a,b) => b.issueDate - a.issueDate);
+    const allAlbums = sortedAlbums.map(album => (
         <AlbumsItem
-            key={album.id}
-            id={album.id}
+            key={album._id}
+            id={album._id}
             title={album.title}
             image={album.image}
             artist={album.artist}
-            issueDate={parseInt(album.issueDate)}
+            issueDate={album.issueDate}
         />
         )
     );
+
     return (
         <>
             <Grid container justifyContent="space-around">
                 {loading && <CircularProgress/>}
-                <Grid container>
-                    <h1>{artistName?.name}</h1>
-                    {allAlbums}
+                <Grid>
+                    <h1>{name}</h1>
+                    <Grid container>
+                        {allAlbums}
+                    </Grid>
                 </Grid>
             </Grid>
         </>
