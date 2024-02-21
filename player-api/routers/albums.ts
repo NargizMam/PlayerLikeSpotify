@@ -9,7 +9,7 @@ albumsRouter.get('/', async (req, res, next) => {
     let albumsList;
     try {
         if (req.query.params) {
-            albumsList = await Album.find({'artist': req.query.params});
+            albumsList = await Album.find({'artist': req.query.params}).populate('artist', 'name');
             if(albumsList.length === 0){
                 return  res.send('У данного альбома нет треков')
             }

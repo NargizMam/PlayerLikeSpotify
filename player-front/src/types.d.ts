@@ -23,7 +23,14 @@ export interface ValidationError {
     _message: string;
 }
 export interface ArtistApi {
-    id: string;
+    _id: string;
     name: string;
     image: string | null;
+}
+export interface AlbumsApi {
+    id: string;
+    title: string;
+    artist: string;
+    issueDate: string;
+    image: string;
 }

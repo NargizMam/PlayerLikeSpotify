@@ -15,12 +15,12 @@ const Artists = () => {
     }, [dispatch]);
 
     const allArtists = artistsList.map(artist => (
-            <ArtistItem
-                key={artist.id}
-                id={artist.id}
-                name={artist.name}
-                image={artist.image}
-            />
+        <ArtistItem
+            key={artist._id}
+            id={artist._id}
+            name={artist.name}
+            image={artist.image}
+        />
     ));
     return (
         <>
