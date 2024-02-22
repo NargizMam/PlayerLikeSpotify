@@ -10,16 +10,16 @@ interface Props {
 const TracksItem: React.FC<Props> = ({title, duration,serialNumber}) => {
 
     return (
-        <Card sx={{maxWidth: 260, margin: 2}}>
+        <Card sx={{width: 460, margin: 2}}>
             <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                    {title}
+                <Typography gutterBottom variant='h4'  component="div">
+                   {title}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    {serialNumber}
+                    Порядковый номер: <span>{serialNumber}</span>
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    {duration}
+                    Продолжительность: {duration}
                 </Typography>
             </CardContent>
         </Card>

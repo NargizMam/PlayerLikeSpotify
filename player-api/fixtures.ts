@@ -116,7 +116,28 @@ const run = async () => {
             title: 'Сияй',
             album: album5.id,
             duration: '3:26',
-            serialNumber: 1
+            serialNumber: 2
+        },
+        {
+            id: crypto.randomUUID(),
+            title: 'Тра ля ',
+            album: album5.id,
+            duration: '4:26',
+            serialNumber: 3
+        },
+        {
+            id: crypto.randomUUID(),
+            title: 'Тра ля ',
+            album: album5.id,
+            duration: '4:26',
+            serialNumber: 4
+        },
+        {
+            id: crypto.randomUUID(),
+            title: 'Можно ',
+            album: album5.id,
+            duration: '4:26',
+            serialNumber: 5
         },
         {
             id: crypto.randomUUID(),
@@ -130,7 +151,26 @@ const run = async () => {
             title: 'Дискотека на двоих',
             album: album4.id,
             duration: '3:04',
-            serialNumber: 8
+            serialNumber: 5
+        },
+        {
+            id: crypto.randomUUID(),
+            title: 'Возможно',
+            album: album4.id,
+            duration: '3:04',
+            serialNumber: 3
+        }, {
+            id: crypto.randomUUID(),
+            title: 'Не знаю',
+            album: album4.id,
+            duration: '3:04',
+            serialNumber: 2
+        }, {
+            id: crypto.randomUUID(),
+            title: 'Нельзя',
+            album: album4.id,
+            duration: '3:04',
+            serialNumber: 1
         },
         {
             id: crypto.randomUUID(),
@@ -144,21 +184,63 @@ const run = async () => {
             title: 'My Mom',
             album: album6.id,
             duration: '5:03',
+            serialNumber: 2
+        },
+        {
+            id: crypto.randomUUID(),
+            title: 'Dr. Skit',
+            album: album6.id,
+            duration: '1:03',
             serialNumber: 3
+        },
+        {
+            id: crypto.randomUUID(),
+            title: 'My sister',
+            album: album6.id,
+            duration: '5:03',
+            serialNumber: 4
+        },
+        {
+            id: crypto.randomUUID(),
+            title: 'My brother',
+            album: album6.id,
+            duration: '5:03',
+            serialNumber: 5
         },
         {
             id: crypto.randomUUID(),
             title: 'Bad Guy',
             album: album7.id,
             duration: '7:14',
-            serialNumber: 2
+            serialNumber: 1
         },
         {
             id: crypto.randomUUID(),
             title: 'So much better',
             album: album7.id,
             duration: '7:14',
-            serialNumber: 1
+            serialNumber: 2
+        },
+        {
+            id: crypto.randomUUID(),
+            title: 'Good',
+            album: album7.id,
+            duration: '7:14',
+            serialNumber: 3
+        },
+        {
+            id: crypto.randomUUID(),
+            title: 'Find',
+            album: album7.id,
+            duration: '7:14',
+            serialNumber: 4
+        },
+        {
+            id: crypto.randomUUID(),
+            title: 'Better',
+            album: album7.id,
+            duration: '7:14',
+            serialNumber: 5
         },
         {
             id: crypto.randomUUID(),
@@ -166,6 +248,34 @@ const run = async () => {
             album: album3.id,
             duration: '1:03',
             serialNumber: 2
+        },
+        {
+            id: crypto.randomUUID(),
+            title: 'Bad',
+            album: album3.id,
+            duration: '1:03',
+            serialNumber: 1
+        },
+        {
+            id: crypto.randomUUID(),
+            title: 'Good',
+            album: album3.id,
+            duration: '1:03',
+            serialNumber: 3
+        },
+        {
+            id: crypto.randomUUID(),
+            title: 'Fine',
+            album: album3.id,
+            duration: '1:03',
+            serialNumber: 4
+        },
+        {
+            id: crypto.randomUUID(),
+            title: 'Later',
+            album: album3.id,
+            duration: '1:03',
+            serialNumber: 5
         },
         {
             id: crypto.randomUUID(),
@@ -183,21 +293,60 @@ const run = async () => {
         },
         {
             id: crypto.randomUUID(),
+            title: 'Moon',
+            album: album2.id,
+            duration: '3:03',
+            serialNumber: 2
+        },
+        {
+            id: crypto.randomUUID(),
+            title: 'Мое солнце',
+            album: album2.id,
+            duration: '3:03',
+            serialNumber: 5
+        },
+        {
+            id: crypto.randomUUID(),
+            title: 'Mother',
+            album: album2.id,
+            duration: '4:03',
+            serialNumber: 4
+        },
+        {
+            id: crypto.randomUUID(),
             title: 'Атлант',
             album: album1.id,
             duration: '3:07',
-            serialNumber: 1
+            serialNumber: 5
+        },
+        {
+            id: crypto.randomUUID(),
+            title: 'Атлант',
+            album: album1.id,
+            duration: '3:07',
+            serialNumber: 4
         },
         {
             id: crypto.randomUUID(),
             title: 'Психопатия',
             album: album1.id,
             duration: '3:29',
+            serialNumber: 3
+        },
+        {
+            id: crypto.randomUUID(),
+            title: 'Мозг',
+            album: album1.id,
+            duration: '3:07',
             serialNumber: 2
         },
-
-
-
+        {
+            id: crypto.randomUUID(),
+            title: 'Лучшее',
+            album: album1.id,
+            duration: '3:29',
+            serialNumber: 1
+        },
     )
 
 

@@ -12,8 +12,10 @@ const TracksList = () => {
     const tracksList = useAppSelector(selectTracksList);
     const loading = useAppSelector(selectTracksFetching);
     const {id} = useParams();
-    const [albumsInfo, setAlbumsInfo] = useState('');
-    // const [artistInfo, setArtistInfo] = useState('');
+    const [tracksInfo, setTracksInfo] = useState({
+        artist: '',
+        album: ''
+    });
 
     useEffect(() => {
         if (id) {
@@ -23,16 +25,21 @@ const TracksList = () => {
 
     useEffect(() => {
         if (tracksList.length > 0) getAlbumsInfo();
-        console.log(tracksList)
     }, [tracksList]);
+
     const getAlbumsInfo = () => {
-        const tracksKey = tracksList.map(track => track.album);
-        setAlbumsInfo(tracksKey[0].title);
+        const tracksAlbum = tracksList.map(track => track.album);
+        const tracksArtist = tracksList.map(track => track.artist);
+        setTracksInfo((prevState) => ({
+            ...prevState,
+            album: tracksAlbum[0],
+            artist: tracksArtist[0]
+        }))
     };
 
     const allTracks = tracksList.map(track => (
             <TracksItem
-                key={track._id}
+                key={crypto.randomUUID()}
                 title={track.title}
                 duration={track.duration}
                 serialNumber={track.serialNumber}
@@ -45,7 +52,8 @@ const TracksList = () => {
             <Grid container justifyContent="space-around">
                 {loading && <CircularProgress/>}
                 <Grid>
-                    <h1>{albumsInfo}</h1>
+                    <h1>Исполнитель: {tracksInfo.artist}</h1>
+                    <h6>Альбом: {tracksInfo.album}</h6>
                     <Grid container>
                         {allTracks}
                     </Grid>

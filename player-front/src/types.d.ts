@@ -45,8 +45,8 @@ export interface AlbumsApi {
 export interface TrackApi {
     _id: string;
     title: string;
-    album: Album;
-    artist: Artist;
+    album: string;
+    artist: string;
     duration: string;
     serialNumber: number;
 }
