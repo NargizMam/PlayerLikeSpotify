@@ -1,40 +1,56 @@
 import express from 'express';
-import { TrackApi, TrackArtistApi, TrackMutation } from '../types';
+import {TrackAlbumsApi, TrackApi, TrackArtistApi, TrackMutation} from '../types';
 import Track from '../models/Track';
 import Artist from '../models/Artist';
+import artist from "../models/Artist";
 
 const tracksRouter = express.Router();
 
 tracksRouter.get('/', async (req, res, next) => {
-  let trackList;
+  let trackList:TrackAlbumsApi[] = [];
+
   try {
     if (req.query.album) {
-      trackList = await Track.find({ album: req.query.album });
-      if (trackList.length === 0) {
+      const albumsTrack: TrackApi[] = await Track.find({album: req.query.album}).populate('album', 'title artist');
+      if (albumsTrack.length === 0) {
         return res.send('У данного альбома нет треков');
       }
-      return res.send(trackList);
-    }
-    if (req.query.artist) {
-      let artistTrack: TrackArtistApi[] = [];
-      const tracks: TrackApi[] = await Track.find().populate('album', { artist: req.query.artist });
-      for (let i = 0; i < tracks.length; i++) {
-        const artistName = await Artist.findById(tracks[i].album.artist);
-        if (artistName) {
-          const artistsTrack: TrackArtistApi = {
-            artist: artistName.name,
-            title: tracks[i].title,
-            duration: tracks[i].duration,
-            serialNumber: tracks[i].serialNumber
-          };
-          artistTrack.push(artistsTrack);
-        } else {
-          res.send('У данного исполнителя не найдены композиции');
+
+      for (let i = 0; i < albumsTrack.length; i++) {
+        const artistInfo = await Artist.findById(albumsTrack[i].album.artist);
+
+        if (artistInfo) {
+          const artistsTrack: TrackAlbumsApi = {
+            artist: artistInfo.name,
+            album: albumsTrack[i].album.title,
+            title: albumsTrack[i].title,
+            duration: albumsTrack[i].duration,
+            serialNumber: albumsTrack[i].serialNumber
+          }
+          trackList.push(artistsTrack);
         }
       }
-      return res.send(artistTrack);
-    }
+      return res.send(trackList);
 
+    }
+      if (req.query.artist) {
+        const tracks: TrackApi[] = await Track.find().populate('album', {artist: req.query.artist});
+        for (let i = 0; i < tracks.length; i++) {
+          const artistInfo = await Artist.findById(tracks[i].album.artist);
+
+          if (artistInfo) {
+            const artistsTrack: TrackAlbumsApi = {
+              artist: artistInfo.name,
+              album: tracks[i].album.title,
+              title: tracks[i].title,
+              duration: tracks[i].duration,
+              serialNumber: tracks[i].serialNumber
+            }
+            trackList.push(artistsTrack);
+          }
+        }
+        return res.send('ll');
+    }
     trackList = await Track.find();
     return res.send(trackList);
   } catch (e) {

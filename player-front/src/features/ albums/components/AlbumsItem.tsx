@@ -8,21 +8,17 @@ interface Props {
     id: string;
     title: string;
     image: string | null;
-    artist: string;
     issueDate: number;
 }
 
-const AlbumsItem: React.FC<Props> = ({title, image, id, issueDate, artist}) => {
+const AlbumsItem: React.FC<Props> = ({title, image, id, issueDate}) => {
     let cardImage = noImage;
 
     if (image) {
         cardImage = apiURL + '/' + image;
     }
-    const getTrack = () => {
-        console.log(id);
-    }
     return (
-        <Card sx={{maxWidth: 345, margin: 2}} onClick={getTrack}>
+        <Card sx={{maxWidth: 345, margin: 2}}>
             <CardMedia
                 sx={{height: 140}}
                 image={cardImage}
@@ -37,7 +33,7 @@ const AlbumsItem: React.FC<Props> = ({title, image, id, issueDate, artist}) => {
                 </Typography>
             </CardContent>
             <CardActions>
-                <Button component={NavLink} to={`/albums?artist=${artist}`} size="small">Посмотреть альбомы</Button>
+                <Button component={NavLink} to={`/albums/${id}`} size="small">Посмотреть треки</Button>
             </CardActions>
         </Card>
     );

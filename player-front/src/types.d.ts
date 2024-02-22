@@ -22,15 +22,35 @@ export interface ValidationError {
     name: string;
     _message: string;
 }
+export interface Artist {
+    id: string;
+    name: string;
+};
 export interface ArtistApi {
     _id: string;
     name: string;
     image: string | null;
 }
+export interface Album {
+    id: string;
+    title: string
+}
 export interface AlbumsApi {
     _id: string;
     title: string;
-    artist: string;
+    artist: Artist;
     issueDate: number;
     image: string;
+}
+export interface TrackApi {
+    _id: string;
+    title: string;
+    album: Album;
+    artist: Artist;
+    duration: string;
+    serialNumber: number;
+}
+export
+interface QueryParams {
+    [key: string]: string
 }

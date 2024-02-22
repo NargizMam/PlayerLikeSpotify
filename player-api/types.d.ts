@@ -20,6 +20,7 @@ export interface TrackMutation {
 export interface Album {
   _id: string;
   artist: string;
+  title: string;
 }
 export interface TrackApi {
   _id: string;
@@ -30,6 +31,13 @@ export interface TrackApi {
 }
 export interface TrackArtistApi {
   artist: string | null;
+  title: string;
+  duration: string;
+  serialNumber: number;
+}
+export interface TrackAlbumsApi {
+  artist: string | null;
+  album: string;
   title: string;
   duration: string;
   serialNumber: number;

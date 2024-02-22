@@ -1,8 +1,7 @@
 import express from 'express';
 import Artist from '../models/Artist';
-import { imagesUpload } from '../multer';
-import { ArtistMutation } from '../types';
-import Album from "../models/Album";
+import {imagesUpload} from '../multer';
+import {ArtistMutation} from '../types';
 
 const artistsRouter = express.Router();
 

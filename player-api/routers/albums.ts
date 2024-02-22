@@ -10,11 +10,10 @@ albumsRouter.get('/', async (req, res, next) => {
     try {
         if (req.query.artist) {
             albumsList = await Album.find({'artist': req.query.artist}).populate('artist', 'name');
-            console.log(albumsList)
             if(albumsList.length === 0){
                 return  res.send('У данного альбома нет треков')
             }
-            return res.send(albumsList);
+            return res.send(albumsList.sort((a, b) => b.issueDate - a.issueDate));
         }
         albumsList = await Album.find();
         return res.send(albumsList);
