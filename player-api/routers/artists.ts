@@ -2,7 +2,6 @@ import express from 'express';
 import Artist from '../models/Artist';
 import {imagesUpload} from '../multer';
 import {ArtistMutation} from '../types';
-import Track from "../models/Track";
 
 const artistsRouter = express.Router();
 
