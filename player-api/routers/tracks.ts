@@ -1,8 +1,7 @@
 import express from 'express';
-import {TrackAlbumsApi, TrackApi, TrackArtistApi, TrackMutation} from '../types';
+import {TrackAlbumsApi, TrackApi, TrackMutation} from '../types';
 import Track from '../models/Track';
 import Artist from '../models/Artist';
-import artist from "../models/Artist";
 
 const tracksRouter = express.Router();
 
@@ -49,7 +48,7 @@ tracksRouter.get('/', async (req, res, next) => {
             trackList.push(artistsTrack);
           }
         }
-        return res.send('ll');
+        return res.send(trackList);
     }
     trackList = await Track.find();
     return res.send(trackList);

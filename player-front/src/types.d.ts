@@ -25,7 +25,7 @@ export interface ValidationError {
 export interface Artist {
     id: string;
     name: string;
-};
+}
 export interface ArtistApi {
     _id: string;
     name: string;

@@ -1,4 +1,4 @@
-import { Model } from 'mongoose';
+import {Model} from 'mongoose';
 
 export interface ArtistMutation {
   name: string;
@@ -62,3 +62,15 @@ export interface UserMethods {
   generateToken(): void;
 }
 type UserModal = Model<UserFields, {}, UserMethods>;
+export interface Artist{
+  id: string,
+  name: string
+}
+export interface AlbumsWithTrackCount {
+  id: string;
+  title: string;
+  artist: Artist;
+  issueDate: number;
+  image: string | null;
+  tracksCount: number;
+}
