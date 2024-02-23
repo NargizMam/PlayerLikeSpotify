@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import config from "./config";
-import User from "./models/User";
 import Artist from "./models/Artist";
 import Album from "./models/Album";
 import Track from "./models/Track";
@@ -10,31 +9,17 @@ const dropCollection = async (db: mongoose.Connection, collectionName: string) =
         await db.dropCollection(collectionName);
     }
     catch (e) {
-        console.log(`Collection ${collectionName} was missing. skipping derop ...`)
+        console.log(`Collection ${collectionName} was missing. skipping drop ...`)
     }
 };
 const run = async () => {
     await mongoose.connect(config.mongoose.db);
     const db = mongoose.connection;
-    const collections = ['artists', 'albums', 'tracks', 'trackHistory', 'users'];
+    const collections = ['artists', 'albums', 'tracks'];
     for (const collectionName of collections) {
         await dropCollection(db, collectionName)
     }
-    const [user1, user2, user3] = await User.create({
-            username: 'Misha',
-            password: "123",
-            token: crypto.randomUUID()
-        },
-        {
-            username: 'Anna',
-            password: '0000',
-            token: crypto.randomUUID()
-        },
-        {
-            username: 'John',
-            password: "456",
-            token: crypto.randomUUID()
-        });
+
     const [artist1, artist2, artist3] = await Artist.create(
         {
             name: 'MiaGy',
@@ -72,7 +57,7 @@ const run = async () => {
             title: 'Buster Ceaton',
             artist: artist1.id,
             issueDate: 2020,
-            image: 'fixtures/bustr.jpeg'
+            image: 'fixtures/buster.jpeg'
         },
         {
             id: crypto.randomUUID(),
@@ -103,7 +88,7 @@ const run = async () => {
             image: 'fixtures/marshall.jpeg'
         },
     )
-    const [track1, track2, track3, track4, track5, track6, track7, track8] = await Track.create(
+    const [] = await Track.create(
         {
             id: crypto.randomUUID(),
             title: 'Еще хочу',
