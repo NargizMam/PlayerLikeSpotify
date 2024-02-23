@@ -1,8 +1,7 @@
 import express from "express";
 import {imagesUpload} from "../multer";
-import {AlbumMutation, AlbumsWithTrackCount, TrackAlbumsApi} from "../types";
+import {AlbumMutation, AlbumsWithTrackCount} from "../types";
 import Album from "../models/Album";
-import album from "../models/Album";
 import Track from "../models/Track";
 
 const albumsRouter = express.Router();
