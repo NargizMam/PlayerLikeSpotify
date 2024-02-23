@@ -31,16 +31,13 @@ export interface ArtistApi {
     name: string;
     image: string | null;
 }
-export interface Album {
-    id: string;
-    title: string
-}
 export interface AlbumsApi {
     _id: string;
     title: string;
     artist: Artist;
     issueDate: number;
-    image: string;
+    image: string | null;
+    tracksCount?: number;
 }
 export interface TrackApi {
     _id: string;

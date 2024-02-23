@@ -9,7 +9,8 @@ export interface AlbumMutation {
   title: string;
   artist: string;
   issueDate: number;
-  image: string | null;
+  image?: string | null;
+  tracksCount?: number;
 }
 export interface TrackMutation {
   title: string;
@@ -41,6 +42,8 @@ export interface TrackAlbumsApi {
   title: string;
   duration: string;
   serialNumber: number;
+  tracksCount?: number;
+
 }
 export interface UserFields {
   username: string;
@@ -67,10 +70,10 @@ export interface Artist{
   name: string
 }
 export interface AlbumsWithTrackCount {
-  id: string;
+  _id: string;
   title: string;
-  artist: Artist;
+  artist: string;
   issueDate: number;
-  image: string | null;
-  tracksCount: number;
+  image?: string | null;
+  tracksCount?: number;
 }

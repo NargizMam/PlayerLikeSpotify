@@ -54,7 +54,7 @@ const TracksList = () => {
                 <Grid>
                     <h1>Исполнитель: {tracksInfo.artist}</h1>
                     <h6>Альбом: {tracksInfo.album}</h6>
-                    <Grid container>
+                    <Grid >
                         {allTracks}
                     </Grid>
                 </Grid>

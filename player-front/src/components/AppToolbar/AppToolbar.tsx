@@ -19,7 +19,6 @@ const AppToolbar = () => {
                     </Typography>
                     <nav>
                         <Button component={NavLink} to={'/'} color="inherit">Выбрать исполнителя</Button>
-                        <Button component={NavLink} to="/albums" color="inherit"> Albums</Button>
                         <Button component={NavLink} to="/register" color="inherit"> Sign up</Button>
                     </nav>
                 </Grid>

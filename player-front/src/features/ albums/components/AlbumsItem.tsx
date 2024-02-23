@@ -9,9 +9,10 @@ interface Props {
     title: string;
     image: string | null;
     issueDate: number;
+    tracksCount: number;
 }
 
-const AlbumsItem: React.FC<Props> = ({title, image, id, issueDate}) => {
+const AlbumsItem: React.FC<Props> = ({title, image, id, issueDate, tracksCount}) => {
     let cardImage = noImage;
 
     if (image) {
@@ -26,10 +27,13 @@ const AlbumsItem: React.FC<Props> = ({title, image, id, issueDate}) => {
             />
             <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
-                    {title}
+                    Название альбома:{title}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    {issueDate}
+                    Дата выпуска: {issueDate}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                    В данном альбоме: {tracksCount} треков
                 </Typography>
             </CardContent>
             <CardActions>

@@ -14,18 +14,6 @@ artistsRouter.get('/', async (_req, res, next) => {
   }
 });
 
-artistsRouter.get('/:id', async (req, res, next) => {
-  try {
-    const selectArtist = await Artist.findById(req.params.id);
-
-    if (!selectArtist) {
-      return res.status(404).send({error: 'Исполнитель не найден'});
-    }
-    return res.send(selectArtist.name);
-  } catch (e) {
-    next(e);
-  }
-});
 artistsRouter.post('/', imagesUpload.single('image'), async (req, res, next) => {
   try {
     const artistData: ArtistMutation = {

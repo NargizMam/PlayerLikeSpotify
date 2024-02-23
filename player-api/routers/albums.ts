@@ -1,6 +1,6 @@
 import express from "express";
 import {imagesUpload} from "../multer";
-import {AlbumMutation, AlbumsWithTrackCount} from "../types";
+import {AlbumMutation, AlbumsWithTrackCount, TrackAlbumsApi} from "../types";
 import Album from "../models/Album";
 import album from "../models/Album";
 import Track from "../models/Track";
@@ -8,21 +8,26 @@ import Track from "../models/Track";
 const albumsRouter = express.Router();
 
 albumsRouter.get('/', async (req, res, next) => {
-    let albumsList;
+    let albumsList: AlbumsWithTrackCount[] = [];
     try {
         if (req.query.artist) {
-            const artistsAlbum = await Album.find({'artist': req.query.artist}).populate('artist', 'name');
+            const artistsAlbum = await Album.find({'artist': req.query.artist}).sort({issueDate: -1}).populate('artist', 'name');
             if(artistsAlbum.length === 0){
                 return  res.send('У данного альбома нет треков')
             }
             for (let i = 0; i < artistsAlbum.length; i++) {
                 const albumTracksCount = await Track.find({album: artistsAlbum[i].id});
-                const albumsWithTrackCount= {
-                    ...artistsAlbum,
-                    tracksCount: albumTracksCount.length
+                const albumsWithTrackCount: AlbumsWithTrackCount= {
+                    _id: artistsAlbum[i]._id.toString(),
+                    artist: artistsAlbum[i].artist,
+                    title: artistsAlbum[i].title,
+                    issueDate: artistsAlbum[i].issueDate,
+                    image:artistsAlbum[i].image,
+                    tracksCount: albumTracksCount.length,
                 }
+                albumsList.push(albumsWithTrackCount)
             }
-            return res.send(artistsAlbum.sort((a, b) => b.issueDate - a.issueDate));
+            return res.send(albumsList);
         }
         albumsList = await Album.find();
         return res.send(albumsList);

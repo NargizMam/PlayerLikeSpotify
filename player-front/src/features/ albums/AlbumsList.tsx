@@ -34,6 +34,7 @@ const AlbumsList = () => {
             title={album.title}
             image={album.image}
             issueDate={album.issueDate}
+            tracksCount={album.tracksCount ? album.tracksCount : 0}
         />
     ));
     return (
