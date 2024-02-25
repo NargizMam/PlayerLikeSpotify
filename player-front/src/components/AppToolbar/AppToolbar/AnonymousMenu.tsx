@@ -6,7 +6,7 @@ const AnonymousMenu = () => {
     <>
       <Grid item>
         <Button component={NavLink} to='/register' color='inherit'>Sign up</Button>
-        <Button component={NavLink} to='/login' color='inherit'>Login up</Button>
+        <Button component={NavLink} to='/login' color='inherit'>Log in</Button>
       </Grid>
     </>
   );

@@ -47,4 +47,10 @@ export interface TrackApi {
     duration: string;
     serialNumber: number;
 }
-
+export interface GlobalError {
+    error: string
+}
+export interface LoginMutation {
+    username: string;
+    password: string;
+}
