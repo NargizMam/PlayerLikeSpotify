@@ -1,11 +1,11 @@
 import './App.css'
 import {Container, CssBaseline} from "@mui/material";
-import AppToolbar from "./components/AppToolbar/AppToolbar.tsx";
 import {Route, Routes} from "react-router-dom";
 import Artists from "./features/artists/Artists.tsx";
 import AlbumsList from "./features/ albums/AlbumsList.tsx";
 import TracksList from './features/tracks/TracksList.tsx';
 import Register from "./features/users/Register.tsx";
+import AppToolbar from './components/AppToolbar/AppToolbar/AppToolbar.tsx';
 
 const App = () => (
     <>
