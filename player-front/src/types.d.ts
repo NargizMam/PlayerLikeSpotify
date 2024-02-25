@@ -47,7 +47,4 @@ export interface TrackApi {
     duration: string;
     serialNumber: number;
 }
-export
-interface QueryParams {
-    [key: string]: string
-}
+

@@ -5,6 +5,7 @@ import {Route, Routes} from "react-router-dom";
 import Artists from "./features/artists/Artists.tsx";
 import AlbumsList from "./features/ albums/AlbumsList.tsx";
 import TracksList from './features/tracks/TracksList.tsx';
+import Register from "./features/users/Register.tsx";
 
 const App = () => (
     <>
@@ -15,6 +16,7 @@ const App = () => (
         <Container className="container" maxWidth="xl">
             <Routes>
                 <Route path="/"  element={<Artists/>} />
+                <Route path="/register"  element={<Register/>} />
                 <Route path="/artists/:id"  element={<AlbumsList/>} />
                 <Route path="/albums/:id"  element={<TracksList/>} />
                 <Route path="*" element={<h1>Not found</h1>} />
