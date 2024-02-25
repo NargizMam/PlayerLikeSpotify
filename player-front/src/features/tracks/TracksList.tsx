@@ -9,6 +9,7 @@ import TracksItem from "./components/TracksItem.tsx";
 
 const TracksList = () => {
     const dispatch = useAppDispatch();
+    // const user = useAppSelector(selectUser);
     const tracksList = useAppSelector(selectTracksList);
     const loading = useAppSelector(selectTracksFetching);
     const {id} = useParams();
@@ -36,13 +37,18 @@ const TracksList = () => {
             artist: tracksArtist[0]
         }))
     };
-
+    const createTrackHistory = (id: string) => {
+        console.log(id)
+    }
     const allTracks = tracksList.map(track => (
             <TracksItem
-                key={crypto.randomUUID()}
+                key={track.id}
+                id={track.id}
                 title={track.title}
                 duration={track.duration}
                 serialNumber={track.serialNumber}
+                onPlayer={() =>createTrackHistory(track.id)}
+
             />
         )
     );

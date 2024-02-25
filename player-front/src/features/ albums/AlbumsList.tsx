@@ -14,10 +14,12 @@ const AlbumsList = () => {
     const [artistName, setArtistName] = useState('');
 
     useEffect(() => {
+        dispatch(getAlbumsList(null));
         if (id) {
             dispatch(getAlbumsList(id));
         }
     }, [dispatch, id]);
+
     useEffect(() => {
         const getArtistInfo = () => {
             const albumsKey = albumsList.map(album => album.artist);

@@ -28,7 +28,19 @@ albumsRouter.get('/', async (req, res, next) => {
             }
             return res.send(albumsList);
         }
-        albumsList = await Album.find();
+        const allAlbumsList = await Album.find();
+        for (let i = 0; i < allAlbumsList.length; i++) {
+            const albumTracksCount = await Track.find({album: allAlbumsList[i].id});
+            const albumsWithTrackCount: AlbumsWithTrackCount= {
+                _id: allAlbumsList[i]._id.toString(),
+                artist: allAlbumsList[i].artist,
+                title: allAlbumsList[i].title,
+                issueDate: allAlbumsList[i].issueDate,
+                image:allAlbumsList[i].image,
+                tracksCount: albumTracksCount.length,
+            }
+            albumsList.push(albumsWithTrackCount)
+        }
         return res.send(albumsList);
     } catch (e) {
         next(e);

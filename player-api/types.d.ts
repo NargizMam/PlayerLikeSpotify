@@ -37,6 +37,7 @@ export interface TrackArtistApi {
   serialNumber: number;
 }
 export interface TrackAlbumsApi {
+  id: string;
   artist: string | null;
   album: string;
   title: string;

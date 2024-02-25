@@ -40,7 +40,7 @@ export interface AlbumsApi {
     tracksCount?: number;
 }
 export interface TrackApi {
-    _id: string;
+    id: string;
     title: string;
     album: string;
     artist: string;

@@ -19,8 +19,9 @@ const App = () => (
                 <Route path="/"  element={<Artists/>} />
                 <Route path="/register"  element={<Register/>}/>
                 <Route path="/login"  element={<Login/>}/>
+                <Route path="/albums"  element={<AlbumsList/>}/>
                 <Route path="/artists/:id"  element={<AlbumsList/>} />
-                <Route path="/albums/:id"  element={<TracksList/>} />
+                <Route path="/albums/:id"  element={<TracksList/>}/>
                 <Route path="*" element={<h1>Not found</h1>} />
             </Routes>
         </Container>

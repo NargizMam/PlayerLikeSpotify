@@ -20,6 +20,7 @@ tracksRouter.get('/', async (req, res, next) => {
 
         if (artistInfo) {
           const artistsTrack: TrackAlbumsApi = {
+            id: albumsTrack[i]._id.toString(),
             artist: artistInfo.name,
             album: albumsTrack[i].album.title,
             title: albumsTrack[i].title,
@@ -39,6 +40,7 @@ tracksRouter.get('/', async (req, res, next) => {
 
           if (artistInfo) {
             const artistsTrack: TrackAlbumsApi = {
+              id: tracks[i]._id.toString(),
               artist: artistInfo.name,
               album: tracks[i].album.title,
               title: tracks[i].title,
