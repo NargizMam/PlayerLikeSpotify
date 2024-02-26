@@ -1,7 +1,6 @@
 import express from 'express';
-import {TrackAlbumsApi, TrackApi, TrackMutation} from '../types';
+import {TrackApi, TrackMutation} from '../types';
 import Track from '../models/Track';
-import Artist from '../models/Artist';
 
 const tracksRouter = express.Router();
 

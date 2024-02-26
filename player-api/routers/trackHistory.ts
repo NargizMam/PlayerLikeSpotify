@@ -3,10 +3,7 @@ import auth, {RequestWithUser} from '../middleware/auth';
 import Track from '../models/Track';
 import TrackHistory from '../models/TrackHistory';
 import mongoose from 'mongoose';
-import {TrackArtistApi, TrackHistoryMutation} from "../types";
-import Artist from "../models/Artist";
-import Album from "../models/Album";
-import {log} from "util";
+import {TrackHistoryMutation} from "../types";
 
 const trackHistoryRouter = express.Router();
 
