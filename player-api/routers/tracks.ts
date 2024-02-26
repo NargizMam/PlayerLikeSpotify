@@ -6,50 +6,20 @@ import Artist from '../models/Artist';
 const tracksRouter = express.Router();
 
 tracksRouter.get('/', async (req, res, next) => {
-  let trackList:TrackAlbumsApi[] = [];
-
+  let trackList: TrackApi[] = [];
   try {
     if (req.query.album) {
-      const albumsTrack: TrackApi[] = await Track.find({album: req.query.album}).sort({ serialNumber: 1 }).populate('album', 'title artist');
-      if (albumsTrack.length === 0) {
+      trackList = await Track.find({album: req.query.album})
+          .sort({ serialNumber: 1 })
+          .populate([{path:'album', select:'title artist', populate:[{path: 'artist', select: 'name'}]}]);
+      if (trackList.length === 0) {
         return res.send('У данного альбома нет треков');
-      }
-
-      for (let i = 0; i < albumsTrack.length; i++) {
-        const artistInfo = await Artist.findById(albumsTrack[i].album.artist);
-
-        if (artistInfo) {
-          const artistsTrack: TrackAlbumsApi = {
-            id: albumsTrack[i]._id.toString(),
-            artist: artistInfo.name,
-            album: albumsTrack[i].album.title,
-            title: albumsTrack[i].title,
-            duration: albumsTrack[i].duration,
-            serialNumber: albumsTrack[i].serialNumber
-          }
-          trackList.push(artistsTrack);
-        }
       }
       return res.send(trackList);
 
     }
       if (req.query.artist) {
-        const tracks: TrackApi[] = await Track.find().sort({ serialNumber: 1 }).populate('album', {artist: req.query.artist});
-        for (let i = 0; i < tracks.length; i++) {
-          const artistInfo = await Artist.findById(tracks[i].album.artist);
-
-          if (artistInfo) {
-            const artistsTrack: TrackAlbumsApi = {
-              id: tracks[i]._id.toString(),
-              artist: artistInfo.name,
-              album: tracks[i].album.title,
-              title: tracks[i].title,
-              duration: tracks[i].duration,
-              serialNumber: tracks[i].serialNumber
-            }
-            trackList.push(artistsTrack);
-          }
-        }
+        trackList = await Track.find().sort({ serialNumber: 1 }).populate([{path:'album', select:{artist: req.query.artist},populate:[{path: 'artist', select: 'name'}]}]);
         return res.send(trackList);
     }
     trackList = await Track.find();

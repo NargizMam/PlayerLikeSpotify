@@ -40,10 +40,16 @@ export interface AlbumsApi {
     tracksCount?: number;
 }
 export interface TrackApi {
-    id: string;
+    _id: string;
     title: string;
-    album: string;
-    artist: string;
+    album: {
+        _id: string;
+        title: string;
+        artist: {
+            _id: string;
+            name: string;
+        };
+    };
     duration: string;
     serialNumber: number;
 }
@@ -53,4 +59,15 @@ export interface GlobalError {
 export interface LoginMutation {
     username: string;
     password: string;
+}
+export interface TrackHistoryMutation {
+    token: string;
+    track: string;
+}
+export interface TrackHistoryApi {
+    id: string;
+    user: string;
+    track: string;
+    createdAt: string;
+    updateAt: string;
 }

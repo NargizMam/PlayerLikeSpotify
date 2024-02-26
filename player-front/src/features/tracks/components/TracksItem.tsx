@@ -4,14 +4,13 @@ import {useAppSelector} from "../../../app/hooks.ts";
 import {selectUser} from "../../users/usersSlice.ts";
 
 interface Props {
-    id: string;
     title: string;
     duration: string;
     serialNumber: number;
     onPlayer: React.MouseEventHandler;
 }
 
-const TracksItem: React.FC<Props> = ({title, duration,serialNumber, id, onPlayer}) => {
+const TracksItem: React.FC<Props> = ({title, duration,serialNumber, onPlayer}) => {
     const user = useAppSelector(selectUser);
     return (
         <Card sx={{width: 460, margin: 2}}>
@@ -20,7 +19,7 @@ const TracksItem: React.FC<Props> = ({title, duration,serialNumber, id, onPlayer
                    {title}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                    Порядковый номер: <span>{serialNumber}</span>{id}
+                    Порядковый номер: <span>{serialNumber}</span>
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                     Продолжительность: {duration}

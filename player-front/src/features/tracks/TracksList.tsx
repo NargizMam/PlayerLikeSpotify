@@ -1,15 +1,18 @@
 import {CircularProgress, Grid} from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
 import {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {selectTracksFetching, selectTracksList} from "./tracksSlice.ts";
 import {getTracksList} from "./trackThunk.ts";
 import TracksItem from "./components/TracksItem.tsx";
+import {addTrackInHistory} from "../trackHistories/trackHistoryThunk.ts";
+import {selectUser} from "../users/usersSlice.ts";
 
 
 const TracksList = () => {
     const dispatch = useAppDispatch();
-    // const user = useAppSelector(selectUser);
+    const user = useAppSelector(selectUser);
+    const navigate = useNavigate();
     const tracksList = useAppSelector(selectTracksList);
     const loading = useAppSelector(selectTracksFetching);
     const {id} = useParams();
@@ -19,6 +22,7 @@ const TracksList = () => {
     });
 
     useEffect(() => {
+        dispatch(getTracksList(null));
         if (id) {
             dispatch(getTracksList(id));
         }
@@ -29,26 +33,32 @@ const TracksList = () => {
     }, [tracksList]);
 
     const getAlbumsInfo = () => {
-        const tracksAlbum = tracksList.map(track => track.album);
-        const tracksArtist = tracksList.map(track => track.artist);
-        setTracksInfo((prevState) => ({
-            ...prevState,
-            album: tracksAlbum[0],
-            artist: tracksArtist[0]
-        }))
+        tracksList.map(track => {
+            setTracksInfo((prevState) => ({
+                ...prevState,
+                album: track.album.title,
+                artist: track.album.artist?.name
+            }))
+        });
     };
     const createTrackHistory = (id: string) => {
-        console.log(id)
-    }
+        if(user){
+            const infoForAddTrack = {
+                trackId: id,
+                token: user.token
+            }
+            dispatch(addTrackInHistory(infoForAddTrack))
+        }else {
+            navigate('/login');
+        }
+    };
     const allTracks = tracksList.map(track => (
             <TracksItem
-                key={track.id}
-                id={track.id}
+                key={track._id}
                 title={track.title}
                 duration={track.duration}
                 serialNumber={track.serialNumber}
-                onPlayer={() =>createTrackHistory(track.id)}
-
+                onPlayer={() =>createTrackHistory(track._id)}
             />
         )
     );

@@ -1,14 +1,29 @@
 import express from 'express';
-import auth, { RequestWithUser } from '../middleware/auth';
+import auth, {RequestWithUser} from '../middleware/auth';
 import Track from '../models/Track';
 import TrackHistory from '../models/TrackHistory';
 import mongoose from 'mongoose';
 import {TrackArtistApi, TrackHistoryMutation} from "../types";
+import Artist from "../models/Artist";
+import Album from "../models/Album";
 
 const trackHistoryRouter = express.Router();
 
-trackHistoryRouter.post('/', auth, async (req, res, next) => {
+trackHistoryRouter.get('/', auth, async (req, res, next) => {
   const user = (req as RequestWithUser).user;
+  try {
+    const trackHistoryList = await TrackHistory.find().populate('track', 'title');
+    console.log(trackHistoryList)
+    trackHistoryList.map(async history => {
+      // const trackTitle = await Album.find({id: history.album});
+    })
+    return res.send(trackHistoryList);
+  } catch (e) {
+    next(e);
+  }
+});
+trackHistoryRouter.post('/', auth, async (req: RequestWithUser, res, next) => {
+  const user = req.user?.id;
   try {
     if (req.body.track) {
       const trackId = await Track.findById(req.body.track);

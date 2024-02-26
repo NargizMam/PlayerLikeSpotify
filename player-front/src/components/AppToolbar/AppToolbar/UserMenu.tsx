@@ -3,17 +3,20 @@ import {User} from "../../../types";
 import { Button, Menu, MenuItem } from '@mui/material';
 import {useAppDispatch} from "../../../app/hooks.ts";
 import {logOutUser} from "../../../features/users/usersSlice.ts";
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 
 interface Props {
   user: User;
 }
 const UserMenu: React.FC<Props> = ({user}) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const logOuted = () => {
+  const logOuted =  () => {
     dispatch(logOutUser());
+    navigate('/');
+
   }
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -26,8 +29,8 @@ const UserMenu: React.FC<Props> = ({user}) => {
     <>
       <Button color="inherit" onClick={handleClick}>Hello, {user.username}</Button>
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose} keepMounted>
-          <MenuItem component={NavLink} to="/albums">All albums</MenuItem>
-          <MenuItem>My account</MenuItem>
+          <MenuItem component={NavLink} to="/">All tracks</MenuItem>
+          <MenuItem component={NavLink} to="/tracksHistory">Track History</MenuItem>
           <MenuItem onClick={logOuted}>Log out</MenuItem>
         </Menu>
     </>
