@@ -29,7 +29,6 @@ const UserMenu: React.FC<Props> = ({user}) => {
     <>
       <Button color="inherit" onClick={handleClick}>Hello, {user.username}</Button>
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose} keepMounted>
-          <MenuItem component={NavLink} to="/">All tracks</MenuItem>
           <MenuItem component={NavLink} to="/tracksHistory">Track History</MenuItem>
           <MenuItem onClick={logOuted}>Log out</MenuItem>
         </Menu>

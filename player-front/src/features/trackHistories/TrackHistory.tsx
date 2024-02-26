@@ -6,16 +6,14 @@ import {selectUser} from "../users/usersSlice.ts";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import IconButton from "@mui/material/IconButton";
-import CommentIcon from "@mui/icons-material/Comment";
 import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import {ListItemIcon} from "@mui/material";
 
 const TrackHistory = () => {
     const dispatch = useAppDispatch();
     const trackHistoryList = useAppSelector(selectTrackHistories);
     const user = useAppSelector(selectUser);
-    console.log(trackHistoryList)
     useEffect(() => {
         if(user){
             dispatch(getTrackHistory(user.token))
@@ -23,30 +21,38 @@ const TrackHistory = () => {
     }, [dispatch]);
 
 
-    const handleToggle = (value: string) => () => {
-        console.log(value)
-    };
+
 
     return (
         <>
-            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+            <List sx={{ width: '100%',
+                maxWidth: 900,
+                bgcolor: 'background.paper',
+                justifyContent: 'spaceBetween',
+            }}>
                 {trackHistoryList.map((value) => {
-                    const labelId = `checkbox-list-label-${value.track}`;
-
                     return (
                         <ListItem
-                            key={value.id}
+                            sx={{border: '1px solid #000', margin: '5px'}}
+                            key={value._id}
                             secondaryAction={
                                 <IconButton edge="end" aria-label="comments">
                                 </IconButton>
                             }
-                            disablePadding
                         >
                             <ListItemButton >
+                                <ListItemText>
+                                    <strong>{value.track.album.artist.name}</strong>
+                                </ListItemText>
+                                <ListItemText>
+                                    {value.track.album.title}
+                                </ListItemText>
+                                <ListItemText>
+                                    {value.track.title}
+                                </ListItemText>
                                 <ListItemIcon>
-                                    {labelId}
+                                    {value.createdAt}
                                 </ListItemIcon>
-                                <ListItemText/>
                             </ListItemButton>
                         </ListItem>
                     );

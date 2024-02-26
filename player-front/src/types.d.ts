@@ -39,17 +39,19 @@ export interface AlbumsApi {
     image: string | null;
     tracksCount?: number;
 }
+export interface Album {
+    _id: string;
+    title: string;
+    artist: Artist;
+}
+export interface Artist {
+    _id: string;
+    name: string;
+}
 export interface TrackApi {
     _id: string;
     title: string;
-    album: {
-        _id: string;
-        title: string;
-        artist: {
-            _id: string;
-            name: string;
-        };
-    };
+    album: Album;
     duration: string;
     serialNumber: number;
 }
@@ -65,9 +67,12 @@ export interface TrackHistoryMutation {
     track: string;
 }
 export interface TrackHistoryApi {
-    id: string;
-    user: string;
-    track: string;
+    _id: string;
+    track: {
+        _id: string;
+        title: string;
+        album: Album;
+    }
     createdAt: string;
     updateAt: string;
 }

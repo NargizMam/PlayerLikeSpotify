@@ -17,10 +17,8 @@ export const addTrackInHistory = createAsyncThunk<TrackHistoryApi, TrackProps>(
 export const getTrackHistory = createAsyncThunk<TrackHistoryApi[], string>(
     'tracksHistory/fetch',
     async ( token) => {
-        console.log( token)
         const response = await axiosApi.get<TrackHistoryApi[]>('/trackHistory',
              { headers: { Authorization: `_bearer ${token}` }});
-        console.log(response.data)
         return response.data;
     }
 );
