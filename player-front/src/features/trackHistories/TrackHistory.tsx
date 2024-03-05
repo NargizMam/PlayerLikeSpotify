@@ -1,5 +1,5 @@
 import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
-import {selectTrackHistories} from "./trackHistorySlice.ts";
+import {selectTrackHistories, selectTrackHistoryFetching} from "./trackHistorySlice.ts";
 import {useEffect} from "react";
 import {getTrackHistory} from "./trackHistoryThunk.ts";
 import {selectUser} from "../users/usersSlice.ts";
@@ -9,22 +9,28 @@ import IconButton from "@mui/material/IconButton";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import {ListItemIcon} from "@mui/material";
+import {useNavigate} from "react-router-dom";
+import Loading from "../../components/UI/Spinner/Loading.tsx";
 
 const TrackHistory = () => {
     const dispatch = useAppDispatch();
     const trackHistoryList = useAppSelector(selectTrackHistories);
+    const navigate = useNavigate();
     const user = useAppSelector(selectUser);
+    const loading = useAppSelector(selectTrackHistoryFetching);
+
     useEffect(() => {
         if(user){
-            dispatch(getTrackHistory(user.token))
+            dispatch(getTrackHistory(user.token));
         }
+        navigate('/');
+
     }, [dispatch]);
-
-
 
 
     return (
         <>
+            {loading && <Loading/>}
             <List sx={{ width: '100%',
                 maxWidth: 900,
                 bgcolor: 'background.paper',

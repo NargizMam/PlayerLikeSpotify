@@ -1,4 +1,3 @@
-import './App.css'
 import {Container, CssBaseline} from "@mui/material";
 import {Route, Routes} from "react-router-dom";
 import Artists from "./features/artists/Artists.tsx";
@@ -15,7 +14,7 @@ const App = () => (
         <header>
             <AppToolbar/>
         </header>
-        <Container className="container" maxWidth="xl">
+        <Container>
             <Routes>
                 <Route path="/"  element={<Artists/>} />
                 <Route path="/register"  element={<Register/>}/>

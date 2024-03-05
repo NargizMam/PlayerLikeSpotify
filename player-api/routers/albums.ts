@@ -14,19 +14,14 @@ albumsRouter.get('/', async (req, res, next) => {
             if(artistsAlbum.length === 0){
                 return  res.send('У данного альбома нет треков')
             }
-            for (let i = 0; i < artistsAlbum.length; i++) {
-                const albumTracksCount = await Track.find({album: artistsAlbum[i].id});
-                const albumsWithTrackCount: AlbumsWithTrackCount= {
-                    _id: artistsAlbum[i]._id.toString(),
-                    artist: artistsAlbum[i].artist,
-                    title: artistsAlbum[i].title,
-                    issueDate: artistsAlbum[i].issueDate,
-                    image:artistsAlbum[i].image,
-                    tracksCount: albumTracksCount.length,
+            const albumsWithTrackCount = await Promise.all(artistsAlbum.map(async (album) => {
+                const trackCount = await Track.countDocuments({album: album.id});
+                return {
+                    ...album.toObject(),
+                    trackCount,
                 }
-                albumsList.push(albumsWithTrackCount)
-            }
-            return res.send(albumsList);
+            }))
+            return res.send(albumsWithTrackCount);
         }
         const allAlbumsList = await Album.find();
         for (let i = 0; i < allAlbumsList.length; i++) {
@@ -38,6 +33,7 @@ albumsRouter.get('/', async (req, res, next) => {
                 issueDate: allAlbumsList[i].issueDate,
                 image:allAlbumsList[i].image,
                 tracksCount: albumTracksCount.length,
+                isPublished: allAlbumsList[i].isPublished,
             }
             albumsList.push(albumsWithTrackCount)
         }

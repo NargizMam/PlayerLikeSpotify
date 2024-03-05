@@ -16,11 +16,10 @@ const Link = styled(NavLink)({
 const AppToolbar = () => {
   const user = useAppSelector(selectUser);
 
-
   return (
     <AppBar position="sticky" sx={{mb: 2}}>
       <Toolbar>
-        <Grid  container justifyContent="space-between" alignItems="center">
+        <Grid container justifyContent="space-between" alignItems="center">
           <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
             <Link to="/">Player like Spotify</Link>
           </Typography>

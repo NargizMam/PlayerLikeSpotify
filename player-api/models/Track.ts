@@ -25,6 +25,11 @@ const TrackSchema = new mongoose.Schema({
   serialNumber: {
     type: Number,
     required: true
+  },
+  isPublished: {
+    type: Boolean,
+    required: true,
+    default: false
   }
 });
 
