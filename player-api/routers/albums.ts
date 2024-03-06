@@ -5,6 +5,8 @@ import Album from "../models/Album";
 import Track from "../models/Track";
 import auth, {RequestWithUser} from "../middleware/auth";
 import permit from "../middleware/permit";
+import Artist from "../models/Artist";
+import artistsRouter from "./artists";
 
 const albumsRouter = express.Router();
 
@@ -46,6 +48,22 @@ albumsRouter.get('/:id', async (req, res, next) => {
             return res.status(404).send({error: 'Альбом не найден'});
         }
         return res.send(selectAlbum);
+    } catch (e) {
+        next(e);
+    }
+});
+albumsRouter.patch('/:id/togglePublished', auth, permit('admin'), async (req, res, next) => {
+    try {
+        const albumsId = req.params.id;
+
+        const chosenAlbum = await Album.findById(albumsId);
+        if(!chosenAlbum){
+            return res.status(404).json({ error: 'Альбом не найден!' });
+        }
+        chosenAlbum.isPublished = !chosenAlbum.isPublished;
+        await chosenAlbum.save();
+        return res.send(    { message: 'Success', isPublished: chosenAlbum.isPublished });
+
     } catch (e) {
         next(e);
     }

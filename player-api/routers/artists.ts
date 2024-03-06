@@ -15,6 +15,22 @@ artistsRouter.get('/', async (_req, res, next) => {
     next(e);
   }
 });
+artistsRouter.patch('/:id/togglePublished', auth, permit('admin'), async (req, res, next) => {
+  try {
+    const artistsId = req.params.id;
+
+    const chosenArtist = await Artist.findById(artistsId);
+    if(!chosenArtist){
+      return res.status(404).json({ error: 'Исполнитель не найден!' });
+    }
+    chosenArtist.isPublished = !chosenArtist.isPublished;
+    await chosenArtist.save();
+    return res.send(    { message: 'Success', isPublished: chosenArtist.isPublished });
+
+  } catch (e) {
+    next(e);
+  }
+});
 
 artistsRouter.post('/', auth, imagesUpload.single('image'), async (req: RequestWithUser, res, next) => {
   try {

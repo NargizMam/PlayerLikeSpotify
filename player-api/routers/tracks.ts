@@ -5,6 +5,8 @@ import auth, {RequestWithUser} from "../middleware/auth";
 import permit from "../middleware/permit";
 import Album from "../models/Album";
 import albumsRouter from "./albums";
+import Artist from "../models/Artist";
+import artistsRouter from "./artists";
 
 const tracksRouter = express.Router();
 
@@ -27,6 +29,22 @@ tracksRouter.get('/', async (req, res, next) => {
     }
     trackList = await Track.find();
     return res.send(trackList);
+  } catch (e) {
+    next(e);
+  }
+});
+tracksRouter.patch('/:id/togglePublished', auth, permit('admin'), async (req, res, next) => {
+  try {
+    const trackId = req.params.id;
+
+    const chosenTrack = await Track.findById(trackId);
+    if(!chosenTrack){
+      return res.status(404).json({ error: 'Трек не найден!' });
+    }
+    chosenTrack.isPublished = !chosenTrack.isPublished;
+    await chosenTrack.save();
+    return res.send(    { message: 'Success', isPublished: chosenTrack.isPublished });
+
   } catch (e) {
     next(e);
   }
@@ -56,5 +74,6 @@ tracksRouter.delete('/:id', auth, permit('admin'), async (req: RequestWithUser, 
   }
   return res.send('Трек был удален!');
 });
+
 
 export default tracksRouter;

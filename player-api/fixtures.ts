@@ -56,7 +56,7 @@ const run = async () => {
             name: 'Zivert',
             image: 'fixtures/zivert.jpg',
             id: crypto.randomUUID(),
-            isPublished: true
+            isPublished: false
         },
     )
     const [album1, album2, album3, album4, album5, album6, album7] = await Album.create(
@@ -98,7 +98,7 @@ const run = async () => {
             artist: artist3.id,
             issueDate: 2018,
             image: 'fixtures/siyay.jpeg',
-            isPublished: true
+            isPublished: false
         },
         {
             id: crypto.randomUUID(),
@@ -394,6 +394,22 @@ const run = async () => {
             duration: '3:29',
             serialNumber: 1,
             isPublished: true
+        },
+        {
+            id: crypto.randomUUID(),
+            title: 'My finally',
+            album: album1.id,
+            duration: '3:07',
+            serialNumber: 2,
+            isPublished: false
+        },
+        {
+            id: crypto.randomUUID(),
+            title: 'It my world',
+            album: album1.id,
+            duration: '3:29',
+            serialNumber: 1,
+            isPublished: false
         },
     )
 
