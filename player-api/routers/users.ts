@@ -44,19 +44,19 @@ usersRouter.delete('/sessions',async (req, res, next) => {
     const successMessage = { message: 'Success!' };
 
     if (!headerValue) {
-      return res.send({ ...successMessage, stage: 'No header' });
+      return res.send({ ...successMessage });
     }
 
     const [_bearer, token] = headerValue.split(' ');
 
     if (!token) {
-      return res.send({ ...successMessage, stage: 'No token' });
+      return res.send({ ...successMessage});
     }
 
     const user = await User.findOne({ token });
 
     if (!user) {
-      return res.send({ ...successMessage, stage: 'No user' });
+      return res.send({ ...successMessage});
     }
 
     user.generateToken();

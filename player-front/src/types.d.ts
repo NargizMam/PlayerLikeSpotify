@@ -37,7 +37,7 @@ export interface AlbumsApi {
     artist: Artist;
     issueDate: number;
     image: string | null;
-    tracksCount?: number;
+    trackCount?: number;
 }
 export interface Album {
     _id: string;

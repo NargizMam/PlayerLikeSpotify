@@ -3,6 +3,8 @@ import {imagesUpload} from "../multer";
 import {AlbumMutation, AlbumsWithTrackCount} from "../types";
 import Album from "../models/Album";
 import Track from "../models/Track";
+import auth, {RequestWithUser} from "../middleware/auth";
+import permit from "../middleware/permit";
 
 const albumsRouter = express.Router();
 
@@ -20,24 +22,18 @@ albumsRouter.get('/', async (req, res, next) => {
                     ...album.toObject(),
                     trackCount,
                 }
-            }))
+            }));
             return res.send(albumsWithTrackCount);
         }
         const allAlbumsList = await Album.find();
-        for (let i = 0; i < allAlbumsList.length; i++) {
-            const albumTracksCount = await Track.find({album: allAlbumsList[i].id});
-            const albumsWithTrackCount: AlbumsWithTrackCount= {
-                _id: allAlbumsList[i]._id.toString(),
-                artist: allAlbumsList[i].artist,
-                title: allAlbumsList[i].title,
-                issueDate: allAlbumsList[i].issueDate,
-                image:allAlbumsList[i].image,
-                tracksCount: albumTracksCount.length,
-                isPublished: allAlbumsList[i].isPublished,
+        const albumsWithTrackCount = await Promise.all(allAlbumsList.map(async (album) => {
+            const trackCount = await Track.countDocuments({album: album.id});
+            return {
+                ...album.toObject(),
+                trackCount,
             }
-            albumsList.push(albumsWithTrackCount)
-        }
-        return res.send(albumsList);
+        }));
+        return res.send(albumsWithTrackCount);
     } catch (e) {
         next(e);
     }
@@ -54,7 +50,7 @@ albumsRouter.get('/:id', async (req, res, next) => {
         next(e);
     }
 });
-albumsRouter.post('/', imagesUpload.single('image'), async (req, res, next) => {
+albumsRouter.post('/', auth, imagesUpload.single('image'), async (req: RequestWithUser, res, next) => {
     try {
         const albumsData: AlbumMutation = {
             title: req.body.title,
@@ -70,4 +66,13 @@ albumsRouter.post('/', imagesUpload.single('image'), async (req, res, next) => {
     }
 });
 
+albumsRouter.delete('/:id', auth, permit('admin'), async (req: RequestWithUser, res, next) => {
+    const id = req.params.id;
+
+    const deletedAlbums = await Album.findByIdAndDelete(id);
+    if(!deletedAlbums){
+        return res.send('Альбом, возможно, был удален!');
+    }
+    return res.send('Альбом был удален!');
+});
 export default albumsRouter;

@@ -8,17 +8,16 @@ interface TrackProps {
 }
 export const addTrackInHistory = createAsyncThunk<TrackHistoryApi, TrackProps>(
     'tracksHistory/add',
-    async ({trackId, token}) => {
+    async ({trackId}) => {
         const response = await axiosApi.post<TrackHistoryApi>('/trackHistory',
-            {trackId}, { headers: { Authorization: `_bearer ${token}` }});
+            {trackId});
         return response.data;
     }
 );
-export const getTrackHistory = createAsyncThunk<TrackHistoryApi[], string>(
+export const getTrackHistory = createAsyncThunk<TrackHistoryApi[]>(
     'tracksHistory/fetch',
-    async ( token) => {
-        const response = await axiosApi.get<TrackHistoryApi[]>('/trackHistory',
-             { headers: { Authorization: `_bearer ${token}` }});
+    async ( ) => {
+        const response = await axiosApi.get<TrackHistoryApi[]>('/trackHistory');
         return response.data;
     }
 );

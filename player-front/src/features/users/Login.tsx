@@ -24,7 +24,7 @@ const Login = () => {
     const submitFormHandler = async (event: React.FormEvent) => {
         event.preventDefault();
         await dispatch(loginUser(state)).unwrap();
-        navigate('/tracks');
+        navigate('/');
     };
     return (
         <Container component="main" maxWidth="xs">

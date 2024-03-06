@@ -1,6 +1,10 @@
 import express from 'express';
 import {TrackApi, TrackMutation} from '../types';
 import Track from '../models/Track';
+import auth, {RequestWithUser} from "../middleware/auth";
+import permit from "../middleware/permit";
+import Album from "../models/Album";
+import albumsRouter from "./albums";
 
 const tracksRouter = express.Router();
 
@@ -28,7 +32,7 @@ tracksRouter.get('/', async (req, res, next) => {
   }
 });
 
-tracksRouter.post('/', async (req, res, next) => {
+tracksRouter.post('/', auth, async (req: RequestWithUser, res, next) => {
   try {
     const tracksData: TrackMutation = {
       title: req.body.title,
@@ -42,6 +46,15 @@ tracksRouter.post('/', async (req, res, next) => {
   } catch (e) {
     next(e);
   }
+});
+tracksRouter.delete('/:id', auth, permit('admin'), async (req: RequestWithUser, res, next) => {
+  const id = req.params.id;
+
+  const deletedTracks = await Track.findByIdAndDelete(id);
+  if(!deletedTracks){
+    return res.send('Трек, возможно, был удален!');
+  }
+  return res.send('Трек был удален!');
 });
 
 export default tracksRouter;

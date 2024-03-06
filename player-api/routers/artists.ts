@@ -2,6 +2,8 @@ import express from 'express';
 import Artist from '../models/Artist';
 import {imagesUpload} from '../multer';
 import {ArtistMutation} from '../types';
+import auth, {RequestWithUser} from "../middleware/auth";
+import permit from "../middleware/permit";
 
 const artistsRouter = express.Router();
 
@@ -14,7 +16,7 @@ artistsRouter.get('/', async (_req, res, next) => {
   }
 });
 
-artistsRouter.post('/', imagesUpload.single('image'), async (req, res, next) => {
+artistsRouter.post('/', auth, imagesUpload.single('image'), async (req: RequestWithUser, res, next) => {
   try {
     const artistData: ArtistMutation = {
       name: req.body.name,
@@ -27,6 +29,15 @@ artistsRouter.post('/', imagesUpload.single('image'), async (req, res, next) => 
   } catch (e) {
     next(e);
   }
+});
+artistsRouter.delete('/:id', auth, permit('admin'), async (req: RequestWithUser, res, next) => {
+  const id = req.params.id;
+
+  const deletedArtist = await Artist.findByIdAndDelete(id);
+  if(!deletedArtist){
+    return res.send('Исполнитель, возможно, был удален!');
+  }
+  return res.send('Исполнитель был удален!');
 });
 
 export default artistsRouter;

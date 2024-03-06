@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import {User} from "../../../types";
-import { Button, Menu, MenuItem } from '@mui/material';
+import {Button, Menu, MenuItem} from '@mui/material';
 import {useAppDispatch} from "../../../app/hooks.ts";
-import {logOutUser} from "../../../features/users/usersSlice.ts";
 import {NavLink, useNavigate} from "react-router-dom";
+import {logout} from "../../../features/users/usersThunk.ts";
 
 interface Props {
   user: User;
@@ -14,7 +14,7 @@ const UserMenu: React.FC<Props> = ({user}) => {
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const logOuted =  () => {
-    dispatch(logOutUser());
+    dispatch(logout());
     navigate('/');
 
   }
