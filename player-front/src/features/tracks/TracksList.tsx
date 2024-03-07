@@ -22,9 +22,10 @@ const TracksList = () => {
     });
 
     useEffect(() => {
-        dispatch(getTracksList(null));
         if (id) {
             dispatch(getTracksList(id));
+        }else {
+            dispatch(getTracksList());
         }
     }, [dispatch, id]);
 

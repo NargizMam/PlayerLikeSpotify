@@ -41,19 +41,19 @@ const run = async () => {
     );
     const [artist1, artist2, artist3] = await Artist.create(
         {
-            name: 'MiaGy',
+            title: 'MiaGy',
             image: 'fixtures/miyagi.jpg',
             id: crypto.randomUUID(),
             isPublished: true
         },
         {
-            name: 'Eminem',
+            title: 'Eminem',
             image: 'fixtures/eminem.jpg',
             id: crypto.randomUUID(),
             isPublished: true
         },
         {
-            name: 'Zivert',
+            title: 'Zivert',
             image: 'fixtures/zivert.jpg',
             id: crypto.randomUUID(),
             isPublished: false

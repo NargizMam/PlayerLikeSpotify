@@ -18,7 +18,7 @@ const Artists = () => {
         <ArtistItem
             key={artist._id}
             id={artist._id}
-            name={artist.name}
+            title={artist.title}
             image={artist.image}
         />
     ));

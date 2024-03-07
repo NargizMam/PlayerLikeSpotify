@@ -5,12 +5,12 @@ import React from "react";
 import {NavLink} from "react-router-dom";
 
 interface Props {
-    name: string;
+    title: string;
     id: string;
     image: string | null;
 }
 
-const Artist: React.FC<Props> = ({name, image, id}) => {
+const Artist: React.FC<Props> = ({title, image, id}) => {
     let cardImage = noImage;
     if (image) {
         cardImage = apiURL + '/' + image;
@@ -20,11 +20,11 @@ const Artist: React.FC<Props> = ({name, image, id}) => {
             <CardMedia
                 sx={{height: 140}}
                 image={cardImage}
-                title={name}
+                title={title}
             />
             <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
-                    {name}
+                    {title}
                 </Typography>
             </CardContent>
             <CardActions>

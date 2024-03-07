@@ -7,6 +7,9 @@ import Register from "./features/users/Register.tsx";
 import AppToolbar from './components/AppToolbar/AppToolbar/AppToolbar.tsx';
 import Login from "./features/users/Login.tsx";
 import TrackHistory from "./features/trackHistories/TrackHistory.tsx";
+import NewArtist from "./features/artists/NewArtist.tsx";
+import NewAlbum from "./features/ albums/NewAlbum.tsx";
+import NewTrack from "./features/tracks/NewTrack.tsx";
 
 const App = () => (
     <>
@@ -21,6 +24,9 @@ const App = () => (
                 <Route path="/login"  element={<Login/>}/>
                 <Route path="/tracksHistory"  element={<TrackHistory/>}/>
                 <Route path="/artists/:id"  element={<AlbumsList/>} />
+                <Route path="/new-artist"  element={<NewArtist/>} />
+                <Route path="/new-album"  element={<NewAlbum/>} />
+                <Route path="/new-track"  element={<NewTrack/>} />
                 <Route path="/albums/:id"  element={<TracksList/>}/>
                 <Route path="*" element={<h1>Not found</h1>} />
             </Routes>

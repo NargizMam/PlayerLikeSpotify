@@ -35,9 +35,9 @@ artistsRouter.patch('/:id/togglePublished', auth, permit('admin'), async (req, r
 artistsRouter.post('/', auth, imagesUpload.single('image'), async (req: RequestWithUser, res, next) => {
   try {
     const artistData: ArtistMutation = {
-      name: req.body.name,
+      title: req.body.title,
       image: req.file ? req.file.filename : null,
-      info: req.body.info || null,
+      description: req.body.description || null,
     };
     const artist = new Artist(artistData);
     await artist.save();
@@ -48,12 +48,16 @@ artistsRouter.post('/', auth, imagesUpload.single('image'), async (req: RequestW
 });
 artistsRouter.delete('/:id', auth, permit('admin'), async (req: RequestWithUser, res, next) => {
   const id = req.params.id;
-
-  const deletedArtist = await Artist.findByIdAndDelete(id);
-  if(!deletedArtist){
-    return res.send('Исполнитель, возможно, был удален!');
+  try{
+    const deletedArtist = await Artist.findByIdAndDelete(id);
+    if(!deletedArtist){
+      return res.send('Исполнитель, возможно, был удален!');
+    }
+    return res.send('Исполнитель был удален!');
+  }catch (e) {
+    next(e);
   }
-  return res.send('Исполнитель был удален!');
+
 });
 
 export default artistsRouter;

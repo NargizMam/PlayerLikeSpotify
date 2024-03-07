@@ -3,10 +3,6 @@ import {TrackApi, TrackMutation} from '../types';
 import Track from '../models/Track';
 import auth, {RequestWithUser} from "../middleware/auth";
 import permit from "../middleware/permit";
-import Album from "../models/Album";
-import albumsRouter from "./albums";
-import Artist from "../models/Artist";
-import artistsRouter from "./artists";
 
 const tracksRouter = express.Router();
 
@@ -16,7 +12,7 @@ tracksRouter.get('/', async (req, res, next) => {
     if (req.query.album) {
       trackList = await Track.find({album: req.query.album})
           .sort({ serialNumber: 1 })
-          .populate([{path:'album', select:'title artist', populate:[{path: 'artist', select: 'name'}]}]);
+          .populate([{path:'album', select:'title artist', populate:[{path: 'artist', select: 'title'}]}]);
       if (trackList.length === 0) {
         return res.send('У данного альбома нет треков');
       }
@@ -24,7 +20,7 @@ tracksRouter.get('/', async (req, res, next) => {
 
     }
       if (req.query.artist) {
-        trackList = await Track.find().sort({ serialNumber: 1 }).populate([{path:'album', select:{artist: req.query.artist},populate:[{path: 'artist', select: 'name'}]}]);
+        trackList = await Track.find().sort({ serialNumber: 1 }).populate([{path:'album', select:{artist: req.query.artist},populate:[{path: 'artist', select: 'title'}]}]);
         return res.send(trackList);
     }
     trackList = await Track.find();

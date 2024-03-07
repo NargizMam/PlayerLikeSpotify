@@ -23,13 +23,23 @@ export interface ValidationError {
     _message: string;
 }
 export interface Artist {
-    id: string;
+    _id: string;
     name: string;
 }
 export interface ArtistApi {
     _id: string;
-    name: string;
+    title: string;
     image: string | null;
+}
+export interface ArtistMutation {
+    title: string;
+    image: string | null;
+    description: string | null;
+}
+export interface Album {
+    _id: string;
+    title: string;
+    artist: Artist;
 }
 export interface AlbumsApi {
     _id: string;
@@ -39,21 +49,27 @@ export interface AlbumsApi {
     image: string | null;
     trackCount?: number;
 }
-export interface Album {
-    _id: string;
+export interface AlbumMutation {
     title: string;
-    artist: Artist;
+    artist: string;
+    description: string;
+    issueDate: string;
+    image: string | null;
 }
-export interface Artist {
-    _id: string;
-    name: string;
-}
+
 export interface TrackApi {
     _id: string;
     title: string;
     album: Album;
     duration: string;
     serialNumber: number;
+}
+export interface TrackMutation {
+    title: string;
+    album: string;
+    artist: string;
+    duration: string;
+    serialNumber: string;
 }
 export interface GlobalError {
     error: string

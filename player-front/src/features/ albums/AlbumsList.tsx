@@ -11,42 +11,49 @@ const AlbumsList = () => {
     const albumsList = useAppSelector(selectAlbumsList);
     const loading = useAppSelector(selectAlbumsFetching);
     const {id} = useParams();
-    const [artistName, setArtistName] = useState('');
+    const [artistName, setArtistName] = useState<string | null>();
+    let allAlbumsList;
 
     useEffect(() => {
-        dispatch(getAlbumsList(null));
         if (id) {
             dispatch(getAlbumsList(id));
+        } else {
+            dispatch(getAlbumsList());
         }
     }, [dispatch, id]);
 
     useEffect(() => {
-        const getArtistInfo = () => {
+        if (albumsList.length > 0) {
             const albumsKey = albumsList.map(album => album.artist);
-            setArtistName(albumsKey[0].name);
+            setArtistName(albumsKey[0].title);
         }
-        if (albumsList.length > 0) getArtistInfo();
+
     }, [albumsList]);
 
+    if (albumsList && albumsList.length !== 0) {
+        allAlbumsList = albumsList.map(album => (
 
-    const allALbumsList = albumsList.map(album => (
-        <AlbumsItem
-            key={album._id}
-            id={album._id}
-            title={album.title}
-            image={album.image}
-            issueDate={album.issueDate}
-            tracksCount={album.trackCount ? album.trackCount : 0}
-        />
-    ));
+            <AlbumsItem
+                key={album._id}
+                id={album._id}
+                title={album.title}
+                image={album.image}
+                issueDate={album.issueDate}
+                tracksCount={album.trackCount ? album.trackCount : 0}
+            />));
+    }else {
+        allAlbumsList =  (<h1>У данного исполнителя не добавлен альбом</h1>);
+    }
+
+
     return (
         <>
             <Grid container justifyContent="space-around">
                 {loading && <CircularProgress/>}
                 <Grid>
-                    <h1>{artistName}</h1>
+                    {artistName && <h1>{artistName}</h1>}
                     <Grid container>
-                        {allALbumsList}
+                        {allAlbumsList}
                     </Grid>
                 </Grid>
             </Grid>

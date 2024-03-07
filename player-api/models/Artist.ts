@@ -1,12 +1,12 @@
 import * as mongoose from 'mongoose';
 
 const ArtistSchema = new mongoose.Schema({
-  name: {
+  title: {
     type: String,
     required: true,
   },
   image: String,
-  info: String,
+  description: String,
   isPublished: {
     type: Boolean,
     required: true,

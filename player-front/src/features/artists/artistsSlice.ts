@@ -1,16 +1,18 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {getArtistsList} from "./artistsThunk.ts";
+import {createArtist, getArtistsList} from "./artistsThunk.ts";
 import {ArtistApi} from "../../types";
 import {RootState} from "../../app/store.ts";
 
 interface ArtistsState {
     artistsList: ArtistApi[];
     fetchLoading: boolean;
+    creating: boolean;
 }
 
 const initialState: ArtistsState = {
     artistsList: [],
-    fetchLoading: false
+    fetchLoading: false,
+    creating: false
 }
 const artistsSlice = createSlice({
     name: 'artists',
@@ -28,6 +30,15 @@ const artistsSlice = createSlice({
             .addCase(getArtistsList.rejected, (state) => {
                 state.fetchLoading = false;
             })
+            .addCase(createArtist.pending, (state) => {
+                state.creating = true;
+            })
+            .addCase(createArtist.fulfilled, (state) => {
+                state.creating = false;
+            })
+            .addCase(createArtist.rejected, (state) => {
+                state.creating = false;
+            })
 
     }
 });
@@ -36,3 +47,4 @@ export const artistsReducer = artistsSlice.reducer;
 
 export const selectArtistsList = (state: RootState) => state.artists.artistsList;
 export const selectArtistsFetching = (state: RootState) => state.artists.fetchLoading;
+export const selectArtistsCreating = (state: RootState) => state.artists.creating;
