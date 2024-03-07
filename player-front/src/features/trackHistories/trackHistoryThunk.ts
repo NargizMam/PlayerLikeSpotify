@@ -2,15 +2,11 @@ import {createAsyncThunk} from "@reduxjs/toolkit";
 import axiosApi from "../../axiosApi.ts";
 import {TrackHistoryApi} from "../../types";
 
-interface TrackProps {
-    trackId: string;
-    token: string;
-}
-export const addTrackInHistory = createAsyncThunk<TrackHistoryApi, TrackProps>(
+
+export const addTrackInHistory = createAsyncThunk<TrackHistoryApi, string>(
     'tracksHistory/add',
-    async ({trackId}) => {
-        const response = await axiosApi.post<TrackHistoryApi>('/trackHistory',
-            {trackId});
+    async (trackId) => {
+        const response = await axiosApi.post<TrackHistoryApi>('/trackHistory', trackId);
         return response.data;
     }
 );

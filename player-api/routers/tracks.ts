@@ -63,12 +63,16 @@ tracksRouter.post('/', auth, async (req: RequestWithUser, res, next) => {
 });
 tracksRouter.delete('/:id', auth, permit('admin'), async (req: RequestWithUser, res, next) => {
   const id = req.params.id;
-
-  const deletedTracks = await Track.findByIdAndDelete(id);
-  if(!deletedTracks){
-    return res.send('Трек, возможно, был удален!');
+  try{
+    const deletedTracks = await Track.findByIdAndDelete(id);
+    if(!deletedTracks){
+      return res.send('Трек, возможно, был удален!');
+    }
+    return res.send('Трек был удален!');
+  }catch (e) {
+    next (e);
   }
-  return res.send('Трек был удален!');
+
 });
 
 

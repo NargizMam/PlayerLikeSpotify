@@ -4,15 +4,17 @@ import {selectArtistsFetching, selectArtistsList} from "./artistsSlice.ts";
 import ArtistItem from "./components/ArtistItem.tsx";
 import {useEffect} from "react";
 import {getArtistsList} from "./artistsThunk.ts";
+import {useParams} from "react-router-dom";
 
 const Artists = () => {
     const dispatch = useAppDispatch();
     const artistsList = useAppSelector(selectArtistsList);
     const loading = useAppSelector(selectArtistsFetching);
+    const { key } = useParams();
 
     useEffect(() => {
         dispatch(getArtistsList());
-    }, [dispatch]);
+    }, [dispatch, key]);
 
     const allArtists = artistsList.map(artist => (
         <ArtistItem

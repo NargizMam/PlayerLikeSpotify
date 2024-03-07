@@ -4,6 +4,7 @@ import {Button, Menu, MenuItem} from '@mui/material';
 import {useAppDispatch} from "../../../app/hooks.ts";
 import {NavLink, useNavigate} from "react-router-dom";
 import {logout} from "../../../features/users/usersThunk.ts";
+import {getArtistsList} from "../../../features/artists/artistsThunk.ts";
 
 interface Props {
   user: User;
@@ -13,8 +14,9 @@ const UserMenu: React.FC<Props> = ({user}) => {
   const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const logOuted =  () => {
-    dispatch(logout());
+  const logOuted = async () => {
+    await dispatch(logout()).unwrap();
+    dispatch(getArtistsList());
     navigate('/');
   };
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {

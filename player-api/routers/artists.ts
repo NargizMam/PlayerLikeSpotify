@@ -7,8 +7,14 @@ import permit from "../middleware/permit";
 
 const artistsRouter = express.Router();
 
-artistsRouter.get('/', async (_req, res, next) => {
+artistsRouter.get('/',async ( req, res, next) => {
+  const headerValue = req.get('Authorization');
+
   try {
+    if(!headerValue){
+      const artistsListIsPublished = await Artist.find({ isPublished: true });
+      return res.send(artistsListIsPublished);
+    }
     const artistsList = await Artist.find();
     return res.send(artistsList);
   } catch (e) {

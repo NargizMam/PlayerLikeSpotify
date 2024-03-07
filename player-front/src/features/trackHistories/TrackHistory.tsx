@@ -20,9 +20,9 @@ const TrackHistory = () => {
     const loading = useAppSelector(selectTrackHistoryFetching);
 
     useEffect(() => {
-        if(user){
-            dispatch(getTrackHistory(user.token));
-        }
+        if(!user) navigate('/');
+       dispatch(getTrackHistory());
+
         navigate('/');
 
     }, [dispatch]);

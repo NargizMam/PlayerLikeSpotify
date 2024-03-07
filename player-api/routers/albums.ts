@@ -9,17 +9,28 @@ import permit from "../middleware/permit";
 const albumsRouter = express.Router();
 
 albumsRouter.get('/', async (req, res, next) => {
+    const headerValue = req.get('Authorization');
+
     try {
-        let albumsList = [];
-        albumsList = await Album.find();
-        if (!albumsList || albumsList.length <= 0) {
-            return res.status(404).send({error: 'Нет данных'});
-        }
-        if (req.query.artist) {
+        let albumsList;
+        if (req.query.artist && headerValue) {
             albumsList = await Album.find({'artist': req.query.artist}).sort({issueDate: -1}).populate('artist', 'title');
             if (albumsList.length <= 0) {
                 return res.status(404).send({error: 'У данного альбома нет треков'});
             }
+        }else if(req.query.artist && !headerValue){
+            albumsList = await Album.find({'artist': req.query.artist, 'isPublished': true}).sort({issueDate: -1}).populate('artist', 'title');
+            if (albumsList.length <= 0) {
+                return res.status(404).send({error: 'У данного альбома нет треков'});
+            }
+        }else if(!headerValue){
+
+            albumsList = await Album.find({isPublished: true});
+            if (!albumsList || albumsList.length <= 0) {
+                return res.status(404).send({error: 'Нет данных'});
+            }
+        }else{
+            albumsList = await Album.find();
         }
         const albumsWithTrackCount = await Promise.all(albumsList.map(async (album) => {
             const trackCount = await Track.countDocuments({album: album.id});

@@ -9,6 +9,7 @@ import {selectAlbumsCreating} from "./albumsSlice.ts";
 import {createAlbum} from "./albumsThunk.ts";
 import {selectArtistsList} from "../artists/artistsSlice.ts";
 import {getArtistsList} from "../artists/artistsThunk.ts";
+import {selectUser} from "../users/usersSlice.ts";
 
 const initialState = {
     title: '',
@@ -22,9 +23,16 @@ const NewAlbum = () => {
     const navigate = useNavigate();
     const creating = useAppSelector(selectAlbumsCreating);
     const selectedArtist = useAppSelector(selectArtistsList);
-
+    const user = useAppSelector(selectUser);
 
     const [state, setState] = useState<AlbumMutation>(initialState);
+
+    useEffect(() => {
+        if(!user){
+            navigate('/');
+        }
+    }, [user]);
+
     useEffect(() => {
         dispatch(getArtistsList());
     }, [dispatch]);

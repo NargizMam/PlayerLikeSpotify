@@ -10,6 +10,7 @@ import {selectAlbumsList} from "../ albums/albumsSlice.ts";
 import {getAlbumsList} from "../ albums/albumsThunk.ts";
 import {selectTracksCreating} from "./tracksSlice.ts";
 import {createTrack} from "./trackThunk.ts";
+import {selectUser} from "../users/usersSlice.ts";
 
 const initialState = {
     title: '',
@@ -24,11 +25,14 @@ const NewTrack = () => {
     const creating = useAppSelector(selectTracksCreating);
     const selectedAlbum = useAppSelector(selectAlbumsList);
     const selectedArtist = useAppSelector(selectArtistsList);
+    const user = useAppSelector(selectUser);
+
 
     const [state, setState] = useState<TrackMutation>(initialState);
+
     useEffect(() => {
+        if(!user)  navigate('/');
         dispatch(getArtistsList());
-        dispatch(getAlbumsList());
     }, [dispatch]);
 
     const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,6 +41,9 @@ const NewTrack = () => {
         setState(prevState => {
             return {...prevState, [name]: value};
         });
+    };
+    const getArtistsAlbums = (id: string) => {
+        dispatch(getAlbumsList(id));
     };
     const onFormSubmit = async (e: React.FormEvent ) => {
         e.preventDefault();
@@ -68,7 +75,10 @@ const NewTrack = () => {
                         >
                             <MenuItem value="" disabled>Please select a artist</MenuItem>
                             {selectedArtist.map(artist => (
-                                <MenuItem key={artist._id} value={artist._id}>
+                                <MenuItem key={artist._id}
+                                          value={artist._id}
+                                          onClick={() => getArtistsAlbums(artist._id)}
+                                >
                                     {artist.title}
                                 </MenuItem>
                             ))}
