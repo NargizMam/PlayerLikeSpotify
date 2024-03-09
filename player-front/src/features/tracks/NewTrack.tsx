@@ -10,7 +10,6 @@ import {selectAlbumsList} from "../ albums/albumsSlice.ts";
 import {getAlbumsList} from "../ albums/albumsThunk.ts";
 import {selectTracksCreating} from "./tracksSlice.ts";
 import {createTrack} from "./trackThunk.ts";
-import {selectUser} from "../users/usersSlice.ts";
 
 const initialState = {
     title: '',
@@ -25,13 +24,10 @@ const NewTrack = () => {
     const creating = useAppSelector(selectTracksCreating);
     const selectedAlbum = useAppSelector(selectAlbumsList);
     const selectedArtist = useAppSelector(selectArtistsList);
-    const user = useAppSelector(selectUser);
-
 
     const [state, setState] = useState<TrackMutation>(initialState);
 
     useEffect(() => {
-        if(!user)  navigate('/');
         dispatch(getArtistsList());
     }, [dispatch]);
 

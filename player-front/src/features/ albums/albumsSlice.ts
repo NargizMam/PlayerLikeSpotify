@@ -1,18 +1,20 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {RootState} from "../../app/store.ts";
 import {createAlbum, getAlbumsList} from "./albumsThunk.ts";
-import {AlbumsApi} from "../../types";
+import {AlbumsApi, GlobalError} from "../../types";
 
 interface AlbumsState {
     albumsList: AlbumsApi[];
     fetchLoading: boolean;
     creating: boolean;
+    fetchError: GlobalError | null;
 }
 
 const initialState: AlbumsState = {
-    albumsList: [],
+    albumsList: [] ,
     fetchLoading: false,
-    creating: false
+    creating: false,
+    fetchError: null,
 }
 const albumsSlice = createSlice({
     name: 'albums',
@@ -27,8 +29,9 @@ const albumsSlice = createSlice({
                 state.fetchLoading = false;
                 state.albumsList = albums;
             })
-            .addCase(getAlbumsList.rejected, (state) => {
+            .addCase(getAlbumsList.rejected, (state, {payload: data}) => {
                 state.fetchLoading = false;
+                state.fetchError = data || null;
             })
             .addCase(createAlbum.pending, (state) => {
                 state.creating = true;
@@ -47,3 +50,4 @@ export const albumsReducer = albumsSlice.reducer;
 export const selectAlbumsList = (state: RootState) => state.albums.albumsList
 export const selectAlbumsFetching = (state: RootState) => state.albums.fetchLoading;
 export const selectAlbumsCreating = (state: RootState) => state.albums.creating;
+export const selectFetchError = (state: RootState) => state.albums.fetchError;

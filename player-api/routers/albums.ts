@@ -16,12 +16,12 @@ albumsRouter.get('/', async (req, res, next) => {
         if (req.query.artist && headerValue) {
             albumsList = await Album.find({'artist': req.query.artist}).sort({issueDate: -1}).populate('artist', 'title');
             if (albumsList.length <= 0) {
-                return res.status(404).send({error: 'У данного альбома нет треков'});
+                return res.status(404).send({error: 'У данного исполнителя нет альбомов'});
             }
         }else if(req.query.artist && !headerValue){
             albumsList = await Album.find({'artist': req.query.artist, 'isPublished': true}).sort({issueDate: -1}).populate('artist', 'title');
             if (albumsList.length <= 0) {
-                return res.status(404).send({error: 'У данного альбома нет треков'});
+                return res.status(404).send({error: 'У данного исполнителя нет альбомов'});
             }
         }else if(!headerValue){
 
@@ -59,15 +59,18 @@ albumsRouter.get('/:id', async (req, res, next) => {
 });
 albumsRouter.patch('/:id/togglePublished', auth, permit('admin'), async (req, res, next) => {
     try {
-        const albumsId = req.params.id;
-
-        const chosenAlbum = await Album.findById(albumsId);
-        if (!chosenAlbum) {
-            return res.status(404).json({error: 'Альбом не найден!'});
-        }
-        chosenAlbum.isPublished = !chosenAlbum.isPublished;
-        await chosenAlbum.save();
-        return res.send({message: 'Success', isPublished: chosenAlbum.isPublished});
+        // const albumsId = req.params.id;
+        //
+        // const chosenAlbum = await Album.updateOne({_id: albumsId},
+        //     {
+        //         // $set: isPublished
+        //     });
+        // if (!chosenAlbum) {
+        //     return res.status(404).json({error: 'Альбом не найден!'});
+        //
+        // chosenAlbum.isPublished = !chosenAlbum.isPublished;
+        // await chosenAlbum.save();
+        // return res.send({message: 'Success', isPublished: chosenAlbum.isPublished});
 
     } catch (e) {
         next(e);

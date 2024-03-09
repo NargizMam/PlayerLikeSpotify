@@ -6,8 +6,7 @@ import {createArtist} from "./artistsThunk.ts";
 import {selectArtistsCreating} from "./artistsSlice.ts";
 import FileInput from "../../components/UI/FileInput/FileInput.tsx";
 import {LoadingButton} from "@mui/lab";
-import React, {useEffect, useState} from "react";
-import {selectUser} from "../users/usersSlice.ts";
+import React, {useState} from "react";
 
 const initialState  = {
     title: '',
@@ -19,14 +18,6 @@ const NewArtist = () => {
     const navigate = useNavigate();
     const creating = useAppSelector(selectArtistsCreating);
     const [state, setState] = useState<ArtistMutation>(initialState);
-    const user = useAppSelector(selectUser);
-
-
-    useEffect(() => {
-        if(!user){
-            navigate('/');
-        }
-    }, [user]);
     const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
 

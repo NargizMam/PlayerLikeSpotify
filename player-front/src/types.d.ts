@@ -2,6 +2,7 @@ export interface User {
     _id: string;
     username: string;
     token: string;
+    role: string;
 }
 export interface RegisterMutation {
     username: string;
@@ -24,12 +25,13 @@ export interface ValidationError {
 }
 export interface Artist {
     _id: string;
-    name: string;
+    title: string;
 }
 export interface ArtistApi {
     _id: string;
     title: string;
     image: string | null;
+    isPublished: boolean;
 }
 export interface ArtistMutation {
     title: string;
@@ -48,6 +50,17 @@ export interface AlbumsApi {
     issueDate: number;
     image: string | null;
     trackCount?: number;
+    isPublished: boolean;
+}
+export interface AdminsAlbumsApi {
+    _id: string;
+    title: string;
+    artist: Artist;
+    issueDate: number;
+    image: string | null;
+    trackCount?: number;
+    isPublished: boolean;
+    tracks: TrackApi[]
 }
 export interface AlbumMutation {
     title: string;
@@ -63,6 +76,7 @@ export interface TrackApi {
     album: Album;
     duration: string;
     serialNumber: number;
+    isPublished: boolean;
 }
 export interface TrackMutation {
     title: string;

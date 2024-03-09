@@ -1,19 +1,23 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import axiosApi from "../../axiosApi.ts";
-import {AlbumMutation, AlbumsApi} from "../../types";
+import {AlbumMutation, AlbumsApi, GlobalError} from "../../types";
+import {isAxiosError} from "axios";
 
-export const getAlbumsList = createAsyncThunk<AlbumsApi[], string | undefined>(
+export const getAlbumsList = createAsyncThunk<AlbumsApi[] , string | undefined , { rejectValue: GlobalError}>(
     'albums/fetch',
-    async (artistName) => {
+    async (artistName, {rejectWithValue}) => {
         let response;
         try{
             if(artistName){
-                response = await axiosApi.get<AlbumsApi[]>(`/albums?artist=${artistName}`);
+                response = await axiosApi.get<AlbumsApi[] >(`/albums?artist=${artistName}`);
             }else{
-                response = await axiosApi.get<AlbumsApi[]>('/albums');
+                response = await axiosApi.get<AlbumsApi[] >('/albums');
             }
             return response.data;
         }catch (e) {
+            if(isAxiosError(e) && e.response ){
+                return rejectWithValue(e.response.data);
+            }
             throw e;
         }
 
@@ -37,7 +41,7 @@ export const createAlbum = createAsyncThunk<void, AlbumMutation>(
             const response = await axiosApi.post('/albums', formData);
             return response.data;
         }catch (e) {
-            throw e;
+            return e;
         }
 
     }

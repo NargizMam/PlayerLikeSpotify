@@ -30,6 +30,9 @@ const UserMenu: React.FC<Props> = ({user}) => {
     <>
       <Button color="inherit" onClick={handleClick}>Hello, {user.username}</Button>
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose} keepMounted>
+          {user?.role === 'admin' && (
+              <MenuItem component={NavLink} to="/allItems">Вся информация</MenuItem>
+          )}
           <MenuItem component={NavLink} to="/tracksHistory">История </MenuItem>
           <MenuItem component={NavLink} to="/new-artist">Добавить исполнителя</MenuItem>
           <MenuItem component={NavLink} to="/new-album">Добавить альбом</MenuItem>

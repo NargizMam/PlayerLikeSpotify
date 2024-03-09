@@ -2,7 +2,6 @@ import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
 import {selectTrackHistories, selectTrackHistoryFetching} from "./trackHistorySlice.ts";
 import {useEffect} from "react";
 import {getTrackHistory} from "./trackHistoryThunk.ts";
-import {selectUser} from "../users/usersSlice.ts";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import IconButton from "@mui/material/IconButton";
@@ -16,15 +15,11 @@ const TrackHistory = () => {
     const dispatch = useAppDispatch();
     const trackHistoryList = useAppSelector(selectTrackHistories);
     const navigate = useNavigate();
-    const user = useAppSelector(selectUser);
     const loading = useAppSelector(selectTrackHistoryFetching);
 
     useEffect(() => {
-        if(!user) navigate('/');
        dispatch(getTrackHistory());
-
         navigate('/');
-
     }, [dispatch]);
 
 
@@ -33,7 +28,7 @@ const TrackHistory = () => {
             {loading && <Loading/>}
             <List sx={{ width: '100%',
                 maxWidth: 900,
-                bgcolor: 'background.paper',
+                backgroundColor: 'background.paper',
                 justifyContent: 'spaceBetween',
             }}>
                 {trackHistoryList.map((value) => {
