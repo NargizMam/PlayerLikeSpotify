@@ -57,20 +57,18 @@ albumsRouter.get('/:id', async (req, res, next) => {
         next(e);
     }
 });
-albumsRouter.patch('/:id/togglePublished', auth, permit('admin'), async (_req, res, next) => {
+albumsRouter.patch('/:id/togglePublished', auth, permit('admin'), async (req, res, next) => {
     try {
-        // const albumsId = req.params.id;
-        //
-        // const chosenAlbum = await Album.updateOne({_id: albumsId},
-        //     {
-        //         // $set: isPublished
-        //     });
-        // if (!chosenAlbum) {
-        //     return res.status(404).json({error: 'Альбом не найден!'});
-        //
-        // chosenAlbum.isPublished = !chosenAlbum.isPublished;
-        // await chosenAlbum.save();
-        // return res.send({message: 'Success', isPublished: chosenAlbum.isPublished});
+        const albumsId = req.params.id;
+
+        const chosenAlbum = await Album.updateOne({_id: albumsId},
+            {
+                $set: { isPublished: !'$isPublished' }
+            });
+        if (chosenAlbum.matchedCount === 0) {
+            return res.status(404).json({error: 'Альбом не найден!'});
+            }
+        return res.send({message: 'Success'});
 
     } catch (e) {
         next(e);

@@ -25,16 +25,16 @@ artistsRouter.patch('/:id/togglePublished', auth, permit('admin'), async (req, r
   try {
     const artistsId = req.params.id;
 
-    const chosenArtist = await Artist.findById(artistsId);
-    if(!chosenArtist){
-      return res.status(404).json({ error: 'Исполнитель не найден!' });
+    const chosenArtist = await Artist.updateOne({_id: artistsId},
+        {
+          $set: {isPublished: !'$isPublished'}
+        });
+    if (chosenArtist.matchedCount === 0) {
+      return res.status(404).json({error: 'Исполнитель не найден!'});
     }
-    chosenArtist.isPublished = !chosenArtist.isPublished;
-    await chosenArtist.save();
-    return res.send(    { message: 'Success', isPublished: chosenArtist.isPublished });
-
-  } catch (e) {
-    next(e);
+    return res.send({message: 'Success'});
+  }catch (e) {
+    next (e);
   }
 });
 

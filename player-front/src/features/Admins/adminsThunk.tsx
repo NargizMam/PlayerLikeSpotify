@@ -9,8 +9,7 @@ export const getAdminsAlbumsList = createAsyncThunk<AdminsAlbumsApi[][]  , undef
         let response;
         try{
             response = await axiosApi.get<AdminsAlbumsApi[][] >(`/admins`);
-            console.log(response.data)
-               return response.data;
+            return response.data;
         }catch (e) {
             if(isAxiosError(e) && e.response ){
                 return rejectWithValue(e.response.data);
@@ -18,5 +17,38 @@ export const getAdminsAlbumsList = createAsyncThunk<AdminsAlbumsApi[][]  , undef
             throw e;
         }
 
+    }
+);
+export const updateAlbumPublished = createAsyncThunk<void, string>(
+    'admins/albums/toggle',
+    async (id) => {
+        try{
+           const response = await axiosApi.patch(`/albums/${id}/togglePublished`);
+           return response.data;
+        }catch (e) {
+            throw e;
+        }
+    }
+);
+export const updateArtistPublished = createAsyncThunk<void, string>(
+    'admins/artists/toggle',
+    async (id) => {
+        try{
+            const response = await axiosApi.patch(`/artists/${id}/togglePublished`);
+            return response.data;
+        }catch (e) {
+            throw e;
+        }
+    }
+);
+export const updateTrackPublished = createAsyncThunk<void, string>(
+    'admins/tracks/toggle',
+    async (id) => {
+        try{
+            const response = await axiosApi.patch(`/tracks/${id}/togglePublished`);
+            return response.data;
+        }catch (e) {
+            throw e;
+        }
     }
 );

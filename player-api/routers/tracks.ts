@@ -1,5 +1,5 @@
 import express from 'express';
-import {TrackApi, TrackMutation} from '../types';
+import {TrackMutation} from '../types';
 import Track from '../models/Track';
 import auth, {RequestWithUser} from "../middleware/auth";
 import permit from "../middleware/permit";
@@ -52,14 +52,14 @@ tracksRouter.patch('/:id/togglePublished', auth, permit('admin'), async (req, re
   try {
     const trackId = req.params.id;
 
-    const chosenTrack = await Track.findById(trackId);
-    if(!chosenTrack){
-      return res.status(404).json({ error: 'Трек не найден!' });
+    const chosenTrack = await Track.updateOne({_id: trackId},
+        {
+          $set: {isPublished: !'$isPublished'}
+        });
+    if (chosenTrack.matchedCount === 0) {
+      return res.status(404).json({error: 'Трек не найден!'});
     }
-    chosenTrack.isPublished = !chosenTrack.isPublished;
-    await chosenTrack.save();
-    return res.send(    { message: 'Success', isPublished: chosenTrack.isPublished });
-
+    return res.send({message: 'Success'});
   } catch (e) {
     next(e);
   }

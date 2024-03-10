@@ -11,7 +11,7 @@ adminsRouter.get('/', auth, permit('admin'), async (req, res, next) => {
     try {
         const artistsList = await Artist.find();
         const adminsAlbumsList = await Promise.all(artistsList.map(async (artist) => {
-            const albumsList = await Album.find({'artist': artist._id}).sort({ issueDate: -1 }).populate('artist', 'title');
+            const albumsList = await Album.find({'artist': artist._id}).sort({ issueDate: -1 }).populate('artist', 'title isPublished');
             if (!albumsList || albumsList.length === 0) {
                 return [];
             }

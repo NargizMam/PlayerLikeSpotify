@@ -26,6 +26,7 @@ export interface ValidationError {
 export interface Artist {
     _id: string;
     title: string;
+    isPublished: boolean;
 }
 export interface ArtistApi {
     _id: string;
