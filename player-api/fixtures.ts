@@ -241,7 +241,8 @@ const run = async () => {
             title: 'Bad Guy',
             album: album7.id,
             duration: '7:14',
-            serialNumber: 1
+            serialNumber: 1,
+            isPublished: true
         },
         {
             id: crypto.randomUUID(),
@@ -273,7 +274,7 @@ const run = async () => {
             album: album7.id,
             duration: '7:14',
             serialNumber: 5,
-            isPublished: true
+            isPublished: false
         },
         {
             id: crypto.randomUUID(),

@@ -60,8 +60,9 @@ export interface AdminsAlbumsApi {
     image: string | null;
     trackCount?: number;
     isPublished: boolean;
-    tracks: TrackApi[]
+    track: TrackApi[]
 }
+
 export interface AlbumMutation {
     title: string;
     artist: string;

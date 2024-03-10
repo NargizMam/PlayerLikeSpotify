@@ -4,18 +4,18 @@ import {imagesUpload} from '../multer';
 import {ArtistMutation} from '../types';
 import auth, {RequestWithUser} from "../middleware/auth";
 import permit from "../middleware/permit";
+import client from "../middleware/client";
 
 const artistsRouter = express.Router();
 
-artistsRouter.get('/',async ( req, res, next) => {
-  const headerValue = req.get('Authorization');
+artistsRouter.get('/', client, async ( req: RequestWithUser, res, next) => {
+  const user = req.user;
 
   try {
-    if(!headerValue){
-      const artistsListIsPublished = await Artist.find({ isPublished: true });
-      return res.send(artistsListIsPublished);
+    let artistsList = await Artist.find({ isPublished: true });
+    if(user?.role === 'admin'){
+      artistsList = await Artist.find();
     }
-    const artistsList = await Artist.find();
     return res.send(artistsList);
   } catch (e) {
     next(e);
@@ -39,6 +39,7 @@ artistsRouter.patch('/:id/togglePublished', auth, permit('admin'), async (req, r
 });
 
 artistsRouter.post('/', auth, imagesUpload.single('image'), async (req: RequestWithUser, res, next) => {
+
   try {
     const artistData: ArtistMutation = {
       title: req.body.title,

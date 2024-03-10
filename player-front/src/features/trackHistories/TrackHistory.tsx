@@ -18,47 +18,48 @@ const TrackHistory = () => {
     const loading = useAppSelector(selectTrackHistoryFetching);
 
     useEffect(() => {
-       dispatch(getTrackHistory());
+        dispatch(getTrackHistory());
         navigate('/');
     }, [dispatch]);
 
 
     return (
         <>
-            {loading && <Loading/>}
-            <List sx={{ width: '100%',
-                maxWidth: 900,
-                backgroundColor: 'background.paper',
-                justifyContent: 'spaceBetween',
-            }}>
-                {trackHistoryList.map((value) => {
-                    return (
-                        <ListItem
-                            sx={{border: '1px solid #000', margin: '5px'}}
-                            key={value._id}
-                            secondaryAction={
-                                <IconButton edge="end" aria-label="comments">
-                                </IconButton>
-                            }
-                        >
-                            <ListItemButton >
-                                <ListItemText>
-                                    <strong>{value.track.album.artist.name}</strong>
-                                </ListItemText>
-                                <ListItemText>
-                                    {value.track.album.title}
-                                </ListItemText>
-                                <ListItemText>
-                                    {value.track.title}
-                                </ListItemText>
-                                <ListItemIcon>
-                                    {value.createdAt}
-                                </ListItemIcon>
-                            </ListItemButton>
-                        </ListItem>
-                    );
-                })}
-            </List>
+            {loading ? (<Loading/>) :
+                (<List sx={{
+                    width: '100%',
+                    maxWidth: 900,
+                    backgroundColor: 'background.paper',
+                    justifyContent: 'spaceBetween',
+                }}>
+                    {trackHistoryList.map((value) => {
+                        return (
+                            <ListItem
+                                sx={{border: '1px solid #000', margin: '5px'}}
+                                key={value._id}
+                                secondaryAction={
+                                    <IconButton edge="end" aria-label="comments">
+                                    </IconButton>
+                                }
+                            >
+                                <ListItemButton>
+                                    <ListItemText>
+                                        <strong>{value.track.album.artist.title}</strong>
+                                    </ListItemText>
+                                    <ListItemText>
+                                        {value.track.album.title}
+                                    </ListItemText>
+                                    <ListItemText>
+                                        {value.track.title}
+                                    </ListItemText>
+                                    <ListItemIcon>
+                                        {value.createdAt}
+                                    </ListItemIcon>
+                                </ListItemButton>
+                            </ListItem>
+                        );
+                    })}
+                </List>)}
         </>
     );
 };

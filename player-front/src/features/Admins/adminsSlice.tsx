@@ -4,7 +4,7 @@ import {AdminsAlbumsApi, GlobalError} from "../../types";
 import {getAdminsAlbumsList} from "./adminsThunk.tsx";
 
 interface AdminsState {
-    albumsList: AdminsAlbumsApi[];
+    albumsList: AdminsAlbumsApi[][];
     fetchLoading: boolean;
     fetchError: GlobalError | null;
 }
@@ -24,8 +24,8 @@ const adminsSlice = createSlice({
                 state.fetchLoading = true;
             })
             .addCase(getAdminsAlbumsList.fulfilled, (state, {payload: albums}) => {
-                state.fetchLoading = false;
-                state.albumsList = albums;
+            state.fetchLoading = false;
+            state.albumsList = albums;
             })
             .addCase(getAdminsAlbumsList.rejected, (state, {payload: data}) => {
                 state.fetchLoading = false;
