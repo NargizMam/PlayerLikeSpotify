@@ -19,36 +19,5 @@ export const getAdminsAlbumsList = createAsyncThunk<AdminsAlbumsApi[][]  , undef
 
     }
 );
-export const updateAlbumPublished = createAsyncThunk<void, string>(
-    'admins/albums/toggle',
-    async (id) => {
-        try{
-           const response = await axiosApi.patch(`/albums/${id}/togglePublished`);
-           return response.data;
-        }catch (e) {
-            throw e;
-        }
-    }
-);
-export const updateArtistPublished = createAsyncThunk<void, string>(
-    'admins/artists/toggle',
-    async (id) => {
-        try{
-            const response = await axiosApi.patch(`/artists/${id}/togglePublished`);
-            return response.data;
-        }catch (e) {
-            throw e;
-        }
-    }
-);
-export const updateTrackPublished = createAsyncThunk<void, string>(
-    'admins/tracks/toggle',
-    async (id) => {
-        try{
-            const response = await axiosApi.patch(`/tracks/${id}/togglePublished`);
-            return response.data;
-        }catch (e) {
-            throw e;
-        }
-    }
-);
+
+

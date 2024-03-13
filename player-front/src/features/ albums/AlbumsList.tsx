@@ -1,15 +1,17 @@
-import {CircularProgress, Grid} from "@mui/material";
+import {CircularProgress, Grid, Typography} from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
 import {useEffect, useState} from "react";
-import {selectAlbumsFetching, selectAlbumsList} from "./albumsSlice.ts";
+import {selectAlbumsFetchError, selectAlbumsFetching, selectAlbumsList} from "./albumsSlice.ts";
 import AlbumsItem from "./components/AlbumsItem.tsx";
 import {getAlbumsList} from "./albumsThunk.ts";
 import {useParams} from "react-router-dom";
+import {selectUser} from "../users/usersSlice.ts";
 
 const AlbumsList = () => {
     const dispatch = useAppDispatch();
     const albumsList = useAppSelector(selectAlbumsList);
     const loading = useAppSelector(selectAlbumsFetching);
+    const fetchingError = useAppSelector(selectAlbumsFetchError);
     const {id} = useParams();
     const [artistName, setArtistName] = useState<string | null>();
     let allAlbumsList;
@@ -40,6 +42,8 @@ const AlbumsList = () => {
                 image={album.image}
                 issueDate={album.issueDate}
                 tracksCount={album.trackCount ? album.trackCount : 0}
+                isPublished={album.isPublished}
+                albumsUser={album.user}
             />));
     }else {
         allAlbumsList =  (<h1>У данного исполнителя не добавлен альбом</h1>);
@@ -51,9 +55,9 @@ const AlbumsList = () => {
             <Grid container justifyContent="space-around">
                 {loading && <CircularProgress/>}
                 <Grid>
-                    {artistName && <h1>{artistName}</h1>}
+                    {artistName && <Typography variant='h4'>{artistName}</Typography>}
                     <Grid container>
-                        {allAlbumsList}
+                        {fetchingError ? fetchingError.error : allAlbumsList}
                     </Grid>
                 </Grid>
             </Grid>

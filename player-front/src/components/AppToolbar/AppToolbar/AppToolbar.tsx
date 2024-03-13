@@ -6,10 +6,10 @@ import UserMenu from './UserMenu';
 import AnonymousMenu from './AnonymousMenu';
 
 const Link = styled(NavLink)({
-  color: 'inherit',
+  color:"secondary",
   textDecoration: 'none',
   '&:hover': {
-    color: 'inherit'
+    color: 'dark'
   },
 });
 
@@ -17,7 +17,7 @@ const AppToolbar = () => {
   const user = useAppSelector(selectUser);
 
   return (
-    <AppBar position="sticky" sx={{mb: 2}}>
+    <AppBar position="sticky" sx={{mb: 2 , backgroundColor: '#EEEEEE'}} >
       <Toolbar>
         <Grid container justifyContent="space-between" alignItems="center">
           <Typography variant="h6" component="div" sx={{flexGrow: 1}}>

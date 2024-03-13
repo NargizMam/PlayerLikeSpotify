@@ -1,5 +1,6 @@
-import mongoose from 'mongoose';
+import mongoose, {Types} from 'mongoose';
 import Artist from './Artist';
+import User from "./User";
 
 const AlbumSchema = new mongoose.Schema({
   title: {
@@ -16,6 +17,18 @@ const AlbumSchema = new mongoose.Schema({
         return Boolean(artist);
       },
       message: 'Исполнитель не найден!',
+    },
+  },
+  user: {
+    type: String,
+    required: true,
+    ref: 'User',
+    validate: {
+      validator: async (value: Types.ObjectId) => {
+        const user = await User.findById(value);
+        return Boolean(user);
+      },
+      message: 'Пользователь не найден!',
     },
   },
   issueDate: {

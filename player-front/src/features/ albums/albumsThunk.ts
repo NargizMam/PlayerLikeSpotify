@@ -46,3 +46,30 @@ export const createAlbum = createAsyncThunk<void, AlbumMutation>(
 
     }
 );
+export const updateAlbumPublished = createAsyncThunk<void, string, { rejectValue: GlobalError}>(
+    '/albums/toggle',
+    async (id, {rejectWithValue}) => {
+        try{
+            const response = await axiosApi.patch(`/albums/${id}/togglePublished`);
+            return response.data;
+        }catch (e) {
+            if(isAxiosError(e) && e.response ){
+                return rejectWithValue(e.response.data);
+            }
+            throw e;
+        }
+    }
+);
+export const deleteAlbum = createAsyncThunk<void, string, { rejectValue: GlobalError}>(
+    'albums/delete',
+    async (id, {rejectWithValue}) => {
+        try{
+            await axiosApi.delete(`/albums/${id}`);
+        }catch (e) {
+            if(isAxiosError(e) && e.response ){
+                return rejectWithValue(e.response.data);
+            }
+            throw e;
+        }
+    }
+);

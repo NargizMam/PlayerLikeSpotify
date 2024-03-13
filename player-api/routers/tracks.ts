@@ -4,6 +4,8 @@ import Track from '../models/Track';
 import auth, {RequestWithUser} from "../middleware/auth";
 import permit from "../middleware/permit";
 import client from "../middleware/client";
+import Artist from "../models/Artist";
+import Album from "../models/Album";
 
 const tracksRouter = express.Router();
 
@@ -29,7 +31,18 @@ tracksRouter.get('/', client, async (req: RequestWithUser, res, next) => {
         return res.send(trackList);
       }
     }
+    else {
+      trackList = await Track.find({
+        $or: [
+          { isPublished: true },
+          { user: user?._id, isPublished: false },
+        ],
+      });
+    }
     if (req.query.album) {
+      if(user){
+        trackList = await Track.find({album: req.query.album, user: user.id})
+      }
       trackList = await Track.find({album: req.query.album, isPublished: true})
           .sort({ serialNumber: 1 })
           .populate([{path:'album', select:'title artist', populate:[{path: 'artist', select: 'title'}]}]);
@@ -59,19 +72,22 @@ tracksRouter.patch('/:id/togglePublished', auth, permit('admin'), async (req, re
     if (chosenTrack.matchedCount === 0) {
       return res.status(404).json({error: 'Трек не найден!'});
     }
-    return res.send({message: 'Success'});
+    return res.send({message: 'track'});
   } catch (e) {
     next(e);
   }
 });
 
 tracksRouter.post('/', auth, async (req: RequestWithUser, res, next) => {
+  const user = req.user;
   try {
+    if(!user?.id) return ;
     const tracksData: TrackMutation = {
       title: req.body.title,
       album: req.body.album,
       duration: req.body.duration,
-      serialNumber: parseInt(req.body.serialNumber)
+      serialNumber: parseInt(req.body.serialNumber),
+      user: user?.id.toString()
     };
     const tracks = new Track(tracksData);
     await tracks.save();
@@ -80,10 +96,16 @@ tracksRouter.post('/', auth, async (req: RequestWithUser, res, next) => {
     next(e);
   }
 });
-tracksRouter.delete('/:id', auth, permit('admin'), async (req: RequestWithUser, res, next) => {
+tracksRouter.delete('/:id', auth,  async (req: RequestWithUser, res, next) => {
   const id = req.params.id;
-  try{
-    const deletedTracks = await Track.findByIdAndDelete(id);
+  const user = req.user!;
+
+  try {
+    let deletedTracks;
+    deletedTracks = await Track.deleteOne({user: user._id, isPublished: false});
+    if(user.role === 'admin'){
+      deletedTracks = await Track.findByIdAndDelete(id);
+    }
     if(!deletedTracks){
       return res.send('Трек, возможно, был удален!');
     }

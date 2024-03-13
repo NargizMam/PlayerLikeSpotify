@@ -5,6 +5,8 @@ import {ArtistMutation} from '../types';
 import auth, {RequestWithUser} from "../middleware/auth";
 import permit from "../middleware/permit";
 import client from "../middleware/client";
+import {log} from "util";
+
 
 const artistsRouter = express.Router();
 
@@ -15,6 +17,13 @@ artistsRouter.get('/', client, async ( req: RequestWithUser, res, next) => {
     let artistsList = await Artist.find({ isPublished: true });
     if(user?.role === 'admin'){
       artistsList = await Artist.find();
+    } else if(user){
+      artistsList = await Artist.find({
+        $or: [
+          { isPublished: true },
+          { user: user._id, isPublished: false },
+        ],
+      });
     }
     return res.send(artistsList);
   } catch (e) {
@@ -32,19 +41,22 @@ artistsRouter.patch('/:id/togglePublished', auth, permit('admin'), async (req, r
     if (chosenArtist.matchedCount === 0) {
       return res.status(404).json({error: 'Исполнитель не найден!'});
     }
-    return res.send({message: 'Success'});
+    return res.send({message: 'artist'});
   }catch (e) {
     next (e);
   }
 });
 
 artistsRouter.post('/', auth, imagesUpload.single('image'), async (req: RequestWithUser, res, next) => {
-
+  const user = req.user;
   try {
+    if(!user?._id) return ;
+
     const artistData: ArtistMutation = {
       title: req.body.title,
       image: req.file ? req.file.filename : null,
       description: req.body.description || null,
+      user: user._id.toString()
     };
     const artist = new Artist(artistData);
     await artist.save();
@@ -53,10 +65,17 @@ artistsRouter.post('/', auth, imagesUpload.single('image'), async (req: RequestW
     next(e);
   }
 });
-artistsRouter.delete('/:id', auth, permit('admin'), async (req: RequestWithUser, res, next) => {
+artistsRouter.delete('/:id', auth,  async (req: RequestWithUser, res, next) => {
   const id = req.params.id;
+  const user = req.user!;
+  let deletedArtist;
   try{
-    const deletedArtist = await Artist.findByIdAndDelete(id);
+
+    deletedArtist = await Artist.deleteOne({user: user._id, isPublished: false});
+    if(user?.role === 'admin'){
+      deletedArtist = await Artist.findByIdAndDelete(id);
+    }
+
     if(!deletedArtist){
       return res.send('Исполнитель, возможно, был удален!');
     }

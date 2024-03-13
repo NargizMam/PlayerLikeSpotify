@@ -4,6 +4,7 @@ import Artist from "./models/Artist";
 import Album from "./models/Album";
 import Track from "./models/Track";
 import User from "./models/User";
+import TrackHistory from "./models/TrackHistory";
 
 const dropCollection = async (db: mongoose.Connection, collectionName: string) => {
     try {
@@ -16,11 +17,11 @@ const dropCollection = async (db: mongoose.Connection, collectionName: string) =
 const run = async () => {
     await mongoose.connect(config.mongoose.db);
     const db = mongoose.connection;
-    const collections = ['artists', 'albums', 'tracks', 'trackhistories', 'users'];
+    const collections = ['artists', 'albums', 'tracks', 'trackHistory', 'users'];
     for (const collectionName of collections) {
         await dropCollection(db, collectionName)
     }
-    const [] = await User.create({
+    const [user1, user2, user3] = await User.create({
             username: 'Misha',
             password: "123",
             token: crypto.randomUUID(),
@@ -44,19 +45,22 @@ const run = async () => {
             title: 'MiaGy',
             image: 'fixtures/miyagi.jpg',
             id: crypto.randomUUID(),
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             title: 'Eminem',
             image: 'fixtures/eminem.jpg',
             id: crypto.randomUUID(),
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             title: 'Zivert',
             image: 'fixtures/zivert.jpg',
             id: crypto.randomUUID(),
-            isPublished: false
+            isPublished: false,
+            user: user2.id
         },
     )
     const [album1, album2, album3, album4, album5, album6, album7] = await Album.create(
@@ -66,7 +70,8 @@ const run = async () => {
             artist: artist1.id,
             issueDate: 2020,
             image: 'fixtures/yamakasi.jpeg',
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -74,7 +79,9 @@ const run = async () => {
             artist: artist1.id,
             issueDate: 2022,
             image: 'fixtures/hattori.jpeg',
-            isPublished: true
+            isPublished: true,
+            user: user3.id
+
         },
         {
             id: crypto.randomUUID(),
@@ -82,7 +89,8 @@ const run = async () => {
             artist: artist1.id,
             issueDate: 2020,
             image: 'fixtures/buster.jpeg',
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -90,7 +98,8 @@ const run = async () => {
             artist: artist3.id,
             issueDate: 2022,
             image: 'fixtures/zima.jpeg',
-            isPublished: true
+            isPublished: true,
+            user: user2.id
         },
         {
             id: crypto.randomUUID(),
@@ -98,7 +107,8 @@ const run = async () => {
             artist: artist3.id,
             issueDate: 2018,
             image: 'fixtures/siyay.jpeg',
-            isPublished: false
+            isPublished: false,
+            user: user2.id
         },
         {
             id: crypto.randomUUID(),
@@ -106,7 +116,8 @@ const run = async () => {
             artist: artist2.id,
             issueDate: 2009,
             image: 'fixtures/relaps.jpeg',
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -114,17 +125,19 @@ const run = async () => {
             artist: artist2.id,
             issueDate: 2009,
             image: 'fixtures/marshall.jpeg',
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
     )
-    const [] = await Track.create(
+    const [t1, t2, t3, t4] = await Track.create(
         {
             id: crypto.randomUUID(),
             title: 'Еще хочу',
             album: album5.id,
             duration: '3:26',
             serialNumber: 1,
-            isPublished: true
+            isPublished: true,
+            user: user2.id
         },
         {
             id: crypto.randomUUID(),
@@ -132,7 +145,8 @@ const run = async () => {
             album: album5.id,
             duration: '3:26',
             serialNumber: 2,
-            isPublished: true
+            isPublished: true,
+            user: user2.id
         },
         {
             id: crypto.randomUUID(),
@@ -140,7 +154,8 @@ const run = async () => {
             album: album5.id,
             duration: '4:26',
             serialNumber: 3,
-            isPublished: true
+            isPublished: true,
+            user: user2.id
         },
         {
             id: crypto.randomUUID(),
@@ -148,7 +163,8 @@ const run = async () => {
             album: album5.id,
             duration: '4:26',
             serialNumber: 4,
-            isPublished: true
+            isPublished: true,
+            user: user2.id
         },
         {
             id: crypto.randomUUID(),
@@ -156,7 +172,8 @@ const run = async () => {
             album: album5.id,
             duration: '4:26',
             serialNumber: 5,
-            isPublished: true
+            isPublished: true,
+            user: user2.id
         },
         {
             id: crypto.randomUUID(),
@@ -164,7 +181,8 @@ const run = async () => {
             album: album4.id,
             duration: '3:03',
             serialNumber: 4,
-            isPublished: true
+            isPublished: true,
+            user: user2.id
         },
         {
             id: crypto.randomUUID(),
@@ -172,7 +190,8 @@ const run = async () => {
             album: album4.id,
             duration: '3:04',
             serialNumber: 5,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -180,21 +199,24 @@ const run = async () => {
             album: album4.id,
             duration: '3:04',
             serialNumber: 3,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         }, {
             id: crypto.randomUUID(),
             title: 'Не знаю',
             album: album4.id,
             duration: '3:04',
             serialNumber: 2,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         }, {
             id: crypto.randomUUID(),
             title: 'Нельзя',
             album: album4.id,
             duration: '3:04',
             serialNumber: 1,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -202,7 +224,8 @@ const run = async () => {
             album: album6.id,
             duration: '1:03',
             serialNumber: 1,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -210,7 +233,8 @@ const run = async () => {
             album: album6.id,
             duration: '5:03',
             serialNumber: 2,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -218,7 +242,8 @@ const run = async () => {
             album: album6.id,
             duration: '1:03',
             serialNumber: 3,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -226,7 +251,8 @@ const run = async () => {
             album: album6.id,
             duration: '5:03',
             serialNumber: 4,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -234,7 +260,8 @@ const run = async () => {
             album: album6.id,
             duration: '5:03',
             serialNumber: 5,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -242,7 +269,8 @@ const run = async () => {
             album: album7.id,
             duration: '7:14',
             serialNumber: 1,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -250,7 +278,8 @@ const run = async () => {
             album: album7.id,
             duration: '7:14',
             serialNumber: 2,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -258,7 +287,8 @@ const run = async () => {
             album: album7.id,
             duration: '7:14',
             serialNumber: 3,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -266,7 +296,8 @@ const run = async () => {
             album: album7.id,
             duration: '7:14',
             serialNumber: 4,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -274,7 +305,8 @@ const run = async () => {
             album: album7.id,
             duration: '7:14',
             serialNumber: 5,
-            isPublished: false
+            isPublished: false,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -282,7 +314,8 @@ const run = async () => {
             album: album3.id,
             duration: '1:03',
             serialNumber: 2,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -290,7 +323,8 @@ const run = async () => {
             album: album3.id,
             duration: '1:03',
             serialNumber: 1,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -298,7 +332,8 @@ const run = async () => {
             album: album3.id,
             duration: '1:03',
             serialNumber: 3,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -306,7 +341,8 @@ const run = async () => {
             album: album3.id,
             duration: '1:03',
             serialNumber: 4,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -314,7 +350,8 @@ const run = async () => {
             album: album3.id,
             duration: '1:03',
             serialNumber: 5,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -322,7 +359,8 @@ const run = async () => {
             album: album2.id,
             duration: '3:03',
             serialNumber: 1,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -330,7 +368,8 @@ const run = async () => {
             album: album2.id,
             duration: '4:03',
             serialNumber: 3,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -338,7 +377,8 @@ const run = async () => {
             album: album2.id,
             duration: '3:03',
             serialNumber: 2,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -346,7 +386,8 @@ const run = async () => {
             album: album2.id,
             duration: '3:03',
             serialNumber: 5,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -354,7 +395,8 @@ const run = async () => {
             album: album2.id,
             duration: '4:03',
             serialNumber: 4,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -362,7 +404,8 @@ const run = async () => {
             album: album1.id,
             duration: '3:07',
             serialNumber: 5,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -370,7 +413,8 @@ const run = async () => {
             album: album1.id,
             duration: '3:07',
             serialNumber: 4,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -378,7 +422,9 @@ const run = async () => {
             album: album1.id,
             duration: '3:29',
             serialNumber: 3,
-            isPublished: true
+            isPublished: true,
+            author: user1.id,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -386,7 +432,8 @@ const run = async () => {
             album: album1.id,
             duration: '3:07',
             serialNumber: 2,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -394,7 +441,8 @@ const run = async () => {
             album: album1.id,
             duration: '3:29',
             serialNumber: 1,
-            isPublished: true
+            isPublished: true,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -402,7 +450,8 @@ const run = async () => {
             album: album1.id,
             duration: '3:07',
             serialNumber: 2,
-            isPublished: false
+            isPublished: false,
+            user: user3.id
         },
         {
             id: crypto.randomUUID(),
@@ -410,11 +459,32 @@ const run = async () => {
             album: album1.id,
             duration: '3:29',
             serialNumber: 1,
-            isPublished: false
+            isPublished: false,
+            user: user3.id
         },
     )
-
-
+    const [] = await TrackHistory.create(
+        {
+            id: crypto.randomUUID(),
+            track: t1.id,
+            user: user2.id
+        },
+        {
+            id: crypto.randomUUID(),
+            track: t2.id,
+            user: user1.id
+        },
+        {
+            id: crypto.randomUUID(),
+            track: t3.id,
+            user: user3.id
+        },
+        {
+            id: crypto.randomUUID(),
+            track: t3.id,
+            user: user2.id
+        }
+    )
     await db.close();
 };
 

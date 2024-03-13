@@ -5,6 +5,7 @@ export interface ArtistMutation {
   image: string | null;
   description?: string;
   isPublished?: boolean;
+  user: string;
 }
 export interface AlbumMutation {
   title: string;
@@ -13,6 +14,7 @@ export interface AlbumMutation {
   image?: string | null;
   tracksCount?: number;
   isPublished?: boolean;
+  user: string;
 }
 export interface TrackMutation {
   title: string;
@@ -20,12 +22,14 @@ export interface TrackMutation {
   duration: string;
   serialNumber: number;
   isPublished?: boolean;
+  user: string;
 }
 export interface Artist {
   _id: string;
   title: string;
   description: string | null;
   isPublished: boolean;
+  user: string;
 }
 
 export interface Album {
@@ -33,6 +37,7 @@ export interface Album {
   artist: Artist;
   title: string;
   isPublished: boolean;
+  user: string
 }
 export interface TrackApi {
   _id: string;
@@ -41,6 +46,7 @@ export interface TrackApi {
   duration: string;
   serialNumber: number;
   isPublished: boolean;
+  user: string;
 }
 export interface TrackArtistApi {
   artist: string | null;
@@ -58,6 +64,7 @@ export interface TrackAlbumsApi {
   serialNumber: number;
   tracksCount?: number;
   isPublished: boolean;
+  user: string;
 }
 export interface UserFields {
   username: string;
@@ -75,16 +82,4 @@ export interface UserMethods {
   generateToken(): void;
 }
 type UserModal = Model<UserFields, {}, UserMethods>;
-export interface Artist{
-  id: string,
-  title: string
-}
-export interface AlbumsWithTrackCount {
-  _id: string;
-  title: string;
-  artist: string;
-  issueDate: number;
-  image?: string | null;
-  tracksCount?: number;
-  isPublished: boolean;
-}
+
