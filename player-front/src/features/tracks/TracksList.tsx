@@ -1,38 +1,37 @@
-import {Box, CircularProgress, Grid, Modal} from "@mui/material";
+import {CircularProgress, Grid} from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
 import {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
-import {selectTracksFetching, selectTracksList} from "./tracksSlice.ts";
-import {getTracksList} from "./trackThunk.ts";
+import {useLocation} from "react-router-dom";
+import {selectTracksFetching, selectTracksFetchingError, selectTracksList} from "./tracksSlice.ts";
 import TracksItem from "./components/TracksItem.tsx";
 import {addTrackInHistory} from "../trackHistories/trackHistoryThunk.ts";
-import YouTubePlayer from "react-youtube";
+import {getTracksList} from "./trackThunk.ts";
+import ErrorMessage from "../ErrorMessage/ErrorMessage.tsx";
 
 
 const TracksList = () => {
     const dispatch = useAppDispatch();
     const tracksList = useAppSelector(selectTracksList);
     const loading = useAppSelector(selectTracksFetching);
-    const {id} = useParams();
+    const fetchingError = useAppSelector(selectTracksFetchingError)
+    const {search} = useLocation();
+    const albumId = new URLSearchParams(search).get('album');
     const [tracksInfo, setTracksInfo] = useState({
         artist: '',
         album: ''
     });
-    const [showPlayer, setShowPlayer] = useState(false);
-
-    const youtubeOpts = {
-        height: "390",
-        width: "640",
-        playerVars: {},
-    };
+    // const [showPlayer, setShowPlayer] = useState(false);
+    //
+    // const youtubeOpts = {
+    //     height: "390",
+    //     width: "640",
+    //     playerVars: {},
+    // };
     useEffect(() => {
-        if (id) {
-            dispatch(getTracksList(id));
-        }else {
-            dispatch(getTracksList());
+        if(albumId){
+            dispatch(getTracksList(albumId));
         }
-    }, [dispatch, id]);
-
+    }, [dispatch]);
     useEffect(() => {
         if (tracksList.length > 0) getAlbumsInfo();
     }, [tracksList]);
@@ -48,7 +47,7 @@ const TracksList = () => {
     };
     const createTrackHistory = async (id: string) => {
        await dispatch(addTrackInHistory(id)).unwrap();
-       setShowPlayer(true);
+       // setShowPlayer(true);
     };
 
     const allTracks = tracksList.map(track => (
@@ -66,6 +65,8 @@ const TracksList = () => {
         <>
             <Grid container justifyContent="space-around">
                 {loading && <CircularProgress/>}
+                {fetchingError && <ErrorMessage
+                    errorMessage={fetchingError.error}/> }
                 <Grid>
                     <h1>Исполнитель: {tracksInfo.artist}</h1>
                     <h6>Альбом: {tracksInfo.album}</h6>

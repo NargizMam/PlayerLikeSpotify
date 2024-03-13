@@ -36,7 +36,6 @@ const App = () => {
                             <TrackHistory/>
                         </ProtectedRoute>)}/>
                     <Route path="/login"  element={<Login/>}/>
-                    <Route path="/artists/:id"  element={<AlbumsList/>} />
                     <Route path="/new-artist"  element={(
                         <ProtectedRoute isAllowed={!!user}>
                             <NewArtist/>
@@ -53,7 +52,8 @@ const App = () => {
                         <ProtectedRoute isAllowed={Boolean(user?.role === 'admin')}>
                             <AllItems/>
                         </ProtectedRoute>)}/>
-                    <Route path="/albums/:id"  element={<TracksList/>}/>
+                    <Route path="/albums"  element={<AlbumsList/>} />
+                    <Route path="/tracks"  element={<TracksList/>}/>
                     <Route path="*" element={<h1>Not found</h1>} />
                 </Routes>
             </Container>

@@ -11,6 +11,7 @@ interface TracksState {
     deleteError: GlobalError | null;
     trackUpdateError: GlobalError | null;
     tracksToggleFetching: boolean;
+    tracksFetchingError: GlobalError | null;
 }
 
 const initialState: TracksState = {
@@ -21,6 +22,7 @@ const initialState: TracksState = {
     deleteError: null,
     tracksToggleFetching: false,
     trackUpdateError: null,
+    tracksFetchingError: null
 }
 const tracksSlice = createSlice({
     name: 'tracks',
@@ -35,8 +37,9 @@ const tracksSlice = createSlice({
                 state.fetchLoading = false;
                 state.tracksList = tracks;
             })
-            .addCase(getTracksList.rejected, (state) => {
+            .addCase(getTracksList.rejected, (state, {payload: error}) => {
                 state.fetchLoading = false;
+                state.tracksFetchingError = error || null;
             })
             .addCase(createTrack.pending, (state) => {
             state.creating = true;
@@ -82,3 +85,4 @@ export const selectTracksDeleting = (state: RootState) => state.tracks.deleting;
 export const selectTracksDeleteError = (state: RootState) => state.tracks.deleteError;
 export const selectTracksToggleFetching = (state: RootState) => state.tracks.tracksToggleFetching;
 export const selectTrackUpdateError = (state: RootState) => state.tracks.trackUpdateError;
+export const selectTracksFetchingError = (state: RootState) => state.tracks.tracksFetchingError;

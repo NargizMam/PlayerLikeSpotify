@@ -8,51 +8,53 @@ import permit from "../middleware/permit";
 import client from "../middleware/client";
 import Artist from "../models/Artist";
 import user from "../models/User";
+import {log} from "util";
 
 const albumsRouter = express.Router();
 
 albumsRouter.get('/', client, async (req: RequestWithUser, res, next) => {
     const user = req.user;
+    const artistId = req.query.artist;
     try {
-        let albumsList = await Album.find({isPublished: true});
-        if(req.query.artist){
-            albumsList = await Album.find({'artist': req.query.artist, isPublished: true}).sort({issueDate: -1}).populate('artist', 'title');
-            if (albumsList.length <= 0) {
-                return res.status(404).send({error: 'У данного исполнителя нет альбомов'});
-            }
-        }
-        if(user && user?.role === 'admin'){
-            albumsList = await Album.find();
-            if (req.query.artist) {
-                albumsList = await Album.find({'artist': req.query.artist })
+        let albumsList;
+        if (artistId) {
+            if (user && user.role === 'admin') {
+                albumsList = await Album.find({'artist': artistId})
                     .sort({issueDate: -1})
                     .populate('artist', 'title');
-                if (albumsList.length <= 0) {
-                    return res.status(404).send({error: 'У данного исполнителя нет альбомов'});
-                }
-            }
-        if(user && user?.role !== 'admin'){
-            albumsList = await Album.find({
-                $or: [
-                    { isPublished: true },
-                    { user: user?._id, isPublished: false },
-                ],
-            });
-            if(req.query.artist){
-                albumsList = await Album.find({ 'artist': req.query.artist, user: user?._id, issueDate: { $gt: 0 } })
-                    .sort({ issueDate: -1 })
+            } else if (user) {
+                albumsList = await Album.find({
+                    $or: [
+                        {'artist': artistId, isPublished: true},
+                        {'artist': artistId, user: user._id, isPublished: false},
+                    ],
+                }).populate('artist', 'title');
+            } else {
+                albumsList = await Album.find({'artist': artistId, isPublished: true})
+                    .sort({issueDate: -1})
                     .populate('artist', 'title');
-                if (albumsList.length <= 0) {
-                    return res.status(404).send({error: 'У данного исполнителя нет альбомов'});
-                }}
+            }
+        } else {
+            if (user && user.role === 'admin') {
+                albumsList = await Album.find()
+                    .sort({issueDate: -1})
+                    .populate('artist', 'title');
+            } else if (user && user.role !== 'admin') {
+                albumsList = await Album.find({
+                    $or: [
+                        {isPublished: true},
+                        {user: user._id, isPublished: false},
+                    ],
+                }).populate('artist', 'title');
+            } else {
+                albumsList = await Album.find({isPublished: true})
+                    .sort({issueDate: -1})
+                    .populate('artist', 'title');
+            }
         }
-
-
-    }
         if (!albumsList || albumsList.length <= 0) {
-            return res.status(404).send({error: 'Нет данных'});
+            return res.status(404).send({error: 'К сожалению,у данного исполнителя нет альбомов!'});
         }
-
         const albumsWithTrackCount = await Promise.all(albumsList.map(async (album) => {
             const trackCount = await Track.countDocuments({album: album.id});
             return {

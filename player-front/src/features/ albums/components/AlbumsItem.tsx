@@ -2,9 +2,10 @@ import {Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid,
 import noImage from '../../../assets/images/image_not_available.png'
 import {apiURL} from "../../../constants.ts";
 import React from "react";
-import {NavLink} from "react-router-dom";
-import {useAppSelector} from "../../../app/hooks.ts";
+import {useNavigate} from "react-router-dom";
+import {useAppDispatch, useAppSelector} from "../../../app/hooks.ts";
 import {selectUser} from "../../users/usersSlice.ts";
+import {getTracksList} from "../../tracks/trackThunk.ts";
 
 interface Props {
     id: string;
@@ -21,6 +22,8 @@ const AlbumsItem: React.FC<Props> = ({
                                          issueDate, tracksCount,
                                          isPublished, albumsUser
                                      }) => {
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const user = useAppSelector(selectUser)!;
 
     let cardImage = noImage;
@@ -30,6 +33,10 @@ const AlbumsItem: React.FC<Props> = ({
     }
     let publishedAction = null;
 
+    const getAlbumsTrackList = async () => {
+        await dispatch(getTracksList(id)).unwrap();
+        navigate(`/tracks?album=${id}`);
+    }
     if (isPublished && user) {
         if (user?.role === 'admin') {
             publishedAction = (
@@ -49,7 +56,7 @@ const AlbumsItem: React.FC<Props> = ({
 
     return (
         <Card sx={{width: '40%', m: 2, p: 2, alignItems: 'center', textDecoration: 'none', borderRadius: 10}}
-              component={NavLink} to={`/artists/${id}`}>
+              onClick={getAlbumsTrackList}>
             <CardActionArea sx={{p: 1}}>
                 <CardMedia
                     sx={{height: 250, borderRadius: 8}}

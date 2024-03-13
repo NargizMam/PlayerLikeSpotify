@@ -3,16 +3,25 @@ import axiosApi from "../../axiosApi.ts";
 import {GlobalError, TrackApi, TrackMutation} from "../../types";
 import {isAxiosError} from "axios";
 
-export const getTracksList = createAsyncThunk<TrackApi[], string | undefined>(
+export const getTracksList = createAsyncThunk<TrackApi[], string | undefined, { rejectValue: GlobalError}>(
     'tracks',
-    async (albumId) => {
-       let response;
-        if(albumId){
-            response = await axiosApi.get<TrackApi[]>(`/tracks?album=${albumId}`);
-        }else{
-            response = await axiosApi.get<TrackApi[]>('/tracks');
+    async (id, {rejectWithValue}) => {
+        try{
+            let response;
+            if(id){
+                response = await axiosApi.get<TrackApi[]>(`/tracks?album=${id}`);
+                return response.data;
+            }else{
+                response = await axiosApi.get<TrackApi[]>('/tracks');
+                return response.data;
+            }
+        }catch (e) {
+            if(isAxiosError(e) && e.response ){
+                return rejectWithValue(e.response.data);
+            }
+            throw e;
         }
-        return response.data;
+
     }
 );
 export const createTrack= createAsyncThunk<void, TrackMutation, { rejectValue: GlobalError}>(

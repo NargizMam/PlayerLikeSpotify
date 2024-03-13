@@ -1,28 +1,26 @@
 import {CircularProgress, Grid, Typography} from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
 import {useEffect, useState} from "react";
-import {selectAlbumsFetchError, selectAlbumsFetching, selectAlbumsList} from "./albumsSlice.ts";
+import {selectAlbumsFetching, selectAlbumsList} from "./albumsSlice.ts";
 import AlbumsItem from "./components/AlbumsItem.tsx";
+import {useLocation} from "react-router-dom";
 import {getAlbumsList} from "./albumsThunk.ts";
-import {useParams} from "react-router-dom";
-import {selectUser} from "../users/usersSlice.ts";
 
 const AlbumsList = () => {
-    const dispatch = useAppDispatch();
     const albumsList = useAppSelector(selectAlbumsList);
     const loading = useAppSelector(selectAlbumsFetching);
-    const fetchingError = useAppSelector(selectAlbumsFetchError);
-    const {id} = useParams();
     const [artistName, setArtistName] = useState<string | null>();
+    const {search} = useLocation();
+    const dispatch = useAppDispatch();
+    const artistId = new URLSearchParams(search).get('artist');
+
     let allAlbumsList;
 
     useEffect(() => {
-        if (id) {
-            dispatch(getAlbumsList(id));
-        } else {
-            dispatch(getAlbumsList());
+        if(artistId){
+            dispatch(getAlbumsList(artistId));
         }
-    }, [dispatch, id]);
+    }, [dispatch]);
 
     useEffect(() => {
         if (albumsList.length > 0) {
@@ -57,7 +55,8 @@ const AlbumsList = () => {
                 <Grid>
                     {artistName && <Typography variant='h4'>{artistName}</Typography>}
                     <Grid container>
-                        {fetchingError ? fetchingError.error : allAlbumsList}
+
+                        {allAlbumsList}
                     </Grid>
                 </Grid>
             </Grid>

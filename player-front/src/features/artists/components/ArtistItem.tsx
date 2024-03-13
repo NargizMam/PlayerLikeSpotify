@@ -2,9 +2,11 @@ import {Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid,
 import noImage from '../../../assets/images/image_not_available.png'
 import {apiURL} from "../../../constants.ts";
 import React from "react";
-import {NavLink} from "react-router-dom";
-import {useAppSelector} from "../../../app/hooks.ts";
+import {useNavigate} from "react-router-dom";
+import {useAppDispatch, useAppSelector} from "../../../app/hooks.ts";
 import {selectUser} from "../../users/usersSlice.ts";
+import {getAlbumsList} from "../../ albums/albumsThunk.ts";
+import {openSnackBar} from "../../ErrorMessage/errorMessageSlice.ts";
 
 interface Props {
     title: string;
@@ -16,13 +18,22 @@ interface Props {
 
 const Artist: React.FC<Props> = ({title, image, id, isPublished, artistUser}) => {
     const user = useAppSelector(selectUser);
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     let cardImage = noImage;
     if (image) {
         cardImage = apiURL + '/' + image;
     }
     let publishedAction = null;
-
+    const getArtistsAlbum = async () => {
+        try {
+            await dispatch(getAlbumsList(id)).unwrap();
+            navigate(`/albums?artist=${id}`);
+        } catch (error) {
+            dispatch(openSnackBar());
+        }
+    };
     if (isPublished && user) {
         if (user?.role === 'admin') {
             publishedAction = (<Grid>
@@ -40,8 +51,9 @@ const Artist: React.FC<Props> = ({title, image, id, isPublished, artistUser}) =>
         }
     }
     return (
-        <Card sx={{width: '28%', m: 2 , p: 2, alignItems:'center', textDecoration:'none', borderRadius: 10}} component={NavLink} to={`/artists/${id}`}>
-            <CardActionArea sx={{p: 1}}>
+        <Card sx={{width: '28%', m: 2 , p: 2, alignItems:'center', textDecoration:'none', borderRadius: 10}}
+              onClick={getArtistsAlbum}>
+              <CardActionArea sx={{p: 1}}>
             <CardMedia
                 sx={{height: 250, borderRadius: 8}}
                 image={cardImage}
@@ -56,7 +68,6 @@ const Artist: React.FC<Props> = ({title, image, id, isPublished, artistUser}) =>
             <CardActions>
                 {publishedAction}
             </CardActions>
-
         </Card>
     );
 };
