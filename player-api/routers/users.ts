@@ -6,20 +6,23 @@ import config from "../config";
 const usersRouter = express.Router();
 const client = new OAuth2Client(config.google.clientId);
 usersRouter.post('/', async (req, res, next) => {
-  try {
-    const user = new User({
-      email: req.body.email,
-      password: req.body.password,
-    });
-    user.generateToken();
-    await user.save();
-    return res.send({message: 'User is register!', user});
-  } catch (e) {
-    if (e instanceof mongoose.Error.ValidationError) {
-      return res.status(422).send(e);
-    }
-    next(e);
-  }
+  console.log(req.body);
+  // try {
+  //   const user = new User({
+  //     email: req.body.email,
+  //     password: req.body.password,
+  //     displayName: req.body.userName,
+  //     avatar: req.file ? req.file.filename : null,
+  //   });
+  //   user.generateToken();
+  //   await user.save();
+  //   return res.send({message: 'User is register!', user});
+  // } catch (e) {
+  //   if (e instanceof mongoose.Error.ValidationError) {
+  //     return res.status(422).send(e);
+  //   }
+  //   next(e);
+  // }
 });
 usersRouter.post("/google", async (req, res, next) => {
   try {

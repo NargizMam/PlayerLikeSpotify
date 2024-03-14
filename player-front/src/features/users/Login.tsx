@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
-import { RegisterMutation } from '../../types';
-import { Alert, Avatar, Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import React, {useState} from 'react';
+import {LoginMutation} from '../../types';
+import {Alert, Avatar, Box, Button, Container, Grid, Link, TextField, Typography} from '@mui/material';
+import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import LockOpenIcon from "@mui/icons-material/LockOpen";
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import {googleLogin, loginUser } from './usersThunk';
+import {useAppDispatch, useAppSelector} from '../../app/hooks';
+import {googleLogin, loginUser} from './usersThunk';
 import {selectLoginError} from "./usersSlice.ts";
-import { GoogleLogin } from '@react-oauth/google';
+import {GoogleLogin} from '@react-oauth/google';
+import {openSnackBar} from "../ErrorMessage/errorMessageSlice.ts";
 
 const Login = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const error = useAppSelector(selectLoginError);
-    const [state, setState] = useState<RegisterMutation>({
+    const [state, setState] = useState<LoginMutation>({
         email: '',
         password: ''
     });
@@ -28,8 +29,12 @@ const Login = () => {
         navigate('/');
     };
     const googleLoginHandler =  async (credential: string) => {
-        await dispatch(googleLogin(credential)).unwrap();
-        navigate('/');
+        try{
+            await dispatch(googleLogin(credential)).unwrap();
+            navigate('/');
+        }catch (e) {
+           dispatch(openSnackBar());
+        }
     };
     return (
         <Container component="main" maxWidth="xs">

@@ -22,22 +22,28 @@ const run = async () => {
         await dropCollection(db, collectionName)
     }
     const [user1, user2, user3] = await User.create({
-            email: 'Misha',
+            email: 'misha@gmail.com',
             password: "123",
             token: crypto.randomUUID(),
-            role: 'user'
+            role: 'user',
+            displayName: 'Major',
+            avatar: 'fixtures/relaps.jpeg'
         },
         {
-            email: 'Anna',
+            email: 'anna@gmail.com',
             password: '0000',
             token: crypto.randomUUID(),
-            role: 'user'
+            role: 'user',
+            displayName: 'Anna',
+            avatar: 'fixtures/relaps.jpeg'
         },
         {
-            email: 'Ninini',
+            email: 'nini@gmail.com',
             password: "123",
             token: crypto.randomUUID(),
-            role: 'admin'
+            role: 'admin',
+            displayName: 'Ninini',
+            avatar: 'fixtures/relaps.jpeg'
         }
     );
     const [artist1, artist2, artist3] = await Artist.create(

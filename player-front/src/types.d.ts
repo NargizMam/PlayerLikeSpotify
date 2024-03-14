@@ -3,10 +3,19 @@ export interface User {
     email: string;
     token: string;
     role: string;
+    displayName: string;
+    avatar: string | null;
 }
 export interface RegisterMutation {
     email: string;
     password: string;
+    displayName: string;
+    avatar: string | null;
+}
+export interface LoginMutation {
+    email: string;
+    password: string;
+
 }
 export interface RegisterResponse {
     message: string;

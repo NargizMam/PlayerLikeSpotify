@@ -4,11 +4,24 @@ import axiosApi from "../../axiosApi.ts";
 import {isAxiosError} from "axios";
 import {RootState} from "../../app/store.ts";
 import {logOutUser} from "./usersSlice.ts";
+
 export const registerUser = createAsyncThunk<RegisterResponse, RegisterMutation, { rejectValue: ValidationError }>(
     'users/register',
     async (registerMutation, {rejectWithValue}) => {
         try{
-            const response = await axiosApi.post('/users', registerMutation);
+            console.log(registerMutation, 'reg')
+            const formData = new FormData();
+            const keys = Object.keys(registerMutation) as (keyof RegisterMutation)[];
+            console.log(keys,'keys')
+            keys.forEach(key => {
+                const value = registerMutation[key];
+                if (value !== null) {
+                    console.log(value, 'value')
+                    formData.append(key, value);
+                }
+            });
+            console.log(formData)
+            const response = await axiosApi.post('/users', formData);
             return response.data;
         }
         catch (e) {

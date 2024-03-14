@@ -4,9 +4,12 @@ import {RegisterMutation} from '../../types';
 import React, {useState} from 'react';
 import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
-import {registerUser} from './usersThunk';
+import {googleLogin, registerUser} from './usersThunk';
 import {selectRegisterError} from './usersSlice';
 import {GoogleLogin} from "@react-oauth/google";
+import {openSnackBar} from "../ErrorMessage/errorMessageSlice.ts";
+import FileInput from "../../components/UI/FileInput/FileInput.tsx";
+import ErrorMessage from '../ErrorMessage/ErrorMessage.tsx';
 
 
 const Register = () => {
@@ -16,7 +19,9 @@ const Register = () => {
 
     const [state, setState] = useState<RegisterMutation>({
         email: '',
-        password: ''
+        password: '',
+        displayName: '',
+        avatar: null
     });
     const getFieldError = (fieldName: string) => {
         try {
@@ -33,11 +38,33 @@ const Register = () => {
     };
     const submitFormHandler = async (event: React.FormEvent) => {
         event.preventDefault();
+        if (!state.email || !state.password || !state.displayName) {
+            (dispatch(openSnackBar()))
+            return (
+                <ErrorMessage errorMessage={'Необходимые поля не заполнены!'}/>
+            )
+        }
         try {
             await dispatch(registerUser(state)).unwrap();
             navigate('/');
         } catch (e) {
-            console.log(e);
+            dispatch(openSnackBar());
+        }
+    };
+    const fileInputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const {name, files} = e.target;
+        if (files) {
+            setState(prevState => ({
+                ...prevState, [name]: files[0]
+            }));
+        }
+    };
+    const googleLoginHandler =  async (credential: string) => {
+        try{
+            await dispatch(googleLogin(credential)).unwrap();
+            navigate('/');
+        }catch (e) {
+            dispatch(openSnackBar());
         }
     };
     return (
@@ -53,7 +80,7 @@ const Register = () => {
                 <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
                     <LockOutlinedIcon/>
                 </Avatar>
-                {error && (<Alert variant="filled" severity="error">Error !!!</Alert>)}
+                {error && (<Alert variant="filled" severity="error">{error.message}</Alert>)}
                 <Typography component="h1" variant="h5">
                     Sign up
                 </Typography>
@@ -91,8 +118,28 @@ const Register = () => {
                                 value={state.password}
                                 onChange={inputChangeHandler}
                                 autoComplete="new-password"
-                                error={Boolean(getFieldError('email'))}
-                                helperText={getFieldError('email')}
+                                error={Boolean(getFieldError('password'))}
+                                helperText={getFieldError('password')}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                required
+                                name="displayName"
+                                label="Display name"
+                                type="displayName"
+                                value={state.displayName}
+                                onChange={inputChangeHandler}
+                                autoComplete="new-displayName"
+                                error={Boolean(getFieldError('displayName'))}
+                                helperText={getFieldError('displayName')}
+                            />
+                        </Grid>
+                        <Grid item xs>
+                            <FileInput
+                                label="Avatar"
+                                name="avatar"
+                                onChange={fileInputChangeHandler}
                             />
                         </Grid>
                     </Grid>
