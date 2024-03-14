@@ -59,11 +59,13 @@ const Register = () => {
                 </Typography>
                 <Box>
                     <GoogleLogin onSuccess={(credentialResponse) => {
-                        console.log(credentialResponse);
+                        if(credentialResponse.credential) {
+                            void googleLoginHandler(credentialResponse.credential);
+                        }
                     }}
-                     onError={() => {
-                         console.log('Login failed!')
-                     }}
+                                 onError={() => {
+                                     console.log('Login failed!')
+                                 }}
                     />
                 </Box>
                 <Box component="form" onSubmit={submitFormHandler} sx={{mt: 3}}>

@@ -4,7 +4,7 @@ import { Alert, Avatar, Box, Button, Container, Grid, Link, TextField, Typograph
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { loginUser } from './usersThunk';
+import {googleLogin, loginUser } from './usersThunk';
 import {selectLoginError} from "./usersSlice.ts";
 import { GoogleLogin } from '@react-oauth/google';
 
@@ -25,6 +25,10 @@ const Login = () => {
     const submitFormHandler = async (event: React.FormEvent) => {
         event.preventDefault();
         await dispatch(loginUser(state)).unwrap();
+        navigate('/');
+    };
+    const googleLoginHandler =  async (credential: string) => {
+        await dispatch(googleLogin(credential)).unwrap();
         navigate('/');
     };
     return (
@@ -50,11 +54,13 @@ const Login = () => {
                 )}
                 <Box>
                     <GoogleLogin onSuccess={(credentialResponse) => {
-                        console.log(credentialResponse);
+                        if(credentialResponse.credential) {
+                           void googleLoginHandler(credentialResponse.credential);
+                        }
                     }}
-                                 onError={() => {
-                                     console.log('Login failed!')
-                                 }}
+                     onError={() => {
+                         console.log('Login failed!')
+                     }}
                     />
                 </Box>
 

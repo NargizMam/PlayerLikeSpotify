@@ -4,10 +4,7 @@ import axiosApi from "../../axiosApi.ts";
 import {isAxiosError} from "axios";
 import {RootState} from "../../app/store.ts";
 import {logOutUser} from "./usersSlice.ts";
-
-export const registerUser = createAsyncThunk<RegisterResponse, RegisterMutation, {
-    rejectValue: ValidationError
-}>(
+export const registerUser = createAsyncThunk<RegisterResponse, RegisterMutation, { rejectValue: ValidationError }>(
     'users/register',
     async (registerMutation, {rejectWithValue}) => {
         try{
@@ -19,7 +16,6 @@ export const registerUser = createAsyncThunk<RegisterResponse, RegisterMutation,
                return rejectWithValue(e.response.data)
            }
         }
-
     }
 );
 export const loginUser = createAsyncThunk<RegisterResponse, LoginMutation, { rejectValue: GlobalError}>(
@@ -35,6 +31,20 @@ export const loginUser = createAsyncThunk<RegisterResponse, LoginMutation, { rej
             throw e;
         }
     }
+);
+export const googleLogin = createAsyncThunk<RegisterResponse, string, { rejectValue: GlobalError }>(
+    'users/googleLogin',
+    async (credential, { rejectWithValue }) => {
+        try {
+            const response = await axiosApi.post('/users/google', { credential });
+            return response.data.user;
+        } catch (e) {
+            if (isAxiosError(e) && e.response && e.response.status === 400) {
+                return rejectWithValue(e.response.data as GlobalError);
+            }
+            throw e;
+        }
+    },
 );
 export const logout = createAsyncThunk<void, undefined, {state: RootState}>(
     'users/logout',
