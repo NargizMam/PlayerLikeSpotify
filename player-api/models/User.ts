@@ -7,14 +7,14 @@ const Schema = mongoose.Schema;
 const SALT_WORK_FACTOR = 10;
 
 const UserSchema = new Schema<UserFields, UserModal, UserMethods>({
-  username: {
+  email: {
     type: String,
     required: true,
     unique: true,
     validate: {
-      validator: async function (this: HydratedDocument<UserFields>,username: string): Promise<boolean>  {
-        if(!this.isModified('username')) return true;
-        const user = await User.findOne({username: username});
+      validator: async function (this: HydratedDocument<UserFields>,email: string): Promise<boolean>  {
+        if(!this.isModified('email')) return true;
+        const user = await User.findOne({email: email});
         return !user;
       },
       message: 'This user was registered!'
@@ -33,7 +33,13 @@ const UserSchema = new Schema<UserFields, UserModal, UserMethods>({
     required: true,
     enum: ['admin', 'user'],
     default: 'user'
-  }
+  },
+  displayName: {
+    type: String,
+    required: true
+  },
+  googleId: String,
+  avatar: String,
 });
 
 UserSchema.methods.generateToken = function () {

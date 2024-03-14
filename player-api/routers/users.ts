@@ -7,7 +7,7 @@ const usersRouter = express.Router();
 usersRouter.post('/', async (req, res, next) => {
   try {
     const user = new User({
-      username: req.body.username,
+      email: req.body.email,
       password: req.body.password,
     });
     user.generateToken();
@@ -22,7 +22,7 @@ usersRouter.post('/', async (req, res, next) => {
 });
 usersRouter.post('/sessions', async (req, res, next) => {
   try {
-    const user = await User.findOne({ username: req.body.username });
+    const user = await User.findOne({ email: req.body.email });
     if (!user) {
       return res.status(422).send({ error: 'Логин или пароль введен неверно!' });
     }

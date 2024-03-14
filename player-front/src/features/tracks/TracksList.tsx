@@ -53,9 +53,12 @@ const TracksList = () => {
     const allTracks = tracksList.map(track => (
             <TracksItem
                 key={track._id}
+                id={track._id}
                 title={track.title}
                 duration={track.duration}
                 serialNumber={track.serialNumber}
+                isPublished={track.isPublished}
+                tracksUser={track.user}
                 onPlayer={() =>createTrackHistory(track._id)}
             />
         )

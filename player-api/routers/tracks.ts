@@ -4,6 +4,7 @@ import Track from '../models/Track';
 import auth, {RequestWithUser} from "../middleware/auth";
 import permit from "../middleware/permit";
 import client from "../middleware/client";
+import Album from "../models/Album";
 
 const tracksRouter = express.Router();
 
@@ -79,14 +80,16 @@ tracksRouter.patch('/:id/togglePublished', auth, permit('admin'), async (req, re
     try {
         const trackId = req.params.id;
 
-        const chosenTrack = await Track.updateOne({_id: trackId},
-            {
-                $set: {isPublished: !'$isPublished'}
-            });
-        if (chosenTrack.matchedCount === 0) {
-            return res.status(404).json({error: 'Трек не найден!'});
-        }
-        return res.send({message: 'track'});
+        Track.findById(trackId)
+            .then(track => {
+                if (!track) {
+                    throw new Error('Документ не найден');
+                }
+                track.isPublished = !track.isPublished;
+
+                track.save();
+            })
+        return res.send('Трек успешно опубликован');
     } catch (e) {
         next(e);
     }
@@ -96,12 +99,15 @@ tracksRouter.post('/', auth, async (req: RequestWithUser, res, next) => {
     const user = req.user;
     try {
         if (!user?.id) return;
+        if (isNaN(req.body.serialNumber)) {
+            return res.status(400).send('Некорректное значение для номера трека');
+        }
         const tracksData: TrackMutation = {
             title: req.body.title,
             album: req.body.album,
             duration: req.body.duration,
             serialNumber: parseInt(req.body.serialNumber),
-            user: user?.id.toString()
+            user: user.id.toString()
         };
         const tracks = new Track(tracksData);
         await tracks.save();

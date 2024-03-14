@@ -8,9 +8,10 @@ interface TracksState {
     fetchLoading: boolean;
     creating: boolean;
     deleting: boolean;
+    tracksToggleFetching: boolean;
+    createError: GlobalError | null;
     deleteError: GlobalError | null;
     trackUpdateError: GlobalError | null;
-    tracksToggleFetching: boolean;
     tracksFetchingError: GlobalError | null;
 }
 
@@ -19,8 +20,9 @@ const initialState: TracksState = {
     fetchLoading: false,
     creating: false,
     deleting: false,
-    deleteError: null,
     tracksToggleFetching: false,
+    createError: null,
+    deleteError: null,
     trackUpdateError: null,
     tracksFetchingError: null
 }
@@ -47,8 +49,9 @@ const tracksSlice = createSlice({
             .addCase(createTrack.fulfilled, (state) => {
                 state.creating = false;
             })
-            .addCase(createTrack.rejected, (state) => {
+            .addCase(createTrack.rejected, (state, {payload: error}) => {
                 state.creating = false;
+                state.createError = error || null;
             })
             .addCase(updateTrackPublished.pending, (state) => {
                 state.tracksToggleFetching = true;
@@ -83,6 +86,7 @@ export const selectTracksFetching = (state: RootState) => state.tracks.fetchLoad
 export const selectTracksCreating = (state: RootState) => state.tracks.creating;
 export const selectTracksDeleting = (state: RootState) => state.tracks.deleting;
 export const selectTracksDeleteError = (state: RootState) => state.tracks.deleteError;
-export const selectTracksToggleFetching = (state: RootState) => state.tracks.tracksToggleFetching;
-export const selectTrackUpdateError = (state: RootState) => state.tracks.trackUpdateError;
 export const selectTracksFetchingError = (state: RootState) => state.tracks.tracksFetchingError;
+export const selectTrackUpdateError = (state: RootState) => state.tracks.trackUpdateError;
+export const selectTrackCreateError = (state: RootState) => state.tracks.createError;
+export const selectTracksToggleFetching = (state: RootState) => state.tracks.tracksToggleFetching;

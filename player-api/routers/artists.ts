@@ -5,7 +5,6 @@ import {ArtistMutation} from '../types';
 import auth, {RequestWithUser} from "../middleware/auth";
 import permit from "../middleware/permit";
 import client from "../middleware/client";
-import {log} from "util";
 
 
 const artistsRouter = express.Router();
@@ -34,15 +33,18 @@ artistsRouter.patch('/:id/togglePublished', auth, permit('admin'), async (req, r
   try {
     const artistsId = req.params.id;
 
-    const chosenArtist = await Artist.updateOne({_id: artistsId},
-        {
-          $set: {isPublished: !'$isPublished'}
-        });
-    if (chosenArtist.matchedCount === 0) {
-      return res.status(404).json({error: 'Исполнитель не найден!'});
-    }
-    return res.send({message: 'artist'});
-  }catch (e) {
+    Artist.findById(artistsId)
+        .then(artist => {
+          if (!artist) {
+            throw new Error('Документ не найден');
+          }
+            artist.isPublished = !artist.isPublished;
+
+          artist.save();
+          })
+    return res.send('Исполнитель успешно опубликован');
+  }
+  catch (e) {
     next (e);
   }
 });

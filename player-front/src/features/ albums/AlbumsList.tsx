@@ -1,10 +1,11 @@
 import {CircularProgress, Grid, Typography} from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
 import {useEffect, useState} from "react";
-import {selectAlbumsFetching, selectAlbumsList} from "./albumsSlice.ts";
+import {selectAlbumsFetching, selectAlbumsList, selectAlbumUpdateError} from "./albumsSlice.ts";
 import AlbumsItem from "./components/AlbumsItem.tsx";
 import {useLocation} from "react-router-dom";
 import {getAlbumsList} from "./albumsThunk.ts";
+import ErrorMessage from "../ErrorMessage/ErrorMessage.tsx";
 
 const AlbumsList = () => {
     const albumsList = useAppSelector(selectAlbumsList);
@@ -13,7 +14,7 @@ const AlbumsList = () => {
     const {search} = useLocation();
     const dispatch = useAppDispatch();
     const artistId = new URLSearchParams(search).get('artist');
-
+    const updateError = useAppSelector(selectAlbumUpdateError);
     let allAlbumsList;
 
     useEffect(() => {
@@ -50,12 +51,12 @@ const AlbumsList = () => {
 
     return (
         <>
+            {updateError && <ErrorMessage errorMessage={updateError.error}/>}
             <Grid container justifyContent="space-around">
                 {loading && <CircularProgress/>}
                 <Grid>
                     {artistName && <Typography variant='h4'>{artistName}</Typography>}
                     <Grid container>
-
                         {allAlbumsList}
                     </Grid>
                 </Grid>

@@ -7,8 +7,6 @@ import auth, {RequestWithUser} from "../middleware/auth";
 import permit from "../middleware/permit";
 import client from "../middleware/client";
 import Artist from "../models/Artist";
-import user from "../models/User";
-import {log} from "util";
 
 const albumsRouter = express.Router();
 
@@ -83,14 +81,16 @@ albumsRouter.patch('/:id/togglePublished', auth, permit('admin'), async (req, re
     try {
         const albumsId = req.params.id;
 
-        const chosenAlbum = await Album.updateOne({_id: albumsId},
-            {
-                $set: { isPublished: !'$isPublished' }
-            });
-        if (chosenAlbum.matchedCount === 0) {
-            return res.status(404).json({error: 'Альбом не найден!'});
-            }
-        return res.send({message: 'album'});
+        Album.findById(albumsId)
+            .then(album => {
+                if (!album) {
+                    throw new Error('Документ не найден');
+                }
+                album.isPublished = !album.isPublished;
+
+                album.save();
+            })
+        return res.send('Альбом успешно опубликован');
 
     } catch (e) {
         next(e);

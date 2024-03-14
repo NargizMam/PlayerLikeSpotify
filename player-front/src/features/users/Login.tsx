@@ -6,13 +6,14 @@ import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { loginUser } from './usersThunk';
 import {selectLoginError} from "./usersSlice.ts";
+import { GoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const error = useAppSelector(selectLoginError);
     const [state, setState] = useState<RegisterMutation>({
-        username: '',
+        email: '',
         password: ''
     });
     const inputChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,16 +48,26 @@ const Login = () => {
                         {error.error}
                     </Alert>
                 )}
+                <Box>
+                    <GoogleLogin onSuccess={(credentialResponse) => {
+                        console.log(credentialResponse);
+                    }}
+                                 onError={() => {
+                                     console.log('Login failed!')
+                                 }}
+                    />
+                </Box>
+
                 <Box component="form"  onSubmit={submitFormHandler} sx={{mt: 3}}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <TextField
                                 required
-                                label="Username"
-                                name="username"
-                                value={state.username}
+                                label="E-mail"
+                                name="email"
+                                value={state.email}
                                 onChange={inputChangeHandler}
-                                autoComplete="current-username"
+                                autoComplete="current-email"
                             />
                         </Grid>
                         <Grid item xs={12}>

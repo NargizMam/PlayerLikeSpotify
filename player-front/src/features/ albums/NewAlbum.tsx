@@ -5,10 +5,12 @@ import {AlbumMutation} from "../../types";
 import FileInput from "../../components/UI/FileInput/FileInput.tsx";
 import {LoadingButton} from "@mui/lab";
 import React, {useEffect, useState} from "react";
-import {selectAlbumsCreating} from "./albumsSlice.ts";
+import {selectAlbumCreateError, selectAlbumsCreating} from "./albumsSlice.ts";
 import {createAlbum} from "./albumsThunk.ts";
 import {selectArtistsList} from "../artists/artistsSlice.ts";
 import {getArtistsList} from "../artists/artistsThunk.ts";
+import {openSnackBar} from "../ErrorMessage/errorMessageSlice.ts";
+import ErrorMessage from '../ErrorMessage/ErrorMessage.tsx';
 
 const initialState = {
     title: '',
@@ -22,6 +24,7 @@ const NewAlbum = () => {
     const navigate = useNavigate();
     const creating = useAppSelector(selectAlbumsCreating);
     const selectedArtist = useAppSelector(selectArtistsList);
+    const createErrorMessage = useAppSelector(selectAlbumCreateError);
 
     const [state, setState] = useState<AlbumMutation>(initialState);
 
@@ -43,7 +46,7 @@ const NewAlbum = () => {
             setState(initialState);
             navigate('/');
         } catch (e) {
-            throw e;
+            dispatch(openSnackBar());
         }
     };
     const fileInputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,6 +60,7 @@ const NewAlbum = () => {
 
     return (
         <>
+        {createErrorMessage && <ErrorMessage errorMessage={createErrorMessage.error}/>}
             <Typography variant="h4">Новый альбом</Typography>
             <form
                 autoComplete="off"

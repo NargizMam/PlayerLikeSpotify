@@ -30,9 +30,9 @@ const UserMenu: React.FC<Props> = ({user}) => {
   return (
     <>
       <Avatar sx={{ bgcolor: '#ccc', mr: 2 }} aria-label="recipe">
-        {user.username.charAt(0)}
+        {user.email.charAt(0)}
       </Avatar>
-      <Button color="secondary" onClick={handleClick}>Hello, {user.username}</Button>
+      <Button color="secondary" onClick={handleClick}>Hello, {user.email}</Button>
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose} keepMounted>
           {user?.role === 'admin' && (
               <MenuItem component={NavLink} to="/allItems">Вся информация</MenuItem>

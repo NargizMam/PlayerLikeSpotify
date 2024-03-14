@@ -10,9 +10,9 @@ export const getArtistsList = createAsyncThunk<ArtistApi[]>(
         return response.data;
     }
 );
-export const createArtist = createAsyncThunk<void, ArtistMutation>(
+export const createArtist = createAsyncThunk<void, ArtistMutation,{ rejectValue: GlobalError}>(
     'artists/create',
-    async (artistMutation) => {
+    async (artistMutation, {rejectWithValue}) => {
         try{
             const formData = new FormData();
 
@@ -27,6 +27,9 @@ export const createArtist = createAsyncThunk<void, ArtistMutation>(
             const response = await axiosApi.post('/artists', formData);
             return response.data;
         }catch (e) {
+            if(isAxiosError(e) && e.response ){
+                return rejectWithValue(e.response.data);
+            }
             throw e;
         }
 

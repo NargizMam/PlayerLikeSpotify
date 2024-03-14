@@ -22,19 +22,19 @@ const run = async () => {
         await dropCollection(db, collectionName)
     }
     const [user1, user2, user3] = await User.create({
-            username: 'Misha',
+            email: 'Misha',
             password: "123",
             token: crypto.randomUUID(),
             role: 'user'
         },
         {
-            username: 'Anna',
+            email: 'Anna',
             password: '0000',
             token: crypto.randomUUID(),
             role: 'user'
         },
         {
-            username: 'Ninini',
+            email: 'Ninini',
             password: "123",
             token: crypto.randomUUID(),
             role: 'admin'
@@ -129,7 +129,7 @@ const run = async () => {
             user: user3.id
         },
     )
-    const [t1, t2, t3, t4] = await Track.create(
+    const [t1, t2, t3] = await Track.create(
         {
             id: crypto.randomUUID(),
             title: 'Еще хочу',

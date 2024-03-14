@@ -1,11 +1,12 @@
-import { Alert, Avatar, Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
+import {Alert, Avatar, Box, Button, Container, Grid, Link, TextField, Typography} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { RegisterMutation } from '../../types';
-import React, { useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { registerUser } from './usersThunk';
-import { selectRegisterError } from './usersSlice';
+import {RegisterMutation} from '../../types';
+import React, {useState} from 'react';
+import {Link as RouterLink, useNavigate} from 'react-router-dom';
+import {useAppDispatch, useAppSelector} from '../../app/hooks';
+import {registerUser} from './usersThunk';
+import {selectRegisterError} from './usersSlice';
+import {GoogleLogin} from "@react-oauth/google";
 
 
 const Register = () => {
@@ -14,13 +15,13 @@ const Register = () => {
     const navigate = useNavigate();
 
     const [state, setState] = useState<RegisterMutation>({
-        username: '',
+        email: '',
         password: ''
     });
     const getFieldError = (fieldName: string) => {
-        try{
+        try {
             return error?.errors[fieldName].message;
-        }catch {
+        } catch {
             return undefined;
         }
     };
@@ -35,8 +36,7 @@ const Register = () => {
         try {
             await dispatch(registerUser(state)).unwrap();
             navigate('/');
-        }
-        catch (e) {
+        } catch (e) {
             console.log(e);
         }
     };
@@ -57,18 +57,27 @@ const Register = () => {
                 <Typography component="h1" variant="h5">
                     Sign up
                 </Typography>
-                <Box component="form"  onSubmit={submitFormHandler} sx={{mt: 3}}>
+                <Box>
+                    <GoogleLogin onSuccess={(credentialResponse) => {
+                        console.log(credentialResponse);
+                    }}
+                     onError={() => {
+                         console.log('Login failed!')
+                     }}
+                    />
+                </Box>
+                <Box component="form" onSubmit={submitFormHandler} sx={{mt: 3}}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <TextField
                                 required
-                                label="Username"
-                                name="username"
-                                value={state.username}
+                                label="E-mail"
+                                name="email"
+                                value={state.email}
                                 onChange={inputChangeHandler}
-                                autoComplete="new-username"
-                                error={Boolean(getFieldError('username'))}
-                                helperText={getFieldError('username')}
+                                autoComplete="new-email"
+                                error={Boolean(getFieldError('email'))}
+                                helperText={getFieldError('email')}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -80,8 +89,8 @@ const Register = () => {
                                 value={state.password}
                                 onChange={inputChangeHandler}
                                 autoComplete="new-password"
-                                error={Boolean(getFieldError('username'))}
-                                helperText={getFieldError('username')}
+                                error={Boolean(getFieldError('email'))}
+                                helperText={getFieldError('email')}
                             />
                         </Grid>
                     </Grid>

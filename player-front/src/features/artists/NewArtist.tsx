@@ -3,10 +3,11 @@ import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {useNavigate} from 'react-router-dom';
 import {ArtistMutation} from "../../types";
 import {createArtist} from "./artistsThunk.ts";
-import {selectArtistsCreating} from "./artistsSlice.ts";
+import {selectArtistCreateError, selectArtistsCreating} from "./artistsSlice.ts";
 import FileInput from "../../components/UI/FileInput/FileInput.tsx";
 import {LoadingButton} from "@mui/lab";
 import React, {useState} from "react";
+import ErrorMessage from '../ErrorMessage/ErrorMessage.tsx';
 
 const initialState  = {
     title: '',
@@ -17,6 +18,7 @@ const NewArtist = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const creating = useAppSelector(selectArtistsCreating);
+    const createError = useAppSelector(selectArtistCreateError);
     const [state, setState] = useState<ArtistMutation>(initialState);
     const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
@@ -46,6 +48,7 @@ const NewArtist = () => {
 
     return (
         <>
+            {createError && <ErrorMessage errorMessage={createError.error}/>}
             <Typography variant="h4">New artist</Typography>
             <form
                 autoComplete="off"

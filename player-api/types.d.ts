@@ -67,10 +67,13 @@ export interface TrackAlbumsApi {
   user: string;
 }
 export interface UserFields {
-  username: string;
+  email: string;
   password: string;
   token: string;
   role: string;
+  displayName: string;
+  googleId?: string;
+  avatar?: string ;
 }
 export interface TrackHistoryMutation {
   user: string;

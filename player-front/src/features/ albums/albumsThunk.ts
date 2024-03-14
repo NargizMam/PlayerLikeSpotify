@@ -24,9 +24,9 @@ export const getAlbumsList = createAsyncThunk<AlbumsApi[] , string | undefined ,
     }
 );
 
-export const createAlbum = createAsyncThunk<void, AlbumMutation>(
+export const createAlbum = createAsyncThunk<void, AlbumMutation, { rejectValue: GlobalError}>(
     'albums/create',
-    async (albumMutation) => {
+    async (albumMutation, {rejectWithValue}) => {
         try{
             const formData = new FormData();
 
@@ -41,6 +41,9 @@ export const createAlbum = createAsyncThunk<void, AlbumMutation>(
             const response = await axiosApi.post('/albums', formData);
             return response.data;
         }catch (e) {
+            if(isAxiosError(e) && e.response ){
+                return rejectWithValue(e.response.data);
+            }
             return e;
         }
 

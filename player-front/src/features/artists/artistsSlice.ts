@@ -9,6 +9,8 @@ interface ArtistsState {
     creating: boolean;
     artistsToggleFetching: boolean;
     artistsUpdateError: GlobalError | null;
+    artistsCreateError: GlobalError | null;
+    artistsDeleteError: GlobalError | null;
 }
 
 const initialState: ArtistsState = {
@@ -17,6 +19,8 @@ const initialState: ArtistsState = {
     creating: false,
     artistsToggleFetching: false,
     artistsUpdateError: null,
+    artistsCreateError: null,
+    artistsDeleteError: null,
 }
 const artistsSlice = createSlice({
     name: 'artists',
@@ -50,8 +54,9 @@ const artistsSlice = createSlice({
             .addCase(createArtist.fulfilled, (state) => {
                 state.creating = false;
             })
-            .addCase(createArtist.rejected, (state) => {
+            .addCase(createArtist.rejected, (state, {payload: error}) => {
                 state.creating = false;
+                state.artistsCreateError = error || null;
             })
 
     }
@@ -64,3 +69,4 @@ export const selectArtistsFetching = (state: RootState) => state.artists.fetchLo
 export const selectArtistsCreating = (state: RootState) => state.artists.creating;
 export const selectArtistsToggleFetching = (state: RootState) => state.artists.artistsToggleFetching;
 export const selectArtistUpdateError = (state: RootState) => state.artists.artistsUpdateError;
+export const selectArtistCreateError = (state: RootState) => state.artists.artistsCreateError;

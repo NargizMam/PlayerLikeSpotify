@@ -1,11 +1,13 @@
-import {Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Typography} from "@mui/material";
+import {Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography} from "@mui/material";
 import noImage from '../../../assets/images/image_not_available.png'
-import {apiURL} from "../../../constants.ts";
+import {apiURL, IS_PUBLISHED_ADMIN} from "../../../constants.ts";
 import React from "react";
 import {useNavigate} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks.ts";
 import {selectUser} from "../../users/usersSlice.ts";
 import {getTracksList} from "../../tracks/trackThunk.ts";
+import {openSnackBar} from "../../ErrorMessage/errorMessageSlice.ts";
+import {getAlbumsList, updateAlbumPublished} from "../albumsThunk.ts";
 
 interface Props {
     id: string;
@@ -32,32 +34,37 @@ const AlbumsItem: React.FC<Props> = ({
         cardImage = apiURL + '/' + image;
     }
     let publishedAction = null;
-
+    const toPublishedAlbum = async () => {
+        try{
+            await dispatch(updateAlbumPublished(id)).unwrap();
+            dispatch(getAlbumsList(albumsUser));
+        }catch (e) {
+            dispatch(openSnackBar());
+        }
+    }
     const getAlbumsTrackList = async () => {
         await dispatch(getTracksList(id)).unwrap();
         navigate(`/tracks?album=${id}`);
     }
-    if (isPublished && user) {
-        if (user?.role === 'admin') {
-            publishedAction = (
-                <Button>Удалить</Button>)
-        }
-    }else if(!isPublished && user){
-
-        if (user?.role === 'admin') {
-            publishedAction = (
-                <Grid>
-                <Button sx={{ml:1}} variant="contained" color='warning'>Опубликовать</Button>
-            </Grid>
-            )}else if(user?.role !== 'admin' && user._id === albumsUser){
-            publishedAction = <Typography>Не опубликовано</Typography>
-        }
+    if (IS_PUBLISHED_ADMIN) {
+        publishedAction = (
+            <Button >Удалить</Button>
+        );
+    } else if (!IS_PUBLISHED_ADMIN) {
+        publishedAction = (
+            <Button
+                onClick={toPublishedAlbum}
+                sx={{ ml: 1 }}
+                color='warning'
+            >Опубликовать</Button>
+        );
+    } else if (!isPublished && user && user.role !== 'admin' && user._id === albumsUser) {
+        publishedAction = <Typography>Не опубликовано</Typography>;
     }
 
     return (
-        <Card sx={{width: '40%', m: 2, p: 2, alignItems: 'center', textDecoration: 'none', borderRadius: 10}}
-              onClick={getAlbumsTrackList}>
-            <CardActionArea sx={{p: 1}}>
+        <Card sx={{width: '40%', m: 2, p: 2, alignItems: 'center', textDecoration: 'none', borderRadius: 10}}>
+            <CardActionArea sx={{p: 1}} onClick={getAlbumsTrackList}>
                 <CardMedia
                     sx={{height: 250, borderRadius: 8}}
                     image={cardImage}
@@ -73,11 +80,11 @@ const AlbumsItem: React.FC<Props> = ({
                         В данном альбоме: {tracksCount} треков
                     </Typography>
                 </CardContent>
-                <CardActions>
-                    {publishedAction}
-                </CardActions>
-        </CardActionArea>
-</Card>
+            </CardActionArea>
+            <CardActions>
+                {publishedAction}
+            </CardActions>
+        </Card>
 )
     ;
 };

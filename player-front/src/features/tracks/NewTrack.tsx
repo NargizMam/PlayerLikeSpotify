@@ -8,8 +8,9 @@ import {selectArtistsList} from "../artists/artistsSlice.ts";
 import {getArtistsList} from "../artists/artistsThunk.ts";
 import {selectAlbumsList} from "../ albums/albumsSlice.ts";
 import {getAlbumsList} from "../ albums/albumsThunk.ts";
-import {selectTracksCreating} from "./tracksSlice.ts";
+import {selectTrackCreateError, selectTracksCreating} from "./tracksSlice.ts";
 import {createTrack} from "./trackThunk.ts";
+import ErrorMessage from '../ErrorMessage/ErrorMessage.tsx';
 
 const initialState = {
     title: '',
@@ -24,6 +25,7 @@ const NewTrack = () => {
     const creating = useAppSelector(selectTracksCreating);
     const selectedAlbum = useAppSelector(selectAlbumsList);
     const selectedArtist = useAppSelector(selectArtistsList);
+    const createError = useAppSelector(selectTrackCreateError);
 
     const [state, setState] = useState<TrackMutation>(initialState);
 
@@ -54,7 +56,8 @@ const NewTrack = () => {
 
     return (
         <>
-            <Typography variant="h4">Новый альбом</Typography>
+            {createError && <ErrorMessage errorMessage={createError.error}/>}
+            <Typography variant="h4">Новый трек</Typography>
             <form
                 autoComplete="off"
                 onSubmit={onFormSubmit}
@@ -69,7 +72,7 @@ const NewTrack = () => {
                             name="artist"
                             required
                         >
-                            <MenuItem value="" disabled>Please select a artist</MenuItem>
+                            <MenuItem value="" disabled>Please select artist</MenuItem>
                             {selectedArtist.map(artist => (
                                 <MenuItem key={artist._id}
                                           value={artist._id}
@@ -86,12 +89,14 @@ const NewTrack = () => {
                             id="album" label="Выберите альбом"
                             value={state?.album}
                             onChange={inputChangeHandler}
-                            name="artist"
+                            name="album"
                             required
                         >
-                            <MenuItem value="" disabled>Please select a artist</MenuItem>
+                            <MenuItem value="" disabled>Please select album</MenuItem>
                             {selectedAlbum.map(album => (
-                                <MenuItem key={album._id} value={album._id}>
+                                <MenuItem key={album._id}
+                                          value={album._id}
+                                >
                                     {album.title}
                                 </MenuItem>
                             ))}

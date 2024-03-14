@@ -10,6 +10,7 @@ interface AlbumsState {
     fetchError: GlobalError | null;
     albumsToggleFetching: boolean;
     albumsUpdateError: GlobalError | null;
+    albumsCreateError: GlobalError | null;
 }
 
 const initialState: AlbumsState = {
@@ -19,6 +20,7 @@ const initialState: AlbumsState = {
     fetchError: null,
     albumsToggleFetching: false,
     albumsUpdateError: null,
+    albumsCreateError: null
 }
 const albumsSlice = createSlice({
     name: 'albums',
@@ -53,8 +55,9 @@ const albumsSlice = createSlice({
             .addCase(createAlbum.fulfilled, (state) => {
                 state.creating = false;
             })
-            .addCase(createAlbum.rejected, (state) => {
+            .addCase(createAlbum.rejected, (state, {payload: error}) => {
                 state.creating = false;
+                state.albumsCreateError = error || null;
             })
     }
 });
@@ -64,6 +67,7 @@ export const albumsReducer = albumsSlice.reducer;
 export const selectAlbumsList = (state: RootState) => state.albums.albumsList
 export const selectAlbumsFetching = (state: RootState) => state.albums.fetchLoading;
 export const selectAlbumsCreating = (state: RootState) => state.albums.creating;
-export const selectAlbumsFetchError = (state: RootState) => state.albums.fetchError;
 export const selectAlbumsToggleFetching = (state: RootState) => state.albums.albumsToggleFetching;
+export const selectAlbumsFetchError = (state: RootState) => state.albums.fetchError;
 export const selectAlbumUpdateError = (state: RootState) => state.albums.albumsUpdateError;
+export const selectAlbumCreateError = (state: RootState) => state.albums.albumsCreateError;
