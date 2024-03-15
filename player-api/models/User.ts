@@ -1,4 +1,4 @@
-import mongoose, {HydratedDocument} from 'mongoose';
+import mongoose, { HydratedDocument } from 'mongoose';
 import bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 import { UserFields, UserMethods, UserModal } from '../types';
@@ -12,13 +12,13 @@ const UserSchema = new Schema<UserFields, UserModal, UserMethods>({
     required: true,
     unique: true,
     validate: {
-      validator: async function (this: HydratedDocument<UserFields>,email: string): Promise<boolean>  {
-        if(!this.isModified('email')) return true;
-        const user = await User.findOne({email: email});
+      validator: async function (this: HydratedDocument<UserFields>, email: string): Promise<boolean> {
+        if (!this.isModified('email')) return true;
+        const user = await User.findOne({ email: email });
         return !user;
       },
-      message: 'This user was registered!'
-    }
+      message: 'This user was registered!',
+    },
   },
   password: {
     type: String,
@@ -32,11 +32,11 @@ const UserSchema = new Schema<UserFields, UserModal, UserMethods>({
     type: String,
     required: true,
     enum: ['admin', 'user'],
-    default: 'user'
+    default: 'user',
   },
   displayName: {
     type: String,
-    required: true
+    required: true,
   },
   googleId: String,
   image: String,

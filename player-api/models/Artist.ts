@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
-import {Types} from "mongoose";
-import User from "./User";
+import { Types } from 'mongoose';
+import User from './User';
 
 const ArtistSchema = new mongoose.Schema({
   title: {
@@ -12,7 +12,7 @@ const ArtistSchema = new mongoose.Schema({
   isPublished: {
     type: Boolean,
     required: true,
-    default: false
+    default: false,
   },
   user: {
     type: String,

@@ -1,19 +1,24 @@
 import express from 'express';
-import auth, {RequestWithUser} from '../middleware/auth';
+import auth, { RequestWithUser } from '../middleware/auth';
 import Track from '../models/Track';
 import TrackHistory from '../models/TrackHistory';
 import mongoose from 'mongoose';
-import {TrackHistoryMutation} from "../types";
+import { TrackHistoryMutation } from '../types';
 
 const trackHistoryRouter = express.Router();
 
 trackHistoryRouter.get('/', auth, async (req, res, next) => {
   const user = (req as RequestWithUser).user;
   try {
-    const trackHistoryList = await TrackHistory.find().sort({createdAt: -1})
-        .populate([{path:'track', select:'title album',
-          populate: {path:'album', select: 'title artist',
-            populate: {path: 'artist', select: 'name'}}}]);
+    const trackHistoryList = await TrackHistory.find()
+      .sort({ createdAt: -1 })
+      .populate([
+        {
+          path: 'track',
+          select: 'title album',
+          populate: { path: 'album', select: 'title artist', populate: { path: 'artist', select: 'name' } },
+        },
+      ]);
 
     return res.send(trackHistoryList);
   } catch (e) {

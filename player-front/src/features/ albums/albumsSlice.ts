@@ -64,7 +64,7 @@ const albumsSlice = createSlice({
                 state.albumsIsPublishedMessage = null;
             })
             .addCase(createAlbum.pending, (state) => {
-                state.updating = true;
+              state.updating = true;
                 state.albumsCreateMessage = null;
             })
             .addCase(createAlbum.fulfilled, (state, {payload: success}) => {

@@ -1,6 +1,6 @@
-import mongoose, {Types} from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import Artist from './Artist';
-import User from "./User";
+import User from './User';
 
 const AlbumSchema = new mongoose.Schema({
   title: {
@@ -39,8 +39,8 @@ const AlbumSchema = new mongoose.Schema({
   isPublished: {
     type: Boolean,
     required: true,
-    default: false
-  }
+    default: false,
+  },
 });
 
 const Album = mongoose.model('Album', AlbumSchema);

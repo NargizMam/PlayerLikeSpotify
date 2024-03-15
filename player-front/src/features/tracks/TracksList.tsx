@@ -1,94 +1,94 @@
-import {CircularProgress, Grid} from "@mui/material";
-import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
-import {useEffect, useState} from "react";
-import {useLocation} from "react-router-dom";
-import {selectTracksFetching, selectTracksFetchingError, selectTracksList} from "./tracksSlice.ts";
-import TracksItem from "./components/TracksItem.tsx";
-import {addTrackInHistory} from "../trackHistories/trackHistoryThunk.ts";
-import {getTracksList} from "./trackThunk.ts";
-import ErrorMessage from "../WarningMessage/ErrorMessage.tsx";
+import { CircularProgress, Grid } from '@mui/material';
+import { useAppDispatch, useAppSelector } from '../../app/hooks.ts';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { selectTracksFetching, selectTracksFetchingError, selectTracksList } from './tracksSlice.ts';
+import TracksItem from './components/TracksItem.tsx';
+import { addTrackInHistory } from '../trackHistories/trackHistoryThunk.ts';
+import { getTracksList } from './trackThunk.ts';
+import ErrorMessage from '../WarningMessage/ErrorMessage.tsx';
 
 
 const TracksList = () => {
-    const dispatch = useAppDispatch();
-    const tracksList = useAppSelector(selectTracksList);
-    const loading = useAppSelector(selectTracksFetching);
-    const fetchingError = useAppSelector(selectTracksFetchingError)
-    const {search} = useLocation();
-    const albumId = new URLSearchParams(search).get('album');
-    const [tracksInfo, setTracksInfo] = useState({
-        artist: '',
-        album: ''
+  const dispatch = useAppDispatch();
+  const tracksList = useAppSelector(selectTracksList);
+  const loading = useAppSelector(selectTracksFetching);
+  const fetchingError = useAppSelector(selectTracksFetchingError);
+  const {search} = useLocation();
+  const albumId = new URLSearchParams(search).get('album');
+  const [tracksInfo, setTracksInfo] = useState({
+    artist: '',
+    album: ''
+  });
+  // const [showPlayer, setShowPlayer] = useState(false);
+  //
+  // const youtubeOpts = {
+  //     height: "390",
+  //     width: "640",
+  //     playerVars: {},
+  // };
+  useEffect(() => {
+    if (albumId) {
+      dispatch(getTracksList(albumId));
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (tracksList.length > 0) getAlbumsInfo();
+  }, [tracksList]);
+
+  const getAlbumsInfo = () => {
+    tracksList.map(track => {
+      setTracksInfo((prevState) => ({
+        ...prevState,
+        album: track.album.title,
+        artist: track.album.artist?.title
+      }));
     });
-    // const [showPlayer, setShowPlayer] = useState(false);
-    //
-    // const youtubeOpts = {
-    //     height: "390",
-    //     width: "640",
-    //     playerVars: {},
-    // };
-    useEffect(() => {
-        if(albumId){
-            dispatch(getTracksList(albumId));
-        }
-    }, [dispatch]);
+  };
+  const createTrackHistory = async (id: string) => {
+    await dispatch(addTrackInHistory(id)).unwrap();
+    // setShowPlayer(true);
+  };
 
-    useEffect(() => {
-        if (tracksList.length > 0) getAlbumsInfo();
-    }, [tracksList]);
+  const allTracks = tracksList.map(track => (
+      <TracksItem
+        key={track._id}
+        id={track._id}
+        title={track.title}
+        duration={track.duration}
+        serialNumber={track.serialNumber}
+        isPublished={track.isPublished}
+        tracksUser={track.user}
+        onPlayer={() => createTrackHistory(track._id)}
+        albumId={albumId}
+      />
+    )
+  );
 
-    const getAlbumsInfo = () => {
-        tracksList.map(track => {
-            setTracksInfo((prevState) => ({
-                ...prevState,
-                album: track.album.title,
-                artist: track.album.artist?.title
-            }))
-        });
-    };
-    const createTrackHistory = async (id: string) => {
-       await dispatch(addTrackInHistory(id)).unwrap();
-       // setShowPlayer(true);
-    };
+  return (
+    <>
+      <Grid container justifyContent="space-around">
+        {loading && <CircularProgress/>}
+        {fetchingError && <ErrorMessage errorMessage={fetchingError.error}/>}
+        <Grid item xs={12}> {/* Важно добавить item и размер xs={12} для правильного отображения */}
+          <h1>Исполнитель: {tracksInfo.artist}</h1>
+          <h6>Альбом: {tracksInfo.album}</h6>
+          <Grid container direction="column"> {/* Добавляем direction="column" для вывода в столбик */}
+            {allTracks}
+          </Grid>
+          {/*{showPlayer && (*/}
+          {/*    <Modal open={showPlayer}*/}
 
-    const allTracks = tracksList.map(track => (
-            <TracksItem
-                key={track._id}
-                id={track._id}
-                title={track.title}
-                duration={track.duration}
-                serialNumber={track.serialNumber}
-                isPublished={track.isPublished}
-                tracksUser={track.user}
-                onPlayer={() =>createTrackHistory(track._id)}
-                albumId={albumId}
-            />
-        )
-    );
-
-    return (
-        <>
-            <Grid container justifyContent="space-around">
-                {loading && <CircularProgress/>}
-                {fetchingError && <ErrorMessage errorMessage={fetchingError.error}/> }
-                <Grid item xs={12}> {/* Важно добавить item и размер xs={12} для правильного отображения */}
-                    <h1>Исполнитель: {tracksInfo.artist}</h1>
-                    <h6>Альбом: {tracksInfo.album}</h6>
-                    <Grid container direction="column"> {/* Добавляем direction="column" для вывода в столбик */}
-                        {allTracks}
-                    </Grid>
-                    {/*{showPlayer && (*/}
-                    {/*    <Modal open={showPlayer}*/}
-
-                    {/*    <Box>*/}
-                    {/*        <YouTubePlayer videoId='usy6l6sEr7g' opts={youtubeOpts}/>*/}
-                    {/*        <button onClick={() => setShowPlayer(false)}>Close</button>*/}
-                    {/*    </Box>*/}
-                    {/*</Modal>)}*/}
-                </Grid>
-            </Grid>
-            </>
-    );
+          {/*    <Box>*/}
+          {/*        <YouTubePlayer videoId='usy6l6sEr7g' opts={youtubeOpts}/>*/}
+          {/*        <button onClick={() => setShowPlayer(false)}>Close</button>*/}
+          {/*    </Box>*/}
+          {/*</Modal>)}*/}
+        </Grid>
+      </Grid>
+    </>
+  );
 };
 
 export default TracksList;

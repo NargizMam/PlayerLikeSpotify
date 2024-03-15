@@ -1,6 +1,6 @@
-import mongoose, {Types} from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import Album from './Album';
-import User from "./User";
+import User from './User';
 
 const TrackSchema = new mongoose.Schema({
   title: {
@@ -37,13 +37,13 @@ const TrackSchema = new mongoose.Schema({
   },
   serialNumber: {
     type: Number,
-    required: true
+    required: true,
   },
   isPublished: {
     type: Boolean,
     required: true,
-    default: false
-  }
+    default: false,
+  },
 });
 
 const Track = mongoose.model('Track', TrackSchema);

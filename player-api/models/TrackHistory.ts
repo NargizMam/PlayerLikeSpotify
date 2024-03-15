@@ -2,32 +2,35 @@ import mongoose, { Schema, Types } from 'mongoose';
 import User from './User';
 import Track from './Track';
 
-const TrackHistorySchema = new Schema({
-  user: {
-    type: String,
-    required: true,
-    ref: 'User',
-    validate: {
-      validator: async (value: Types.ObjectId) => {
-        const user = await User.findById(value);
-        return Boolean(user);
+const TrackHistorySchema = new Schema(
+  {
+    user: {
+      type: String,
+      required: true,
+      ref: 'User',
+      validate: {
+        validator: async (value: Types.ObjectId) => {
+          const user = await User.findById(value);
+          return Boolean(user);
+        },
+        message: 'Пользователь не найден!',
       },
-      message: 'Пользователь не найден!',
+    },
+    track: {
+      type: String,
+      required: true,
+      ref: 'Track',
+      validate: {
+        validator: async (value: Types.ObjectId) => {
+          const user = await Track.findById(value);
+          return Boolean(user);
+        },
+        message: 'Композиция не найдена!',
+      },
     },
   },
-  track: {
-    type: String,
-    required: true,
-    ref: 'Track',
-    validate: {
-      validator: async (value: Types.ObjectId) => {
-        const user = await Track.findById(value);
-        return Boolean(user);
-      },
-      message: 'Композиция не найдена!',
-    },
-  }
-}, {timestamps: true});
+  { timestamps: true },
+);
 
 const TrackHistory = mongoose.model('TrackHistory', TrackHistorySchema);
 
