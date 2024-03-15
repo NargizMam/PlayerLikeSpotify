@@ -5,7 +5,7 @@ import {selectAlbumsFetching, selectAlbumsList, selectAlbumUpdateError} from "./
 import AlbumsItem from "./components/AlbumsItem.tsx";
 import {useLocation} from "react-router-dom";
 import {getAlbumsList} from "./albumsThunk.ts";
-import ErrorMessage from "../ErrorMessage/ErrorMessage.tsx";
+import ErrorMessage from "../WarningMessage/ErrorMessage.tsx";
 
 const AlbumsList = () => {
     const albumsList = useAppSelector(selectAlbumsList);

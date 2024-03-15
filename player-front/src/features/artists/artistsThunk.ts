@@ -10,7 +10,7 @@ export const getArtistsList = createAsyncThunk<ArtistApi[]>(
         return response.data;
     }
 );
-export const createArtist = createAsyncThunk<void, ArtistMutation,{ rejectValue: GlobalError}>(
+export const createArtist = createAsyncThunk<string, ArtistMutation,{ rejectValue: GlobalError}>(
     'artists/create',
     async (artistMutation, {rejectWithValue}) => {
         try{
@@ -35,7 +35,7 @@ export const createArtist = createAsyncThunk<void, ArtistMutation,{ rejectValue:
 
     }
 );
-export const updateArtistPublished = createAsyncThunk<void, string,{ rejectValue: GlobalError}>(
+export const updateArtistPublished = createAsyncThunk<string, string,{ rejectValue: GlobalError}>(
     'artists/toggle',
     async (id, {rejectWithValue}) => {
         try{
@@ -49,11 +49,12 @@ export const updateArtistPublished = createAsyncThunk<void, string,{ rejectValue
         }
     }
 );
-export const deleteArtist = createAsyncThunk<void, string, { rejectValue: GlobalError}>(
+export const deleteArtist = createAsyncThunk<string, string, { rejectValue: GlobalError}>(
     'artists/delete',
     async (id, {rejectWithValue}) => {
         try{
-            await axiosApi.delete(`/artists/${id}`);
+            const response = await axiosApi.delete(`/artists/${id}`);
+            return response.data;
         }catch (e) {
             if(isAxiosError(e) && e.response ){
                 return rejectWithValue(e.response.data);

@@ -4,13 +4,13 @@ export interface User {
     token: string;
     role: string;
     displayName: string;
-    avatar: string | null;
+    image: string | null;
 }
 export interface RegisterMutation {
     email: string;
     password: string;
     displayName: string;
-    avatar: string | null;
+    image: string | null;
 }
 export interface LoginMutation {
     email: string;

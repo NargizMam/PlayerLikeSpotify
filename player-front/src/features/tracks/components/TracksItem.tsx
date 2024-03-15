@@ -3,7 +3,7 @@ import React from "react";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks.ts";
 import {selectUser} from "../../users/usersSlice.ts";
 import {getTracksList, updateTrackPublished} from "../trackThunk.ts";
-import {openSnackBar} from "../../ErrorMessage/errorMessageSlice.ts";
+import {openErrorMessage} from "../../WarningMessage/warningMessageSlice.ts";
 import {IS_PUBLISHED_ADMIN} from "../../../constants.ts";
 
 interface Props {
@@ -25,7 +25,7 @@ const TracksItem: React.FC<Props> = ({id, title, duration,serialNumber, onPlayer
             await dispatch(updateTrackPublished(id)).unwrap();
             dispatch(getTracksList(tracksUser));
         }catch (e) {
-            dispatch(openSnackBar());
+            dispatch(openErrorMessage());
         }
     }
     if (IS_PUBLISHED_ADMIN) {

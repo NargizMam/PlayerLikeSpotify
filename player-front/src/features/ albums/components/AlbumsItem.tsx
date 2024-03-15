@@ -6,7 +6,7 @@ import {useNavigate} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks.ts";
 import {selectUser} from "../../users/usersSlice.ts";
 import {getTracksList} from "../../tracks/trackThunk.ts";
-import {openSnackBar} from "../../ErrorMessage/errorMessageSlice.ts";
+import {openErrorMessage} from "../../WarningMessage/warningMessageSlice.ts";
 import {getAlbumsList, updateAlbumPublished} from "../albumsThunk.ts";
 
 interface Props {
@@ -39,7 +39,7 @@ const AlbumsItem: React.FC<Props> = ({
             await dispatch(updateAlbumPublished(id)).unwrap();
             dispatch(getAlbumsList(albumsUser));
         }catch (e) {
-            dispatch(openSnackBar());
+            dispatch(openErrorMessage());
         }
     }
     const getAlbumsTrackList = async () => {

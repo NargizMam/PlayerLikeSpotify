@@ -4,7 +4,6 @@ import Track from '../models/Track';
 import auth, {RequestWithUser} from "../middleware/auth";
 import permit from "../middleware/permit";
 import client from "../middleware/client";
-import Album from "../models/Album";
 
 const tracksRouter = express.Router();
 

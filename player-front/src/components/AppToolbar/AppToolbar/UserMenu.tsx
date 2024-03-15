@@ -6,15 +6,21 @@ import {NavLink, useNavigate} from "react-router-dom";
 import {logout} from "../../../features/users/usersThunk.ts";
 import {getArtistsList} from "../../../features/artists/artistsThunk.ts";
 import Avatar from "@mui/material/Avatar";
+import {apiURL} from "../../../constants.ts";
 
 interface Props {
   user: User;
 }
+
 const UserMenu: React.FC<Props> = ({user}) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+
+  let avatar = null;
+  if (user.image) {
+    avatar = apiURL + '/' + user.image;
+  }
   const logOuted = async () => {
     await dispatch(logout()).unwrap();
     dispatch(getArtistsList());
@@ -29,10 +35,10 @@ const UserMenu: React.FC<Props> = ({user}) => {
   }
   return (
     <>
-      <Avatar sx={{ bgcolor: '#ccc', mr: 2 }} aria-label="recipe">
-        {user.email.charAt(0)}
+      <Avatar sx={{ background: avatar ? avatar : '#ccc', mr: 2 }} aria-label="recipe">
+        {avatar && <img src={avatar} alt={user.displayName} style={{ maxWidth: '140%', maxHeight: '140%' }}/>}
       </Avatar>
-      <Button color="secondary" onClick={handleClick}>Hello, {user.email}</Button>
+      <Button color="secondary" onClick={handleClick}>Hello, {user.displayName}</Button>
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose} keepMounted>
           {user?.role === 'admin' && (
               <MenuItem component={NavLink} to="/allItems">Вся информация</MenuItem>

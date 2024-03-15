@@ -1,5 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {createArtist, getArtistsList, updateArtistPublished} from "./artistsThunk.ts";
+import {createArtist, deleteArtist, getArtistsList, updateArtistPublished} from "./artistsThunk.ts";
 import {ArtistApi, GlobalError} from "../../types";
 import {RootState} from "../../app/store.ts";
 
@@ -8,6 +8,9 @@ interface ArtistsState {
     fetchLoading: boolean;
     creating: boolean;
     artistsToggleFetching: boolean;
+    artistCreateMessage: string | null;
+    artistIsPublishedMessage: string | null;
+    artistDeleteMessage: string | null;
     artistsUpdateError: GlobalError | null;
     artistsCreateError: GlobalError | null;
     artistsDeleteError: GlobalError | null;
@@ -18,6 +21,9 @@ const initialState: ArtistsState = {
     fetchLoading: false,
     creating: false,
     artistsToggleFetching: false,
+    artistCreateMessage: null,
+    artistIsPublishedMessage: null,
+    artistDeleteMessage: null,
     artistsUpdateError: null,
     artistsCreateError: null,
     artistsDeleteError: null,
@@ -41,8 +47,9 @@ const artistsSlice = createSlice({
             .addCase(updateArtistPublished.pending, (state) => {
                 state.artistsToggleFetching = true;
             })
-            .addCase(updateArtistPublished.fulfilled, (state) => {
+            .addCase(updateArtistPublished.fulfilled, (state, {payload: success}) => {
                 state.artistsToggleFetching = false;
+                state.artistIsPublishedMessage = success;
             })
             .addCase(updateArtistPublished.rejected, (state, {payload: error}) => {
                 state.artistsToggleFetching = false;
@@ -51,12 +58,24 @@ const artistsSlice = createSlice({
             .addCase(createArtist.pending, (state) => {
                 state.creating = true;
             })
-            .addCase(createArtist.fulfilled, (state) => {
+            .addCase(createArtist.fulfilled, (state, {payload: success}) => {
                 state.creating = false;
+                state.artistCreateMessage = success;
             })
             .addCase(createArtist.rejected, (state, {payload: error}) => {
                 state.creating = false;
                 state.artistsCreateError = error || null;
+            })
+            .addCase(deleteArtist.pending, (state) => {
+                state.creating = true;
+            })
+            .addCase(deleteArtist.fulfilled, (state, {payload: success}) => {
+                state.creating = false;
+                state.artistDeleteMessage = success;
+            })
+            .addCase(deleteArtist.rejected, (state, {payload: error}) => {
+                state.creating = false;
+                state.artistsDeleteError = error || null;
             })
 
     }
@@ -70,3 +89,6 @@ export const selectArtistsCreating = (state: RootState) => state.artists.creatin
 export const selectArtistsToggleFetching = (state: RootState) => state.artists.artistsToggleFetching;
 export const selectArtistUpdateError = (state: RootState) => state.artists.artistsUpdateError;
 export const selectArtistCreateError = (state: RootState) => state.artists.artistsCreateError;
+export const selectArtistCreateSuccess = (state: RootState) => state.artists.artistCreateMessage;
+export const selectArtistUpdateSuccess = (state: RootState) => state.artists.artistIsPublishedMessage;
+export const selectArtistDeleteSuccess = (state: RootState) => state.artists.artistDeleteMessage;

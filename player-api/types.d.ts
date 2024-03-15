@@ -73,7 +73,7 @@ export interface UserFields {
   role: string;
   displayName: string;
   googleId?: string;
-  avatar?: string ;
+  image?: string ;
 }
 export interface TrackHistoryMutation {
   user: string;

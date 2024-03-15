@@ -9,7 +9,7 @@ import {albumsReducer} from "../features/ albums/albumsSlice.ts";
 import {artistsReducer} from "../features/artists/artistsSlice.ts";
 import {trackHistoryReducer} from "../features/trackHistories/trackHistorySlice.ts";
 import {adminsReducer} from "../features/Admins/adminsSlice.tsx";
-import {errorMessageReducer} from "../features/ErrorMessage/errorMessageSlice.ts";
+import {warningMessageReducer} from "../features/WarningMessage/warningMessageSlice.ts";
 
 const usersPersistConfig = {
   key: 'shop:users',
@@ -23,7 +23,7 @@ const rootReducer = combineReducers({
   artists: artistsReducer,
   admins: adminsReducer,
   trackHistory: trackHistoryReducer,
-  errorMessage: errorMessageReducer,
+  warningMessage: warningMessageReducer,
   users: persistReducer(usersPersistConfig, usersReducer)
 });
 export const store = configureStore({

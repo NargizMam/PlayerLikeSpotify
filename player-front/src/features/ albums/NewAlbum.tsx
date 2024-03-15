@@ -9,8 +9,8 @@ import {selectAlbumCreateError, selectAlbumsCreating} from "./albumsSlice.ts";
 import {createAlbum} from "./albumsThunk.ts";
 import {selectArtistsList} from "../artists/artistsSlice.ts";
 import {getArtistsList} from "../artists/artistsThunk.ts";
-import {openSnackBar} from "../ErrorMessage/errorMessageSlice.ts";
-import ErrorMessage from '../ErrorMessage/ErrorMessage.tsx';
+import {openErrorMessage} from "../WarningMessage/warningMessageSlice.ts";
+import ErrorMessage from '../WarningMessage/ErrorMessage.tsx';
 
 const initialState = {
     title: '',
@@ -46,7 +46,7 @@ const NewAlbum = () => {
             setState(initialState);
             navigate('/');
         } catch (e) {
-            dispatch(openSnackBar());
+            dispatch(openErrorMessage());
         }
     };
     const fileInputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {

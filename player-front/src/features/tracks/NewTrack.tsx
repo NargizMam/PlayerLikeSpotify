@@ -10,7 +10,7 @@ import {selectAlbumsList} from "../ albums/albumsSlice.ts";
 import {getAlbumsList} from "../ albums/albumsThunk.ts";
 import {selectTrackCreateError, selectTracksCreating} from "./tracksSlice.ts";
 import {createTrack} from "./trackThunk.ts";
-import ErrorMessage from '../ErrorMessage/ErrorMessage.tsx';
+import ErrorMessage from '../WarningMessage/ErrorMessage.tsx';
 
 const initialState = {
     title: '',

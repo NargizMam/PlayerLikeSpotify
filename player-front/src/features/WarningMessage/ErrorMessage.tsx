@@ -3,7 +3,7 @@ import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
-import {openSnackBar, selectShowSnackBar} from "./errorMessageSlice.ts";
+import {openErrorMessage, selectShowErrorMessage} from "./warningMessageSlice.ts";
 
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 }
 const  ErrorMessage: React.FC<Props> = ({errorMessage}) => {
     const dispatch = useAppDispatch();
-    const showErrorMessage = useAppSelector(selectShowSnackBar);
+    const showErrorMessage = useAppSelector(selectShowErrorMessage);
 
         return (
             <div>
@@ -22,7 +22,7 @@ const  ErrorMessage: React.FC<Props> = ({errorMessage}) => {
                     }}
                     open={showErrorMessage}
                     autoHideDuration={6000}
-                    onClose={() => dispatch(openSnackBar())}
+                    onClose={() => dispatch(openErrorMessage())}
                     ContentProps={{
                         'aria-describedby': 'message-id',
                     }}
@@ -32,7 +32,7 @@ const  ErrorMessage: React.FC<Props> = ({errorMessage}) => {
                             key="close"
                             aria-label="Close"
                             color="warning"
-                            onClick={() => dispatch(openSnackBar())}
+                            onClick={() => dispatch(openErrorMessage())}
                         >
                             <CloseIcon />
                         </IconButton>,

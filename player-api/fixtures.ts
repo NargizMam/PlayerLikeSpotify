@@ -27,7 +27,7 @@ const run = async () => {
             token: crypto.randomUUID(),
             role: 'user',
             displayName: 'Major',
-            avatar: 'fixtures/relaps.jpeg'
+            image: 'fixtures/relaps.jpeg'
         },
         {
             email: 'anna@gmail.com',
@@ -35,7 +35,7 @@ const run = async () => {
             token: crypto.randomUUID(),
             role: 'user',
             displayName: 'Anna',
-            avatar: 'fixtures/relaps.jpeg'
+            image: 'fixtures/relaps.jpeg'
         },
         {
             email: 'nini@gmail.com',
@@ -43,7 +43,7 @@ const run = async () => {
             token: crypto.randomUUID(),
             role: 'admin',
             displayName: 'Ninini',
-            avatar: 'fixtures/relaps.jpeg'
+            image: 'fixtures/relaps.jpeg'
         }
     );
     const [artist1, artist2, artist3] = await Artist.create(

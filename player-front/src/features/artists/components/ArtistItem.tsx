@@ -6,8 +6,8 @@ import {useNavigate} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks.ts";
 import {selectUser} from "../../users/usersSlice.ts";
 import {getAlbumsList} from "../../ albums/albumsThunk.ts";
-import {openSnackBar} from "../../ErrorMessage/errorMessageSlice.ts";
-import {getArtistsList, updateArtistPublished} from "../artistsThunk.ts";
+import {openErrorMessage} from "../../WarningMessage/warningMessageSlice.ts";
+import {deleteArtist, getArtistsList, updateArtistPublished} from "../artistsThunk.ts";
 
 interface Props {
     title: string;
@@ -32,21 +32,23 @@ const Artist: React.FC<Props> = ({title, image, id, isPublished, artistUser}) =>
             await dispatch(getAlbumsList(id)).unwrap();
             navigate(`/albums?artist=${id}`);
         } catch (error) {
-            dispatch(openSnackBar());
+            dispatch(openErrorMessage());
         }
     };
+    const onDeleteArtist
     const toPublishedArtist = async () => {
         try{
             await dispatch(updateArtistPublished(id)).unwrap();
+            dispatch(openErrorMessage());
             dispatch(getArtistsList());
         }catch (e) {
-            dispatch(openSnackBar());
+            dispatch(openErrorMessage());
         }
     }
     if (isPublished && user) {
         if (user?.role === 'admin') {
             publishedAction = (<Grid>
-                <Button>Удалить</Button>
+                <Button onClick={onDeleteArtist}>Удалить</Button>
             </Grid>)
         }
     }else if(!isPublished && user){

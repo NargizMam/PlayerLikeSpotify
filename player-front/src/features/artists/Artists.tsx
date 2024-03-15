@@ -5,7 +5,7 @@ import ArtistItem from "./components/ArtistItem.tsx";
 import {useEffect} from "react";
 import {getArtistsList} from "./artistsThunk.ts";
 import {useParams} from "react-router-dom";
-import ErrorMessage from "../ErrorMessage/ErrorMessage.tsx";
+import ErrorMessage from "../WarningMessage/ErrorMessage.tsx";
 import {selectAlbumsFetchError} from "../ albums/albumsSlice.ts";
 const Artists = () => {
     const dispatch = useAppDispatch();

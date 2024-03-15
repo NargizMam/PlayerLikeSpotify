@@ -7,7 +7,7 @@ import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {googleLogin, loginUser} from './usersThunk';
 import {selectLoginError} from "./usersSlice.ts";
 import {GoogleLogin} from '@react-oauth/google';
-import {openSnackBar} from "../ErrorMessage/errorMessageSlice.ts";
+import {openErrorMessage} from "../WarningMessage/warningMessageSlice.ts";
 
 const Login = () => {
     const dispatch = useAppDispatch();
@@ -33,7 +33,7 @@ const Login = () => {
             await dispatch(googleLogin(credential)).unwrap();
             navigate('/');
         }catch (e) {
-           dispatch(openSnackBar());
+           dispatch(openErrorMessage());
         }
     };
     return (

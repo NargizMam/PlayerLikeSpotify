@@ -62,7 +62,7 @@ artistsRouter.post('/', auth, imagesUpload.single('image'), async (req: RequestW
     };
     const artist = new Artist(artistData);
     await artist.save();
-    return res.send('Испонитель был создан!');
+    return res.send('Исполнитель был создан!');
   } catch (e) {
     next(e);
   }

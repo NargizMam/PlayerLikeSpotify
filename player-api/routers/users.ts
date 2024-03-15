@@ -3,26 +3,26 @@ import mongoose from 'mongoose';
 import User from '../models/User';
 import {OAuth2Client} from "google-auth-library";
 import config from "../config";
+import {imagesUpload} from "../multer";
 const usersRouter = express.Router();
 const client = new OAuth2Client(config.google.clientId);
-usersRouter.post('/', async (req, res, next) => {
-  console.log(req.body);
-  // try {
-  //   const user = new User({
-  //     email: req.body.email,
-  //     password: req.body.password,
-  //     displayName: req.body.userName,
-  //     avatar: req.file ? req.file.filename : null,
-  //   });
-  //   user.generateToken();
-  //   await user.save();
-  //   return res.send({message: 'User is register!', user});
-  // } catch (e) {
-  //   if (e instanceof mongoose.Error.ValidationError) {
-  //     return res.status(422).send(e);
-  //   }
-  //   next(e);
-  // }
+usersRouter.post('/', imagesUpload.single('image'), async (req, res, next) => {
+  try {
+    const user = new User({
+      email: req.body.email,
+      password: req.body.password,
+      displayName: req.body.displayName,
+      image: req.file ? req.file.filename : null,
+    });
+    user.generateToken();
+    await user.save();
+    return res.send({message: 'User is register!', user});
+  } catch (e) {
+    if (e instanceof mongoose.Error.ValidationError) {
+      return res.status(422).send(e);
+    }
+    next(e);
+  }
 });
 usersRouter.post("/google", async (req, res, next) => {
   try {
@@ -40,7 +40,7 @@ usersRouter.post("/google", async (req, res, next) => {
     const email = payload["email"];
     const id = payload["sub"];
     const displayName = payload["name"];
-    const avatar = payload["picture"];
+    const image = payload["picture"];
 
     if (!email) {
       return res
@@ -56,7 +56,7 @@ usersRouter.post("/google", async (req, res, next) => {
         password: crypto.randomUUID(),
         googleID: id,
         displayName: displayName ? displayName : email,
-        avatar
+        image
       });
     }
     user.generateToken();

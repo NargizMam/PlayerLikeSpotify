@@ -18,7 +18,6 @@ const FileInput: React.FC<Props> = ({onChange, name, label}) => {
     } else {
       setFilename('');
     }
-
     onChange(e);
   };
 

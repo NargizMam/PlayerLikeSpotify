@@ -16,7 +16,6 @@ import {selectUser} from "./features/users/usersSlice.ts";
 import AllItems from "./features/Admins/AllItems.tsx";
 import './App.css';
 import Footer from "./components/Footer/Footer.tsx";
-import Template from "./components/Footer/Template.tsx";
 const App = () => {
     const user = useAppSelector(selectUser);
 
@@ -26,7 +25,6 @@ const App = () => {
             <header>
                 <AppToolbar/>
             </header>
-            <Template/>
             <Container>
                 <Routes>
                     <Route path="/"  element={<Artists/>} />

@@ -6,7 +6,7 @@ import {selectTracksFetching, selectTracksFetchingError, selectTracksList} from 
 import TracksItem from "./components/TracksItem.tsx";
 import {addTrackInHistory} from "../trackHistories/trackHistoryThunk.ts";
 import {getTracksList} from "./trackThunk.ts";
-import ErrorMessage from "../ErrorMessage/ErrorMessage.tsx";
+import ErrorMessage from "../WarningMessage/ErrorMessage.tsx";
 
 
 const TracksList = () => {

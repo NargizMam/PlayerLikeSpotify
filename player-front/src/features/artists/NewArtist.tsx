@@ -3,11 +3,12 @@ import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {useNavigate} from 'react-router-dom';
 import {ArtistMutation} from "../../types";
 import {createArtist} from "./artistsThunk.ts";
-import {selectArtistCreateError, selectArtistsCreating} from "./artistsSlice.ts";
+import {selectArtistCreateError, selectArtistCreateSuccess, selectArtistsCreating} from "./artistsSlice.ts";
 import FileInput from "../../components/UI/FileInput/FileInput.tsx";
 import {LoadingButton} from "@mui/lab";
 import React, {useState} from "react";
-import ErrorMessage from '../ErrorMessage/ErrorMessage.tsx';
+import ErrorMessage from '../WarningMessage/ErrorMessage.tsx';
+import SuccessMessage from '../WarningMessage/SuccessMessage.tsx';
 
 const initialState  = {
     title: '',
@@ -19,6 +20,7 @@ const NewArtist = () => {
     const navigate = useNavigate();
     const creating = useAppSelector(selectArtistsCreating);
     const createError = useAppSelector(selectArtistCreateError);
+    const createSuccess = useAppSelector(selectArtistCreateSuccess);
     const [state, setState] = useState<ArtistMutation>(initialState);
     const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
@@ -27,6 +29,7 @@ const NewArtist = () => {
             return {...prevState, [name]: value};
         });
     };
+
     const onFormSubmit = async (e: React.FormEvent ) => {
         e.preventDefault();
         try {
@@ -49,6 +52,7 @@ const NewArtist = () => {
     return (
         <>
             {createError && <ErrorMessage errorMessage={createError.error}/>}
+            {createSuccess && <SuccessMessage successMessage={createSuccess}/>}
             <Typography variant="h4">New artist</Typography>
             <form
                 autoComplete="off"
@@ -74,11 +78,11 @@ const NewArtist = () => {
                         />
                     </Grid>
                     <Grid item xs>
-                            <FileInput
-                                label="Image"
-                                name="image"
-                                onChange={fileInputChangeHandler}
-                            />
+                        <FileInput
+                            label="Image"
+                            name="image"
+                            onChange={fileInputChangeHandler}
+                        />
                     </Grid>
                     <Grid item xs>
                         <LoadingButton

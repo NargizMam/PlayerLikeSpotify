@@ -7,9 +7,9 @@ import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {googleLogin, registerUser} from './usersThunk';
 import {selectRegisterError} from './usersSlice';
 import {GoogleLogin} from "@react-oauth/google";
-import {openSnackBar} from "../ErrorMessage/errorMessageSlice.ts";
+import {openErrorMessage} from "../WarningMessage/warningMessageSlice.ts";
 import FileInput from "../../components/UI/FileInput/FileInput.tsx";
-import ErrorMessage from '../ErrorMessage/ErrorMessage.tsx';
+import ErrorMessage from '../WarningMessage/ErrorMessage.tsx';
 
 
 const Register = () => {
@@ -21,7 +21,7 @@ const Register = () => {
         email: '',
         password: '',
         displayName: '',
-        avatar: null
+        image: null
     });
     const getFieldError = (fieldName: string) => {
         try {
@@ -39,7 +39,7 @@ const Register = () => {
     const submitFormHandler = async (event: React.FormEvent) => {
         event.preventDefault();
         if (!state.email || !state.password || !state.displayName) {
-            (dispatch(openSnackBar()))
+            (dispatch(openErrorMessage()))
             return (
                 <ErrorMessage errorMessage={'Необходимые поля не заполнены!'}/>
             )
@@ -48,7 +48,7 @@ const Register = () => {
             await dispatch(registerUser(state)).unwrap();
             navigate('/');
         } catch (e) {
-            dispatch(openSnackBar());
+            dispatch(openErrorMessage());
         }
     };
     const fileInputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,7 +64,7 @@ const Register = () => {
             await dispatch(googleLogin(credential)).unwrap();
             navigate('/');
         }catch (e) {
-            dispatch(openSnackBar());
+            dispatch(openErrorMessage());
         }
     };
     return (
@@ -137,8 +137,8 @@ const Register = () => {
                         </Grid>
                         <Grid item xs>
                             <FileInput
-                                label="Avatar"
-                                name="avatar"
+                                label="Image"
+                                name="image"
                                 onChange={fileInputChangeHandler}
                             />
                         </Grid>
