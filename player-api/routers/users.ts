@@ -52,7 +52,7 @@ usersRouter.post("/google", async (req, res, next) => {
 
     if (!user) {
       user = new User({
-        username: email,
+        email: email,
         password: crypto.randomUUID(),
         googleID: id,
         displayName: displayName ? displayName : email,

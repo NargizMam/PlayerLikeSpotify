@@ -11,6 +11,7 @@ import {getAlbumsList} from "../ albums/albumsThunk.ts";
 import {selectTrackCreateError, selectTracksCreating} from "./tracksSlice.ts";
 import {createTrack} from "./trackThunk.ts";
 import ErrorMessage from '../WarningMessage/ErrorMessage.tsx';
+import {openErrorMessage, openSuccessMessage} from "../WarningMessage/warningMessageSlice.ts";
 
 const initialState = {
     title: '',
@@ -47,10 +48,11 @@ const NewTrack = () => {
         e.preventDefault();
         try {
             await dispatch(createTrack(state)).unwrap();
+            dispatch(openSuccessMessage());
             setState(initialState);
             navigate('/');
         } catch (e) {
-            throw e;
+            dispatch(openErrorMessage());
         }
     };
 

@@ -1,20 +1,22 @@
-import {Alert, Avatar, Box, Button, Container, Grid, Link, TextField, Typography} from '@mui/material';
+import {Alert, Avatar, Box, Container, Grid, Link, TextField, Typography} from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {RegisterMutation} from '../../types';
 import React, {useState} from 'react';
 import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {googleLogin, registerUser} from './usersThunk';
-import {selectRegisterError} from './usersSlice';
+import {selectRegisterError, selectRegisterLoading} from './usersSlice';
 import {GoogleLogin} from "@react-oauth/google";
 import {openErrorMessage} from "../WarningMessage/warningMessageSlice.ts";
 import FileInput from "../../components/UI/FileInput/FileInput.tsx";
 import ErrorMessage from '../WarningMessage/ErrorMessage.tsx';
+import LoadingButton from "@mui/lab/LoadingButton";
 
 
 const Register = () => {
     const dispatch = useAppDispatch();
     const error = useAppSelector(selectRegisterError);
+    const registering = useAppSelector(selectRegisterLoading);
     const navigate = useNavigate();
 
     const [state, setState] = useState<RegisterMutation>({
@@ -143,14 +145,15 @@ const Register = () => {
                             />
                         </Grid>
                     </Grid>
-                    <Button
+                    <LoadingButton
+                        loading={registering}
                         type="submit"
                         fullWidth
                         variant="contained"
                         sx={{mt: 3, mb: 2}}
                     >
                         Sign Up
-                    </Button>
+                    </LoadingButton>
                     <Grid container justifyContent="flex-end">
                         <Grid item>
                             <Link component={RouterLink} to="/login" variant="body2">

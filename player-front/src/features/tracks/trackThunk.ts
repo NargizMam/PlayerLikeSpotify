@@ -24,13 +24,12 @@ export const getTracksList = createAsyncThunk<TrackApi[], string | undefined, { 
 
     }
 );
-export const createTrack= createAsyncThunk<void, TrackMutation, { rejectValue: GlobalError}>(
+export const createTrack= createAsyncThunk<string, TrackMutation, { rejectValue: GlobalError}>(
     'tracks/add',
     async (trackMutation, {rejectWithValue}) => {
         try{
-            console.log(trackMutation)
            const response = await axiosApi.post('/tracks',trackMutation);
-            console.log(response.data)
+           return response.data;
         }catch (e) {
             if(isAxiosError(e) && e.response ){
                 return rejectWithValue(e.response.data);
@@ -39,7 +38,7 @@ export const createTrack= createAsyncThunk<void, TrackMutation, { rejectValue: G
         }
     }
 );
-export const updateTrackPublished = createAsyncThunk<void, string, { rejectValue: GlobalError}>(
+export const updateTrackPublished = createAsyncThunk<string, string, { rejectValue: GlobalError}>(
     '/tracks/toggle',
     async (id, {rejectWithValue}) => {
         try{
@@ -53,11 +52,12 @@ export const updateTrackPublished = createAsyncThunk<void, string, { rejectValue
         }
     }
 );
-export const deleteTrack = createAsyncThunk<void, string, { rejectValue: GlobalError}>(
+export const deleteTrack = createAsyncThunk<string, string, { rejectValue: GlobalError}>(
     'tracks/delete',
     async (id, {rejectWithValue}) => {
         try{
-            await axiosApi.delete(`/tracks/${id}`);
+            const response = await axiosApi.delete(`/tracks/${id}`);
+            return response.data;
         }catch (e) {
             if(isAxiosError(e) && e.response ){
                 return rejectWithValue(e.response.data);

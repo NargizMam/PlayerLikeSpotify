@@ -1,16 +1,18 @@
 import React, {useState} from 'react';
 import {LoginMutation} from '../../types';
-import {Alert, Avatar, Box, Button, Container, Grid, Link, TextField, Typography} from '@mui/material';
+import {Alert, Avatar, Box, Container, Grid, Link, TextField, Typography} from '@mui/material';
 import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
 import {googleLogin, loginUser} from './usersThunk';
-import {selectLoginError} from "./usersSlice.ts";
+import {selectLoginError, selectLoginLoading} from "./usersSlice.ts";
 import {GoogleLogin} from '@react-oauth/google';
 import {openErrorMessage} from "../WarningMessage/warningMessageSlice.ts";
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const Login = () => {
     const dispatch = useAppDispatch();
+    const logining = useAppSelector(selectLoginLoading);
     const navigate = useNavigate();
     const error = useAppSelector(selectLoginError);
     const [state, setState] = useState<LoginMutation>({
@@ -93,14 +95,15 @@ const Login = () => {
                             />
                         </Grid>
                     </Grid>
-                    <Button
+                    <LoadingButton
+                        loading={logining}
                         type="submit"
                         fullWidth
                         variant="contained"
                         sx={{mt: 3, mb: 2}}
                     >
                         Log in
-                    </Button>
+                    </LoadingButton>
                     <Grid container justifyContent="flex-end">
                         <Grid item>
                             <Link component={RouterLink} to="/register" variant="body2">

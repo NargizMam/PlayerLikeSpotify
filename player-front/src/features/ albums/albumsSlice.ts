@@ -9,7 +9,6 @@ interface AlbumsState {
     creating: boolean;
     updating: boolean;
     deleting: boolean;
-    albumsIsPublishedFetching: boolean;
     albumsFetchError: GlobalError | null;
     albumsUpdateError: GlobalError | null;
     albumsCreateError: GlobalError | null;
@@ -25,7 +24,6 @@ const initialState: AlbumsState = {
     creating: false,
     updating:  false,
     deleting: false,
-    albumsIsPublishedFetching: false,
     albumsFetchError: null,
     albumsUpdateError: null,
     albumsCreateError: null,
@@ -42,6 +40,7 @@ const albumsSlice = createSlice({
         builder
             .addCase(getAlbumsList.pending, (state) => {
                 state.fetchLoading = true;
+                state.albumsFetchError = null;
             })
             .addCase(getAlbumsList.fulfilled, (state, {payload: albums}) => {
                 state.fetchLoading = false;
@@ -52,15 +51,15 @@ const albumsSlice = createSlice({
                 state.albumsFetchError = data || null;
             })
             .addCase(updateAlbumPublished.pending, (state) => {
-                state.albumsIsPublishedFetching = true;
+                state.updating = true;
                 state.albumsIsPublishedMessage = null;
             })
             .addCase(updateAlbumPublished.fulfilled, (state,{payload: success}) => {
-                state.albumsIsPublishedFetching = false;
+                state.updating = false;
                 state.albumsIsPublishedMessage = success;
             })
             .addCase(updateAlbumPublished.rejected, (state, {payload: error}) => {
-                state.albumsIsPublishedFetching = false;
+                state.updating = false;
                 state.albumsUpdateError = error || null;
                 state.albumsIsPublishedMessage = null;
             })
@@ -95,11 +94,12 @@ const albumsSlice = createSlice({
 
 export const albumsReducer = albumsSlice.reducer;
 
-export const selectAlbumsList = (state: RootState) => state.albums.albumsList
 export const selectAlbumsFetching = (state: RootState) => state.albums.fetchLoading;
-export const selectAlbumsCreating = (state: RootState) => state.albums.creating;
-export const selectAlbumsIsPublishedFetching = (state: RootState) => state.albums.albumsIsPublishedFetching;
+export const selectAlbumsList = (state: RootState) => state.albums.albumsList
 export const selectAlbumsFetchError = (state: RootState) => state.albums.albumsFetchError;
+export const selectAlbumsCreating = (state: RootState) => state.albums.creating;
+export const selectAlbumsDeleting = (state: RootState) => state.albums.deleting;
+export const selectAlbumsIsPublishedUpdating = (state: RootState) => state.albums.updating;
 export const selectAlbumIsPublishedError = (state: RootState) => state.albums.albumsUpdateError;
 export const selectAlbumCreateError = (state: RootState) => state.albums.albumsCreateError;
 export const selectAlbumCreateSuccess = (state: RootState) => state.albums.albumsCreateMessage;

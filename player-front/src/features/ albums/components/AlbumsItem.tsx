@@ -1,4 +1,4 @@
-import {Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography} from "@mui/material";
+import {Card, CardActionArea, CardActions, CardContent, CardMedia, Typography} from "@mui/material";
 import noImage from '../../../assets/images/image_not_available.png'
 import {apiURL, IS_PUBLISHED_ADMIN} from "../../../constants.ts";
 import React from "react";
@@ -8,6 +8,8 @@ import {selectUser} from "../../users/usersSlice.ts";
 import {getTracksList} from "../../tracks/trackThunk.ts";
 import {openErrorMessage, openSuccessMessage} from "../../WarningMessage/warningMessageSlice.ts";
 import {deleteAlbum, getAlbumsList, updateAlbumPublished} from "../albumsThunk.ts";
+import {selectAlbumsDeleting, selectAlbumsIsPublishedUpdating} from "../albumsSlice.ts";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 interface Props {
     id: string;
@@ -27,6 +29,8 @@ const AlbumsItem: React.FC<Props> = ({
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const user = useAppSelector(selectUser)!;
+    const updating = useAppSelector(selectAlbumsIsPublishedUpdating);
+    const deleting = useAppSelector(selectAlbumsDeleting);
 
     let cardImage = noImage;
 
@@ -58,15 +62,16 @@ const AlbumsItem: React.FC<Props> = ({
     }
     if (IS_PUBLISHED_ADMIN) {
         publishedAction = (
-            <Button onClick={onDeleteAlbum}>Удалить</Button>
+            <LoadingButton loading={deleting} onClick={onDeleteAlbum}>Удалить</LoadingButton>
         );
     } else if (!IS_PUBLISHED_ADMIN) {
         publishedAction = (
-            <Button
+            <LoadingButton
                 onClick={toPublishedAlbum}
+                loading={updating}
                 sx={{ ml: 1 }}
                 color='warning'
-            >Опубликовать</Button>
+            >Опубликовать</LoadingButton>
         );
     } else if (!isPublished && user && user.role !== 'admin' && user._id === albumsUser) {
         publishedAction = <Typography>Не опубликовано</Typography>;

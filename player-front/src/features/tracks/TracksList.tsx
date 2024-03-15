@@ -32,6 +32,7 @@ const TracksList = () => {
             dispatch(getTracksList(albumId));
         }
     }, [dispatch]);
+
     useEffect(() => {
         if (tracksList.length > 0) getAlbumsInfo();
     }, [tracksList]);
@@ -60,6 +61,7 @@ const TracksList = () => {
                 isPublished={track.isPublished}
                 tracksUser={track.user}
                 onPlayer={() =>createTrackHistory(track._id)}
+                albumId={albumId}
             />
         )
     );
@@ -68,25 +70,24 @@ const TracksList = () => {
         <>
             <Grid container justifyContent="space-around">
                 {loading && <CircularProgress/>}
-                {fetchingError && <ErrorMessage
-                    errorMessage={fetchingError.error}/> }
-                <Grid>
+                {fetchingError && <ErrorMessage errorMessage={fetchingError.error}/> }
+                <Grid item xs={12}> {/* Важно добавить item и размер xs={12} для правильного отображения */}
                     <h1>Исполнитель: {tracksInfo.artist}</h1>
                     <h6>Альбом: {tracksInfo.album}</h6>
-                    <Grid >
+                    <Grid container direction="column"> {/* Добавляем direction="column" для вывода в столбик */}
                         {allTracks}
                     </Grid>
                     {/*{showPlayer && (*/}
                     {/*    <Modal open={showPlayer}*/}
 
-                        {/*    <Box>*/}
-                        {/*        <YouTubePlayer videoId='usy6l6sEr7g' opts={youtubeOpts}/>*/}
-                        {/*        <button onClick={() => setShowPlayer(false)}>Close</button>*/}
-                        {/*    </Box>*/}
-                        {/*</Modal>)}*/}
+                    {/*    <Box>*/}
+                    {/*        <YouTubePlayer videoId='usy6l6sEr7g' opts={youtubeOpts}/>*/}
+                    {/*        <button onClick={() => setShowPlayer(false)}>Close</button>*/}
+                    {/*    </Box>*/}
+                    {/*</Modal>)}*/}
                 </Grid>
             </Grid>
-        </>
+            </>
     );
 };
 

@@ -7,24 +7,30 @@ interface TracksState {
     tracksList: TrackApi[];
     fetchLoading: boolean;
     creating: boolean;
+    isPublishedUpdating: boolean;
     deleting: boolean;
-    tracksToggleFetching: boolean;
-    createError: GlobalError | null;
-    deleteError: GlobalError | null;
-    trackUpdateError: GlobalError | null;
     tracksFetchingError: GlobalError | null;
+    createError: GlobalError | null;
+    createSuccess: string | null;
+    isPublishedSuccess: string | null,
+    deleteSuccess: string | null,
+    trackIsPublishedError: GlobalError | null;
+    deleteError: GlobalError | null;
 }
 
 const initialState: TracksState = {
     tracksList: [],
     fetchLoading: false,
     creating: false,
+    isPublishedUpdating: false,
     deleting: false,
-    tracksToggleFetching: false,
+    createSuccess: null,
+    isPublishedSuccess: null,
+    deleteSuccess: null,
+    tracksFetchingError: null,
     createError: null,
-    deleteError: null,
-    trackUpdateError: null,
-    tracksFetchingError: null
+    trackIsPublishedError: null,
+    deleteError: null
 }
 const tracksSlice = createSlice({
     name: 'tracks',
@@ -45,29 +51,38 @@ const tracksSlice = createSlice({
             })
             .addCase(createTrack.pending, (state) => {
             state.creating = true;
+                state.createError = null;
+                state.createSuccess = null;
             })
-            .addCase(createTrack.fulfilled, (state) => {
+            .addCase(createTrack.fulfilled, (state, {payload: success}) => {
                 state.creating = false;
+                state.createSuccess = success;
             })
             .addCase(createTrack.rejected, (state, {payload: error}) => {
                 state.creating = false;
                 state.createError = error || null;
             })
             .addCase(updateTrackPublished.pending, (state) => {
-                state.tracksToggleFetching = true;
+                state.isPublishedUpdating = true;
+                state.trackIsPublishedError = null;
+                state.isPublishedSuccess = null;
             })
-            .addCase(updateTrackPublished.fulfilled, (state) => {
-                state.tracksToggleFetching = false;
+            .addCase(updateTrackPublished.fulfilled, (state, {payload: success}) => {
+                state.isPublishedUpdating = false;
+                state.isPublishedSuccess = success;
             })
             .addCase(updateTrackPublished.rejected, (state, {payload: error}) => {
-                state.tracksToggleFetching = false;
-                state.trackUpdateError = error || null;
+                state.isPublishedUpdating = false;
+                state.trackIsPublishedError = error || null;
             })
             .addCase(deleteTrack.pending, (state) => {
                 state.deleting = true;
+                state.deleteError = null;
+                state.deleteSuccess = null;
             })
-            .addCase(deleteTrack.fulfilled, (state) => {
+            .addCase(deleteTrack.fulfilled, (state, {payload: success}) => {
                 state.deleting = false;
+                state.deleteSuccess = success;
             })
             .addCase(deleteTrack.rejected, (state, {payload: error}) => {
                 state.deleting = false;
@@ -81,12 +96,15 @@ const tracksSlice = createSlice({
 
 export const tracksReducer = tracksSlice.reducer;
 
-export const selectTracksList = (state: RootState) => state.tracks.tracksList
 export const selectTracksFetching = (state: RootState) => state.tracks.fetchLoading;
-export const selectTracksCreating = (state: RootState) => state.tracks.creating;
-export const selectTracksDeleting = (state: RootState) => state.tracks.deleting;
-export const selectTracksDeleteError = (state: RootState) => state.tracks.deleteError;
+export const selectTracksList = (state: RootState) => state.tracks.tracksList
 export const selectTracksFetchingError = (state: RootState) => state.tracks.tracksFetchingError;
-export const selectTrackUpdateError = (state: RootState) => state.tracks.trackUpdateError;
+export const selectTracksCreating = (state: RootState) => state.tracks.creating;
 export const selectTrackCreateError = (state: RootState) => state.tracks.createError;
-export const selectTracksToggleFetching = (state: RootState) => state.tracks.tracksToggleFetching;
+export const selectTrackCreateSuccess = (state: RootState) => state.tracks.createSuccess
+export const selectTracksIsPublishedUpdating = (state: RootState) => state.tracks.isPublishedUpdating;
+export const selectTrackIsPublishedError = (state: RootState) => state.tracks?.trackIsPublishedError;
+export const selectTrackIsPublishedSuccess = (state: RootState) => state.tracks.isPublishedSuccess;
+export const selectTracksDeleting = (state: RootState) => state.tracks.deleting;
+export const selectTracksDeleteSuccess = (state: RootState) => state.tracks.deleteSuccess;
+export const selectTracksDeleteError = (state: RootState) => state.tracks.deleteError;

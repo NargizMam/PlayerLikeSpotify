@@ -7,6 +7,8 @@ interface ArtistsState {
     artistsList: ArtistApi[];
     fetchLoading: boolean;
     creating: boolean;
+    isPublishedUpdating: boolean;
+    deleting: boolean;
     artistsIsPublishedFetching: boolean;
     artistCreateMessage: string | null;
     artistIsPublishedMessage: string | null;
@@ -20,6 +22,8 @@ const initialState: ArtistsState = {
     artistsList: [],
     fetchLoading: false,
     creating: false,
+    isPublishedUpdating: false,
+    deleting: false,
     artistsIsPublishedFetching: false,
     artistCreateMessage: null,
     artistIsPublishedMessage: null,
@@ -45,16 +49,16 @@ const artistsSlice = createSlice({
                 state.fetchLoading = false;
             })
             .addCase(updateArtistPublished.pending, (state) => {
-                state.artistsIsPublishedFetching = true;
+                state.isPublishedUpdating = true;
                 state.artistsIsPublishedError = null;
                 state.artistIsPublishedMessage = null;
             })
             .addCase(updateArtistPublished.fulfilled, (state, {payload: success}) => {
-                state.artistsIsPublishedFetching = false;
+                state.isPublishedUpdating = false;
                 state.artistIsPublishedMessage = success;
             })
             .addCase(updateArtistPublished.rejected, (state, {payload: error}) => {
-                state.artistsIsPublishedFetching = false;
+                state.isPublishedUpdating = false;
                 state.artistsIsPublishedError = error || null;
             })
             .addCase(createArtist.pending, (state) => {
@@ -94,11 +98,15 @@ export const artistsReducer = artistsSlice.reducer;
 
 export const selectArtistsList = (state: RootState) => state.artists.artistsList;
 export const selectArtistsFetching = (state: RootState) => state.artists.fetchLoading;
+
 export const selectArtistsCreating = (state: RootState) => state.artists.creating;
-export const selectArtistsIsPublishedFetching = (state: RootState) => state.artists.artistsIsPublishedFetching;
-export const selectArtistIsPublishedError = (state: RootState) => state.artists.artistsIsPublishedError;
-export const selectArtistCreateError = (state: RootState) => state.artists.artistsCreateError;
-export const selectArtistDeleteError = (state: RootState) => state.artists.artistsDeleteError;
 export const selectArtistCreateSuccess = (state: RootState) => state.artists.artistCreateMessage;
+export const selectArtistCreateError = (state: RootState) => state.artists.artistsCreateError;
+
+export const selectArtistsIsPublishedFetching = (state: RootState) => state.artists.isPublishedUpdating;
 export const selectArtistIsPublishedSuccess = (state: RootState) => state.artists.artistIsPublishedMessage;
+export const selectArtistIsPublishedError = (state: RootState) => state.artists.artistsIsPublishedError;
+
+export const selectArtistDeleting = (state: RootState) => state.artists.deleting;
 export const selectArtistDeleteSuccess = (state: RootState) => state.artists.artistDeleteMessage;
+export const selectArtistDeleteError = (state: RootState) => state.artists.artistsDeleteError;
