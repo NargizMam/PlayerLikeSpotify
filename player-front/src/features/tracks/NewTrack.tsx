@@ -118,13 +118,14 @@ const NewTrack = () => {
               rows={3}
               id="duration" label="Продолжительность"
               value={state.duration}
+              type='number'
               onChange={inputChangeHandler}
               name="duration"
             />
           </Grid>
           <Grid item xs>
             <TextField
-              rows={3}
+              rows={3}type='number'
               id="serialNumber" label="Номер трека в альбоме"
               value={state.serialNumber}
               onChange={inputChangeHandler}

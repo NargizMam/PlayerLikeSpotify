@@ -4,7 +4,7 @@ import { RegisterMutation } from '../../types';
 import React, { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { googleLogin, registerUser } from './usersThunk';
+import { googleRegister, registerUser } from './usersThunk';
 import { selectRegisterError, selectRegisterLoading } from './usersSlice';
 import { GoogleLogin } from '@react-oauth/google';
 import { openErrorMessage } from '../WarningMessage/warningMessageSlice.ts';
@@ -61,9 +61,9 @@ const Register = () => {
       }));
     }
   };
-  const googleLoginHandler = async (credential: string) => {
+  const googleRegisterHandler = async (credential: string) => {
     try {
-      await dispatch(googleLogin(credential)).unwrap();
+      await dispatch(googleRegister(credential)).unwrap();
       navigate('/');
     } catch (e) {
       dispatch(openErrorMessage());
@@ -89,7 +89,7 @@ const Register = () => {
         <Box>
           <GoogleLogin onSuccess={(credentialResponse) => {
             if (credentialResponse.credential) {
-              void googleLoginHandler(credentialResponse.credential);
+              void googleRegisterHandler(credentialResponse.credential);
             }
           }}
                        onError={() => {

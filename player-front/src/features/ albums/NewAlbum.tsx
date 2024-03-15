@@ -109,6 +109,7 @@ const NewAlbum = () => {
               rows={3}
               id="issueDate" label="Дата выпуска"
               value={state.issueDate}
+              type='number'
               onChange={inputChangeHandler}
               name="issueDate"
             />

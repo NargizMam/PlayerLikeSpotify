@@ -40,11 +40,25 @@ export const loginUser = createAsyncThunk<RegisterResponse, LoginMutation, { rej
     }
   }
 );
+export const googleRegister = createAsyncThunk<RegisterResponse, string, { rejectValue: ValidationError }>(
+  'users/googleRegister',
+  async (credential, {rejectWithValue}) => {
+    try {
+      const response = await axiosApi.post('/users/google', {credential});
+      return response.data.user;
+    } catch (e) {
+      if (isAxiosError(e) && e.response && e.response.status === 422) {
+        return rejectWithValue(e.response.data);
+      }
+      throw e;
+    }
+  },
+);
 export const googleLogin = createAsyncThunk<RegisterResponse, string, { rejectValue: GlobalError }>(
   'users/googleLogin',
   async (credential, {rejectWithValue}) => {
     try {
-      const response = await axiosApi.post('/users/google', {credential});
+      const response = await axiosApi.post('/users/sessions/google', {credential});
       return response.data.user;
     } catch (e) {
       if (isAxiosError(e) && e.response && e.response.status === 400) {
