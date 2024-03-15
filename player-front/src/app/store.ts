@@ -8,7 +8,7 @@ import {tracksReducer} from "../features/tracks/tracksSlice.ts";
 import {albumsReducer} from "../features/ albums/albumsSlice.ts";
 import {artistsReducer} from "../features/artists/artistsSlice.ts";
 import {trackHistoryReducer} from "../features/trackHistories/trackHistorySlice.ts";
-import {adminsReducer} from "../features/Admins/adminsSlice.tsx";
+import {adminsReducer} from "../../../../drawing-ws/frontend/src/Admins/adminsSlice.tsx";
 import {warningMessageReducer} from "../features/WarningMessage/warningMessageSlice.ts";
 
 const usersPersistConfig = {

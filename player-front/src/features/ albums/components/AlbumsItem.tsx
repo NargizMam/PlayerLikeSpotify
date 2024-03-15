@@ -6,8 +6,8 @@ import {useNavigate} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks.ts";
 import {selectUser} from "../../users/usersSlice.ts";
 import {getTracksList} from "../../tracks/trackThunk.ts";
-import {openErrorMessage} from "../../WarningMessage/warningMessageSlice.ts";
-import {getAlbumsList, updateAlbumPublished} from "../albumsThunk.ts";
+import {openErrorMessage, openSuccessMessage} from "../../WarningMessage/warningMessageSlice.ts";
+import {deleteAlbum, getAlbumsList, updateAlbumPublished} from "../albumsThunk.ts";
 
 interface Props {
     id: string;
@@ -41,6 +41,16 @@ const AlbumsItem: React.FC<Props> = ({
         }catch (e) {
             dispatch(openErrorMessage());
         }
+    };
+    const onDeleteAlbum = async () =>{
+        try{
+            await dispatch(deleteAlbum(id)).unwrap();
+            dispatch(openSuccessMessage());
+            dispatch(getAlbumsList(albumsUser));
+            navigate('/');
+        }catch (e) {
+            dispatch(openErrorMessage());
+        }
     }
     const getAlbumsTrackList = async () => {
         await dispatch(getTracksList(id)).unwrap();
@@ -48,7 +58,7 @@ const AlbumsItem: React.FC<Props> = ({
     }
     if (IS_PUBLISHED_ADMIN) {
         publishedAction = (
-            <Button >Удалить</Button>
+            <Button onClick={onDeleteAlbum}>Удалить</Button>
         );
     } else if (!IS_PUBLISHED_ADMIN) {
         publishedAction = (

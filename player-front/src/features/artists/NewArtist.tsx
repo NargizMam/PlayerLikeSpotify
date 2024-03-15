@@ -1,16 +1,15 @@
 import {Grid, TextField, Typography} from '@mui/material';
 import {useAppDispatch, useAppSelector} from '../../app/hooks';
-import {useNavigate} from 'react-router-dom';
 import {ArtistMutation} from "../../types";
 import {createArtist} from "./artistsThunk.ts";
-import {selectArtistCreateError, selectArtistCreateSuccess, selectArtistsCreating} from "./artistsSlice.ts";
+import {selectArtistsCreating} from "./artistsSlice.ts";
 import FileInput from "../../components/UI/FileInput/FileInput.tsx";
 import {LoadingButton} from "@mui/lab";
 import React, {useState} from "react";
-import ErrorMessage from '../WarningMessage/ErrorMessage.tsx';
-import SuccessMessage from '../WarningMessage/SuccessMessage.tsx';
+import {openErrorMessage, openSuccessMessage} from "../WarningMessage/warningMessageSlice.ts";
+import {useNavigate} from "react-router-dom";
 
-const initialState  = {
+const initialState = {
     title: '',
     description: '',
     image: null
@@ -19,8 +18,7 @@ const NewArtist = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const creating = useAppSelector(selectArtistsCreating);
-    const createError = useAppSelector(selectArtistCreateError);
-    const createSuccess = useAppSelector(selectArtistCreateSuccess);
+
     const [state, setState] = useState<ArtistMutation>(initialState);
     const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
@@ -30,14 +28,15 @@ const NewArtist = () => {
         });
     };
 
-    const onFormSubmit = async (e: React.FormEvent ) => {
+    const onFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             await dispatch(createArtist(state)).unwrap();
+            dispatch(openSuccessMessage());
             setState(initialState);
             navigate('/');
         } catch (e) {
-            throw e;
+            dispatch(openErrorMessage());
         }
     };
     const fileInputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,8 +50,6 @@ const NewArtist = () => {
 
     return (
         <>
-            {createError && <ErrorMessage errorMessage={createError.error}/>}
-            {createSuccess && <SuccessMessage successMessage={createSuccess}/>}
             <Typography variant="h4">New artist</Typography>
             <form
                 autoComplete="off"

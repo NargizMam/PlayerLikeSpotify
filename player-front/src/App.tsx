@@ -13,9 +13,10 @@ import NewTrack from "./features/tracks/NewTrack.tsx";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute.tsx";
 import {useAppSelector} from "./app/hooks.ts";
 import {selectUser} from "./features/users/usersSlice.ts";
-import AllItems from "./features/Admins/AllItems.tsx";
 import './App.css';
 import Footer from "./components/Footer/Footer.tsx";
+import WarningMessage from "./features/WarningMessage/WarningMessages.tsx";
+
 const App = () => {
     const user = useAppSelector(selectUser);
 
@@ -26,6 +27,7 @@ const App = () => {
                 <AppToolbar/>
             </header>
             <Container>
+                <WarningMessage/>
                 <Routes>
                     <Route path="/"  element={<Artists/>} />
                     <Route path="/register"  element={<Register/>}/>
@@ -45,10 +47,6 @@ const App = () => {
                     <Route path="/new-track"  element={(
                         <ProtectedRoute isAllowed={!!user}>
                             <NewTrack/>
-                        </ProtectedRoute>)}/>
-                    <Route path='/allItems' element={(
-                        <ProtectedRoute isAllowed={Boolean(user?.role === 'admin')}>
-                            <AllItems/>
                         </ProtectedRoute>)}/>
                     <Route path="/albums"  element={<AlbumsList/>} />
                     <Route path="/tracks"  element={<TracksList/>}/>

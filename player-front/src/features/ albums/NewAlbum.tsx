@@ -9,7 +9,7 @@ import {selectAlbumCreateError, selectAlbumsCreating} from "./albumsSlice.ts";
 import {createAlbum} from "./albumsThunk.ts";
 import {selectArtistsList} from "../artists/artistsSlice.ts";
 import {getArtistsList} from "../artists/artistsThunk.ts";
-import {openErrorMessage} from "../WarningMessage/warningMessageSlice.ts";
+import {openErrorMessage, openSuccessMessage} from "../WarningMessage/warningMessageSlice.ts";
 import ErrorMessage from '../WarningMessage/ErrorMessage.tsx';
 
 const initialState = {
@@ -43,6 +43,7 @@ const NewAlbum = () => {
         e.preventDefault();
         try {
             await dispatch(createAlbum(state)).unwrap();
+            dispatch(openSuccessMessage());
             setState(initialState);
             navigate('/');
         } catch (e) {

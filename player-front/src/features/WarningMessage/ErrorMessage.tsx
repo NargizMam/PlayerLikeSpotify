@@ -21,7 +21,7 @@ const  ErrorMessage: React.FC<Props> = ({errorMessage}) => {
                         horizontal: 'center',
                     }}
                     open={showErrorMessage}
-                    autoHideDuration={6000}
+                    autoHideDuration={5000}
                     onClose={() => dispatch(openErrorMessage())}
                     ContentProps={{
                         'aria-describedby': 'message-id',

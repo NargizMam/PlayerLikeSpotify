@@ -1,26 +1,38 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {RootState} from "../../app/store.ts";
-import {createAlbum, getAlbumsList, updateAlbumPublished} from "./albumsThunk.ts";
+import {createAlbum, deleteAlbum, getAlbumsList, updateAlbumPublished} from "./albumsThunk.ts";
 import {AlbumsApi, GlobalError} from "../../types";
 
 interface AlbumsState {
     albumsList: AlbumsApi[];
     fetchLoading: boolean;
     creating: boolean;
-    fetchError: GlobalError | null;
-    albumsToggleFetching: boolean;
+    updating: boolean;
+    deleting: boolean;
+    albumsIsPublishedFetching: boolean;
+    albumsFetchError: GlobalError | null;
     albumsUpdateError: GlobalError | null;
     albumsCreateError: GlobalError | null;
+    albumsDeleteError: GlobalError | null;
+    albumsIsPublishedMessage: string | null;
+    albumsCreateMessage: string | null;
+    albumsDeleteMessage: string | null;
 }
 
 const initialState: AlbumsState = {
     albumsList: [] ,
     fetchLoading: false,
     creating: false,
-    fetchError: null,
-    albumsToggleFetching: false,
+    updating:  false,
+    deleting: false,
+    albumsIsPublishedFetching: false,
+    albumsFetchError: null,
     albumsUpdateError: null,
-    albumsCreateError: null
+    albumsCreateError: null,
+    albumsDeleteError: null,
+    albumsIsPublishedMessage: null,
+    albumsCreateMessage:  null,
+    albumsDeleteMessage:  null,
 }
 const albumsSlice = createSlice({
     name: 'albums',
@@ -37,27 +49,46 @@ const albumsSlice = createSlice({
             })
             .addCase(getAlbumsList.rejected, (state, {payload: data}) => {
                 state.fetchLoading = false;
-                state.fetchError = data || null;
+                state.albumsFetchError = data || null;
             })
             .addCase(updateAlbumPublished.pending, (state) => {
-                state.albumsToggleFetching = true;
+                state.albumsIsPublishedFetching = true;
+                state.albumsIsPublishedMessage = null;
             })
-            .addCase(updateAlbumPublished.fulfilled, (state) => {
-                state.albumsToggleFetching = false;
+            .addCase(updateAlbumPublished.fulfilled, (state,{payload: success}) => {
+                state.albumsIsPublishedFetching = false;
+                state.albumsIsPublishedMessage = success;
             })
             .addCase(updateAlbumPublished.rejected, (state, {payload: error}) => {
-                state.albumsToggleFetching = false;
+                state.albumsIsPublishedFetching = false;
                 state.albumsUpdateError = error || null;
+                state.albumsIsPublishedMessage = null;
             })
             .addCase(createAlbum.pending, (state) => {
-                state.creating = true;
+                state.updating = true;
+                state.albumsCreateMessage = null;
             })
-            .addCase(createAlbum.fulfilled, (state) => {
-                state.creating = false;
+            .addCase(createAlbum.fulfilled, (state, {payload: success}) => {
+                state.updating = false;
+                state.albumsCreateMessage = success;
             })
             .addCase(createAlbum.rejected, (state, {payload: error}) => {
-                state.creating = false;
+                state.updating = false;
                 state.albumsCreateError = error || null;
+                state.albumsCreateMessage = null;
+            })
+            .addCase(deleteAlbum.pending, (state) => {
+                state.deleting = true;
+                state.albumsDeleteMessage = null;
+            })
+            .addCase(deleteAlbum.fulfilled, (state, {payload: success}) => {
+                state.deleting = false;
+                state.albumsDeleteMessage = success;
+            })
+            .addCase(deleteAlbum.rejected, (state, {payload: error}) => {
+                state.deleting = false;
+                state.albumsDeleteError = error || null;
+                state.albumsDeleteMessage = null;
             })
     }
 });
@@ -67,7 +98,11 @@ export const albumsReducer = albumsSlice.reducer;
 export const selectAlbumsList = (state: RootState) => state.albums.albumsList
 export const selectAlbumsFetching = (state: RootState) => state.albums.fetchLoading;
 export const selectAlbumsCreating = (state: RootState) => state.albums.creating;
-export const selectAlbumsToggleFetching = (state: RootState) => state.albums.albumsToggleFetching;
-export const selectAlbumsFetchError = (state: RootState) => state.albums.fetchError;
-export const selectAlbumUpdateError = (state: RootState) => state.albums.albumsUpdateError;
+export const selectAlbumsIsPublishedFetching = (state: RootState) => state.albums.albumsIsPublishedFetching;
+export const selectAlbumsFetchError = (state: RootState) => state.albums.albumsFetchError;
+export const selectAlbumIsPublishedError = (state: RootState) => state.albums.albumsUpdateError;
 export const selectAlbumCreateError = (state: RootState) => state.albums.albumsCreateError;
+export const selectAlbumCreateSuccess = (state: RootState) => state.albums.albumsCreateMessage;
+export const selectAlbumIsPublishedSuccess = (state: RootState) => state.albums.albumsIsPublishedMessage;
+export const selectAlbumDeleteSuccess = (state: RootState) => state.albums.albumsDeleteMessage;
+export const selectAlbumDeleteError = (state: RootState) => state.albums.albumsDeleteError;

@@ -7,11 +7,11 @@ interface ArtistsState {
     artistsList: ArtistApi[];
     fetchLoading: boolean;
     creating: boolean;
-    artistsToggleFetching: boolean;
+    artistsIsPublishedFetching: boolean;
     artistCreateMessage: string | null;
     artistIsPublishedMessage: string | null;
     artistDeleteMessage: string | null;
-    artistsUpdateError: GlobalError | null;
+    artistsIsPublishedError: GlobalError | null;
     artistsCreateError: GlobalError | null;
     artistsDeleteError: GlobalError | null;
 }
@@ -20,11 +20,11 @@ const initialState: ArtistsState = {
     artistsList: [],
     fetchLoading: false,
     creating: false,
-    artistsToggleFetching: false,
+    artistsIsPublishedFetching: false,
     artistCreateMessage: null,
     artistIsPublishedMessage: null,
     artistDeleteMessage: null,
-    artistsUpdateError: null,
+    artistsIsPublishedError: null,
     artistsCreateError: null,
     artistsDeleteError: null,
 }
@@ -45,18 +45,23 @@ const artistsSlice = createSlice({
                 state.fetchLoading = false;
             })
             .addCase(updateArtistPublished.pending, (state) => {
-                state.artistsToggleFetching = true;
+                state.artistsIsPublishedFetching = true;
+                state.artistsIsPublishedError = null;
+                state.artistIsPublishedMessage = null;
             })
             .addCase(updateArtistPublished.fulfilled, (state, {payload: success}) => {
-                state.artistsToggleFetching = false;
+                state.artistsIsPublishedFetching = false;
                 state.artistIsPublishedMessage = success;
             })
             .addCase(updateArtistPublished.rejected, (state, {payload: error}) => {
-                state.artistsToggleFetching = false;
-                state.artistsUpdateError = error || null;
+                state.artistsIsPublishedFetching = false;
+                state.artistsIsPublishedError = error || null;
             })
             .addCase(createArtist.pending, (state) => {
                 state.creating = true;
+                state.artistCreateMessage = null;
+                state.artistsCreateError = null;
+
             })
             .addCase(createArtist.fulfilled, (state, {payload: success}) => {
                 state.creating = false;
@@ -65,9 +70,12 @@ const artistsSlice = createSlice({
             .addCase(createArtist.rejected, (state, {payload: error}) => {
                 state.creating = false;
                 state.artistsCreateError = error || null;
+                state.artistCreateMessage = null;
             })
             .addCase(deleteArtist.pending, (state) => {
                 state.creating = true;
+                state.artistDeleteMessage = null;
+                state.artistsDeleteError = null;
             })
             .addCase(deleteArtist.fulfilled, (state, {payload: success}) => {
                 state.creating = false;
@@ -76,6 +84,7 @@ const artistsSlice = createSlice({
             .addCase(deleteArtist.rejected, (state, {payload: error}) => {
                 state.creating = false;
                 state.artistsDeleteError = error || null;
+                state.artistDeleteMessage = null;
             })
 
     }
@@ -86,9 +95,10 @@ export const artistsReducer = artistsSlice.reducer;
 export const selectArtistsList = (state: RootState) => state.artists.artistsList;
 export const selectArtistsFetching = (state: RootState) => state.artists.fetchLoading;
 export const selectArtistsCreating = (state: RootState) => state.artists.creating;
-export const selectArtistsToggleFetching = (state: RootState) => state.artists.artistsToggleFetching;
-export const selectArtistUpdateError = (state: RootState) => state.artists.artistsUpdateError;
+export const selectArtistsIsPublishedFetching = (state: RootState) => state.artists.artistsIsPublishedFetching;
+export const selectArtistIsPublishedError = (state: RootState) => state.artists.artistsIsPublishedError;
 export const selectArtistCreateError = (state: RootState) => state.artists.artistsCreateError;
+export const selectArtistDeleteError = (state: RootState) => state.artists.artistsDeleteError;
 export const selectArtistCreateSuccess = (state: RootState) => state.artists.artistCreateMessage;
-export const selectArtistUpdateSuccess = (state: RootState) => state.artists.artistIsPublishedMessage;
+export const selectArtistIsPublishedSuccess = (state: RootState) => state.artists.artistIsPublishedMessage;
 export const selectArtistDeleteSuccess = (state: RootState) => state.artists.artistDeleteMessage;

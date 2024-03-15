@@ -6,7 +6,7 @@ import {useNavigate} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../../app/hooks.ts";
 import {selectUser} from "../../users/usersSlice.ts";
 import {getAlbumsList} from "../../ albums/albumsThunk.ts";
-import {openErrorMessage} from "../../WarningMessage/warningMessageSlice.ts";
+import {openErrorMessage, openSuccessMessage} from "../../WarningMessage/warningMessageSlice.ts";
 import {deleteArtist, getArtistsList, updateArtistPublished} from "../artistsThunk.ts";
 
 interface Props {
@@ -30,16 +30,26 @@ const Artist: React.FC<Props> = ({title, image, id, isPublished, artistUser}) =>
     const getArtistsAlbum = async () => {
         try {
             await dispatch(getAlbumsList(id)).unwrap();
+            dispatch(openSuccessMessage());
             navigate(`/albums?artist=${id}`);
         } catch (error) {
             dispatch(openErrorMessage());
         }
     };
-    const onDeleteArtist
+    const onDeleteArtist = async () =>{
+        try{
+            await dispatch(deleteArtist(id)).unwrap();
+            dispatch(openSuccessMessage());
+            dispatch(getArtistsList());
+            navigate('/');
+        }catch (e) {
+            dispatch(openErrorMessage());
+        }
+    }
     const toPublishedArtist = async () => {
         try{
             await dispatch(updateArtistPublished(id)).unwrap();
-            dispatch(openErrorMessage());
+            dispatch(openSuccessMessage());
             dispatch(getArtistsList());
         }catch (e) {
             dispatch(openErrorMessage());

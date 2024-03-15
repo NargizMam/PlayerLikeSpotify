@@ -2,7 +2,7 @@ import * as React from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
-import {openErrorMessage, selectShowSuccessMessage} from "./warningMessageSlice.ts";
+import {openSuccessMessage, selectShowSuccessMessage} from "./warningMessageSlice.ts";
 
 interface Props {
     successMessage: string;
@@ -15,14 +15,15 @@ const  SuccessMessage: React.FC<Props> = ({successMessage}) => {
 
     return (
         <div>
-            <Snackbar open={showSuccessMessage} autoHideDuration={6000}
+            <Snackbar open={showSuccessMessage}
+                      autoHideDuration={5000}
                       anchorOrigin={{
                           vertical: 'top',
                           horizontal: 'right',
                       }}
-                      onClose={() => dispatch(openErrorMessage())}>
+                      onClose={() => dispatch(openSuccessMessage())}>
                 <Alert
-                    onClose={() => dispatch(openErrorMessage())}
+                    onClose={() => dispatch(openSuccessMessage())}
                     severity="success"
                     variant="filled"
                     sx={{ width: '100%' }}

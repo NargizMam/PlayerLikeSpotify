@@ -49,7 +49,7 @@ export const updateArtistPublished = createAsyncThunk<string, string,{ rejectVal
         }
     }
 );
-export const deleteArtist = createAsyncThunk<string, string, { rejectValue: GlobalError}>(
+export const deleteArtist = createAsyncThunk<string , string, { rejectValue: GlobalError}>(
     'artists/delete',
     async (id, {rejectWithValue}) => {
         try{
